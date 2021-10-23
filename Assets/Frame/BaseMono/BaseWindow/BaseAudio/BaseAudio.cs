@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.Audio;
 namespace Farme
-{  
+{
     [RequireComponent(typeof(AudioSource))]
     /// <summary>
     /// Audio基类
@@ -31,7 +31,7 @@ namespace Farme
             m_IsAutoRecycle = true;
             m_Recoverer = null;
             GetRelyOnAudioMgr().NotInidleAudioControlLi.Add(Control);
-        }     
+        }
         #endregion
 
         #region 字段         
@@ -57,11 +57,11 @@ namespace Farme
         /// <summary>
         /// 是否停止
         /// </summary>
-        private bool m_IsStop = true;       
+        private bool m_IsStop = true;
         /// <summary>
         /// 是否暂停
         /// </summary>
-        private bool m_IsPause = true;        
+        private bool m_IsPause = true;
         /// <summary>
         /// 是否循环
         /// </summary>
@@ -69,7 +69,7 @@ namespace Farme
         /// <summary>
         /// 是否自动回收
         /// </summary>
-        private bool m_IsAutoRecycle = true;  
+        private bool m_IsAutoRecycle = true;
         /// <summary>
         /// 音量
         /// </summary>
@@ -81,11 +81,11 @@ namespace Farme
         /// <summary>
         /// 已播放的时长
         /// </summary>
-        private float m_PlayedTime = 0;              
+        private float m_PlayedTime = 0;
         /// <summary>
         /// 附属回收器(在非循环状态下则会在播放结束时自动回收)
         /// </summary>
-        private Coroutine m_Recoverer;      
+        private Coroutine m_Recoverer;
         #endregion
 
         #region 属性
@@ -96,15 +96,18 @@ namespace Farme
         {
             set
             {
-                if(value)
+                if (m_IsAutoRecycle != value)
                 {
-                    AppendRecoverer();
+                    if (value)
+                    {
+                        AppendRecoverer();
+                    }
+                    else
+                    {
+                        RemoveRecoverer();
+                    }
+                    m_IsAutoRecycle = value;
                 }
-                else
-                {
-                    RemoveRecoverer();
-                }
-                m_IsAutoRecycle = value;
             }
             get
             {
@@ -120,7 +123,7 @@ namespace Farme
             {
                 return m_BindAudioMixerGroup == null ? false : true;
             }
-        }      
+        }
         /// <summary>
         /// 音效控制接口
         /// </summary>
@@ -130,7 +133,7 @@ namespace Farme
             {
                 return this;
             }
-        }            
+        }
         /// <summary>
         /// 左声道->右声道的渐变  -1(左)->0(立体)->1(右)
         /// </summary>
@@ -143,13 +146,13 @@ namespace Farme
                 {
                     m_As.panStereo = m_PanStereo;
                 }
-               
+
             }
             get
             {
                 return m_PanStereo;
             }
-        }  
+        }
         /// <summary>
         /// 音量  
         /// </summary>
@@ -158,7 +161,7 @@ namespace Farme
             set
             {
                 m_Volume = Mathf.Clamp(value, 0, 1);
-                if(m_As!=null)
+                if (m_As != null)
                 {
                     m_As.volume = m_Volume;
                 }
@@ -175,7 +178,7 @@ namespace Farme
         {
             get
             {
-                if(m_Ac!=null)
+                if (m_Ac != null)
                 {
                     return m_Ac.length;
                 }
@@ -189,13 +192,13 @@ namespace Farme
         {
             get
             {
-                if(m_As!=null)
+                if (m_As != null)
                 {
                     return m_As.GetInstanceID();
                 }
                 return -1;
             }
-        }              
+        }
         #endregion
 
         #region 方法
@@ -204,10 +207,11 @@ namespace Farme
         /// </summary>
         private void AppendRecoverer()
         {
-            if (m_Recoverer==null&&m_As != null&& m_Ac!=null)
+            if (m_Recoverer == null && m_As != null && m_Ac != null)
             {
                 m_Recoverer = MonoSingletonFactory<ShareMono>.GetSingleton().DelayUAction(m_Ac.length - m_As.time, () =>//延迟回收时长为调用时音效剪辑总时长-已播放时长
                 {
+                    m_As.Stop();//停止播放
                     m_IsPause = false;//非暂停
                     m_IsPlay = false;//非播放
                     m_IsStop = true;//停止
@@ -215,7 +219,7 @@ namespace Farme
                     MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(m_Recoverer);//停止协程
                     m_Recoverer = null;//重置为NULL
                     GetRelyOnAudioMgr().InidleWithNotInidleTransform(this);//置换     
-                });              
+                });
             }
         }
 
@@ -227,15 +231,15 @@ namespace Farme
             if (m_Recoverer != null)
             {
                 MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(m_Recoverer);//停止协程
-            }                 
+            }
         }
 
         /// <summary>
         /// 获取自身依赖的音效管理器
         /// </summary>
         /// <returns></returns>
-        protected abstract BaseAudioMgr GetRelyOnAudioMgr();    
-        
+        protected abstract BaseAudioMgr GetRelyOnAudioMgr();
+
         /// <summary>
         /// 音效播放
         /// </summary>
@@ -244,11 +248,14 @@ namespace Farme
         {
             if (m_As != null && !m_IsPlay)
             {
-                if (!m_Loop)//非循环
-                {
-                    AppendRecoverer();//添加回收器
-                }
                 m_As.Play();
+                if (IsAutoRecycle)
+                {
+                    if (!m_Loop)//非循环
+                    {
+                        AppendRecoverer();//添加回收器
+                    }
+                }
                 m_IsPlay = true;//播放
                 m_IsPause = false;//非暂停
                 m_IsStop = false;//非停止
@@ -265,11 +272,14 @@ namespace Farme
         {
             if (m_As != null && !m_IsPause)
             {
-                if (!m_Loop)//非循环
-                {
-                    RemoveRecoverer();//移除回收器
-                }
                 m_As.Pause();
+                if (IsAutoRecycle)
+                {
+                    if (!m_Loop)//非循环
+                    {
+                        RemoveRecoverer();//移除回收器
+                    }
+                }
                 m_IsPlay = false;//非播放
                 m_IsStop = false;//非停止
                 m_IsPause = true;//暂停
@@ -286,11 +296,14 @@ namespace Farme
         {
             if (m_As != null && !m_IsStop)
             {
-                if (!m_Loop)//非循环
-                {
-                    RemoveRecoverer();//移除回收器
-                }
                 m_As.Stop();//停止播放
+                if (IsAutoRecycle)
+                {
+                    if (!m_Loop)//非循环
+                    {
+                        RemoveRecoverer();//移除回收器
+                    }
+                }
                 m_As.time = 0;//重置播放时长
                 m_IsPause = false;//非暂停
                 m_IsPlay = false;//非播放           
@@ -309,13 +322,16 @@ namespace Farme
         {
             if (m_As != null && !m_IsStop)
             {
-                if (!m_As.loop)//非循环
-                {
-                    RemoveRecoverer();//移除回收器
-                }
                 m_As.time = 0;//起始播放时长归零
                 m_As.Play();//播放
-                AppendRecoverer();//添加回收器
+                if (IsAutoRecycle)
+                {
+                    if (!m_As.loop)//非循环
+                    {
+                        RemoveRecoverer();//移除回收器
+                        AppendRecoverer();//添加回收器
+                    }
+                }
                 m_IsPlay = true;//播放
                 m_IsPause = false;//非暂停
                 m_IsStop = false;//非停止
@@ -331,10 +347,10 @@ namespace Farme
 
         public bool GetAudioMixerGroup(out AudioMixerGroup group)
         {
-            if(IsBindAudioMixer)
+            if (IsBindAudioMixer)
             {
                 group = m_BindAudioMixerGroup;
-                return true ;
+                return true;
             }
             group = null;
             return false;
@@ -361,7 +377,7 @@ namespace Farme
         }
 
         public bool IsLoop()
-        {           
+        {
             return m_Loop;
         }
 
@@ -391,15 +407,21 @@ namespace Farme
             {
                 if (m_Loop != loop)
                 {
-                    if(loop)
+                    if (IsAutoRecycle)
                     {
-                        RemoveRecoverer();//移除回收器
-                        
+                        if (loop)
+                        {
+                            RemoveRecoverer();//移除回收器                       
+                        }
+                        else
+                        {
+                            if (IsAutoRecycle)
+                            {
+
+                                AppendRecoverer();//添加回收器
+                            }
+                        }
                     }
-                    else
-                    {
-                        AppendRecoverer();//添加回收器
-                    }                      
                     m_As.loop = loop;
                     m_Loop = loop;
                 }
@@ -407,10 +429,10 @@ namespace Farme
             }
             return false;
         }
-    
+
         public bool SetAudioMixerGroup(AudioMixerGroup group)
         {
-            if(m_As!=null)
+            if (m_As != null)
             {
                 if (m_BindAudioMixerGroup != group)
                 {
@@ -428,20 +450,23 @@ namespace Farme
             {
                 m_As.time = playedTime;
                 m_PlayedTime = playedTime;
-                if (!m_Loop)
+                if (IsAutoRecycle)
                 {
-                    //重新设置回收器
-                    RemoveRecoverer();//移除
-                    AppendRecoverer();//添加
+                    if (!m_Loop)
+                    {
+                        //重新设置回收器
+                        RemoveRecoverer();//移除
+                        AppendRecoverer();//添加
+                    }
                 }
                 return true;
             }
             return false;
         }
-       
-        public bool SetAudioClip(AudioClip clip,bool inheritTime=false)
+
+        public bool SetAudioClip(AudioClip clip, bool inheritTime = false)
         {
-            if(m_As!=null)
+            if (m_As != null)
             {
                 if (AudioPause())
                 {
