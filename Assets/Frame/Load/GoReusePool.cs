@@ -9,7 +9,18 @@ namespace Farme
     {
         protected GoReusePool() { }
         #region 字段
-        private static Dictionary<string,List<GameObject>> _reuseGoDic = null;
+        private static Dictionary<string, List<GameObject>> m_ReuseGoDic = null;
+        private static Dictionary<string, List<GameObject>> ReuseGoDic
+        {
+            get
+            {
+                if (m_ReuseGoDic == null)
+                {
+                    m_ReuseGoDic = new Dictionary<string, List<GameObject>>();
+                }
+                return m_ReuseGoDic;
+            }
+        }
         #endregion
         #region 方法
         /// <summary>
@@ -22,27 +33,23 @@ namespace Farme
         public static bool Take(string reuseGroup, out GameObject result)
         {
             result = null;
-            if(_reuseGoDic==null)
+            if (ReuseGoDic.TryGetValue(reuseGroup, out List<GameObject> goLi))
             {
-                _reuseGoDic = new Dictionary<string, List<GameObject>>();
-            }
-            if (_reuseGoDic.TryGetValue(reuseGroup,out List<GameObject> goLi))
-            {
-                foreach(var go in goLi)
+                foreach (var go in goLi)
                 {
-                    if(go!=null)
+                    if (go != null)
                     {
                         result = go;
-                        result.SetActive(true);                       
+                        result.SetActive(true);
                         goLi.Remove(result);
                         return true;
                     }
                 }
-                if(result==null)
+                if (result == null)
                 {
-                    goLi.Clear();               
-                }          
-            }       
+                    goLi.Clear();
+                }
+            }
             return false;
         }
         /// <summary>
@@ -50,23 +57,19 @@ namespace Farme
         /// </summary>
         /// <param name="reuseGroup">复用组</param>
         /// <param name="target">对象</param>
-        public static void Put(string reuseGroup,GameObject target)
+        public static void Put(string reuseGroup, GameObject target)
         {
-            if (_reuseGoDic == null)
-            {
-                _reuseGoDic = new Dictionary<string, List<GameObject>>();
-            }
-            if(target==null)
+            if (target == null)
             {
                 return;
             }
             target.SetActive(false);
-            if (_reuseGoDic.TryGetValue(reuseGroup,out List<GameObject> goLi))
+            if (ReuseGoDic.TryGetValue(reuseGroup, out List<GameObject> goLi))
             {
                 goLi.Add(target);
                 return;
             }
-            _reuseGoDic.Add(reuseGroup, new List<GameObject>() { target });
+            ReuseGoDic.Add(reuseGroup, new List<GameObject>() { target });
         }
         /// <summary>
         /// 预热
@@ -75,9 +78,9 @@ namespace Farme
         /// <param name="reuseGroup">复用组</param>
         /// <param name="total">总数</param>
         /// <param name="parent">父级</param>
-        public static void Preheat(string goPath,string reuseGroup,int total,Transform parent=null)
+        public static void Preheat(string goPath, string reuseGroup, int total, Transform parent = null)
         {
-            while (total>0)
+            while (total > 0)
             {
                 if (GoLoad.Take(goPath, out GameObject result, parent))
                 {
