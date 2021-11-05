@@ -93,6 +93,8 @@
     <Compile Include="Assets\Frame\Load\GoReusePool.cs" />
     <Compile Include="Assets\Frame\Load\ResourcesLoad.cs" />
     <Compile Include="Assets\Frame\Load\SceneLoad.cs" />
+    <Compile Include="Assets\Frame\Net\WebDownloadTool.cs" />
+    <Compile Include="Assets\Test.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>S:/Unity Pro 2019.3.7f1/MyGitProject/Farme/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
