@@ -1,17 +1,63 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Events;
+using System.Text;
+
 namespace Farme.Net
 {
     /// <summary>
     /// 网络下载工具
     /// </summary>
     public class WebDownloadTool 
-    {
+    {        
+        private const string GB2312 = "gb2312";//用处含有未知
         private static float m_DownloadTextureRequestOutTime = 10;
         private static float m_DownloadAssetBundleOutTime = 10;
+        private static float m_DownloadTextRequestOutTime = 5;
+
+        #region 文本下载
+        public static void WebDownloadText(string url, UnityAction<string> resultCallback, UnityAction<float> downLoadProgress = null, UnityAction requestTimeOutCallback = null)
+        {
+            MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IEWebDownloadText(url, resultCallback, downLoadProgress, requestTimeOutCallback));
+        }
+        private static IEnumerator IEWebDownloadText(string url, UnityAction<string> resultCallback, UnityAction<float> downLoadProgress = null, UnityAction requestTimeOutCallback = null)
+        {
+            UnityWebRequest www = UnityWebRequest.Get(url);//创建网络请求
+            www.SendWebRequest();//发送请求
+            bool isRequestTimeOut = false;
+            Coroutine cor = null;
+            while (true)
+            {
+                if (www.downloadProgress <= 0.1f)
+                {
+                    if (!isRequestTimeOut)
+                    {
+                        isRequestTimeOut = true;
+                        if (requestTimeOutCallback != null)
+                        {
+                            cor = MonoSingletonFactory<ShareMono>.GetSingleton().DelayUAction(m_DownloadTextRequestOutTime, requestTimeOutCallback);
+                            break;
+                        }
+                    }
+                }
+                downLoadProgress?.Invoke(www.downloadProgress);//回调下载进度
+                if (www.isDone && www.downloadHandler.isDone)
+                {
+                    if (cor != null)
+                    {
+                        MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(cor);//撤销下载超时回调
+                    }
+                    break;
+                }
+                yield return www.downloadProgress;
+            }
+            /*Encoding.GetEncoding(GB2312)为特殊处理  暂不知为何为GB2312  本解释只针对文本编码格式ANSI类型转
+             * Unity的文本编码UTF-8
+             */
+            resultCallback?.Invoke(Encoding.GetEncoding(GB2312).GetString(www.downloadHandler.data));
+        }
+        #endregion
 
         #region AB包下载
         public static void WebDownloadAssetBundle(string url, UnityAction<AssetBundle> resultCallback, UnityAction<float> downLoadProgress = null, UnityAction requestTimeOutCallback = null)
