@@ -108,8 +108,6 @@ namespace Farme
                 reslutCallback?.Invoke();         
         }
         #endregion
-
-
         /// <summary>
         /// 加载资源
         /// </summary>
