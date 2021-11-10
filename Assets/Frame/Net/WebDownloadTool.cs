@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.Events;
 using System.Text;
-
+using Farme.Tool;
 namespace Farme.Net
 {
     /// <summary>
@@ -25,30 +25,21 @@ namespace Farme.Net
         {
             UnityWebRequest www = UnityWebRequest.Get(url);//创建网络请求
             www.SendWebRequest();//发送请求
-            bool isRequestTimeOut = false;
-            Coroutine cor = null;
+            Coroutine cor = MonoSingletonFactory<ShareMono>.GetSingleton().DelayUAction(m_DownloadAssetBundleOutTime, requestTimeOutCallback);
             while (true)
             {
-                if (www.downloadProgress <= 0.1f)
-                {
-                    if (!isRequestTimeOut)
-                    {
-                        isRequestTimeOut = true;
-                        if (requestTimeOutCallback != null)
-                        {
-                            cor = MonoSingletonFactory<ShareMono>.GetSingleton().DelayUAction(m_DownloadTextRequestOutTime, requestTimeOutCallback);
-                            break;
-                        }
-                    }
-                }
                 downLoadProgress?.Invoke(www.downloadProgress);//回调下载进度
                 if (www.isDone && www.downloadHandler.isDone)
                 {
-                    if (cor != null)
+                    break;
+                }
+                else
+                {
+                    if (cor != null && www.downloadProgress != 0)
                     {
                         MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(cor);//撤销下载超时回调
+                        cor = null;
                     }
-                    break;
                 }
                 yield return www.downloadProgress;
             }
@@ -68,70 +59,64 @@ namespace Farme.Net
         {
             UnityWebRequest www = UnityWebRequestAssetBundle.GetAssetBundle(url);//创建网络请求
             www.SendWebRequest();//发送请求
-            bool isRequestTimeOut = false;
-            Coroutine cor = null;
-            while (true)
+            while(true)
             {
-                if (www.downloadProgress <= 0.1f)
+                if (www.downloadHandler.isDone)
                 {
-                    if (!isRequestTimeOut)
-                    {
-                        isRequestTimeOut = true;
-                        if (requestTimeOutCallback != null)
-                        {
-                            cor = MonoSingletonFactory<ShareMono>.GetSingleton().DelayUAction(m_DownloadAssetBundleOutTime, requestTimeOutCallback);
-                            break;
-                        }
-                    }
-                }
-                downLoadProgress?.Invoke(www.downloadProgress);//回调下载进度
-                if (www.isDone && www.downloadHandler.isDone)
-                {
-                    if (cor != null)
-                    {
-                        MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(cor);//撤销下载超时回调
-                    }
+                    Debuger.Log(www.isDone);
                     break;
                 }
-                yield return www.downloadProgress;
+                yield return www;
             }
-            resultCallback?.Invoke(DownloadHandlerAssetBundle.GetContent(www));
+            //Coroutine cor = MonoSingletonFactory<ShareMono>.GetSingleton().DelayUAction(m_DownloadAssetBundleOutTime, requestTimeOutCallback);
+            //while (true)
+            //{                            
+            //    downLoadProgress?.Invoke(www.downloadProgress);//回调下载进度
+            //    if (www.isDone && www.downloadHandler.isDone)
+            //    {                   
+            //        break;
+            //    }
+            //    else
+            //    {
+            //        if (cor != null&&www.downloadProgress!=0)
+            //        {
+            //            MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(cor);//撤销下载超时回调
+            //            cor = null;
+            //        }
+            //    }
+            
+            //}
+            //resultCallback?.Invoke(DownloadHandlerAssetBundle.GetContent(www));
         }
         #endregion
 
         #region 纹理下载
         public static void WebDownloadTexture(string url, UnityAction<Texture2D> resultCallback, UnityAction<float> downLoadProgress = null, UnityAction requestTimeOutCallback=null)
         {
-            MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IEWebDownloadTexture(url, resultCallback, downLoadProgress, requestTimeOutCallback));
+            MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IEWebDownloadTexture(url, resultCallback, downLoadProgress,()=> 
+            {
+
+            }));
         }       
         private static IEnumerator IEWebDownloadTexture(string url, UnityAction<Texture2D> resultCallback,UnityAction<float> downLoadProgress = null, UnityAction requestTimeOutCallback=null)
         {
             UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);//创建网络请求
             www.SendWebRequest();//发送请求
-            bool isRequestTimeOut = false;
-            Coroutine cor = null;
-            while(true)
+            Coroutine cor = MonoSingletonFactory<ShareMono>.GetSingleton().DelayUAction(m_DownloadAssetBundleOutTime, requestTimeOutCallback);
+            while (true)
             {
-                if(www.downloadProgress<=0.1f)
-                {
-                    if(!isRequestTimeOut)
-                    {
-                        isRequestTimeOut = true;
-                        if (requestTimeOutCallback != null)
-                        {
-                            cor=MonoSingletonFactory<ShareMono>.GetSingleton().DelayUAction(m_DownloadTextureRequestOutTime, requestTimeOutCallback);
-                            break;
-                        }
-                    }
-                }
                 downLoadProgress?.Invoke(www.downloadProgress);//回调下载进度
-                if (www.isDone&&www.downloadHandler.isDone)
+                if (www.isDone && www.downloadHandler.isDone)
                 {
-                    if (cor != null)
+                    break;
+                }
+                else
+                {
+                    if (cor != null && www.downloadProgress != 0)
                     {
                         MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(cor);//撤销下载超时回调
+                        cor = null;
                     }
-                    break;
                 }
                 yield return www.downloadProgress;
             }

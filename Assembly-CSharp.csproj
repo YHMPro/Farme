@@ -96,7 +96,7 @@
     <Compile Include="Assets\Frame\Load\SceneLoad.cs" />
     <Compile Include="Assets\Frame\Net\WebDownloadTool.cs" />
     <Compile Include="Assets\Test.cs" />
-    <None Include="Assets\Frame\Log\Debuger.xml" />
+    <None Include="Assets\Frame\Plugins\Log\Debuger.xml" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>S:/Unity Pro 2019.3.7f1/MyGitProject/Farme/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
@@ -115,6 +115,9 @@
     <Reference Include="Unity.CollabProxy.Editor">
       <HintPath>S:/Unity Pro 2019.3.7f1/MyGitProject/Farme/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
+    <Reference Include="Unity.AssetBundleBrowser.Editor">
+      <HintPath>S:/Unity Pro 2019.3.7f1/MyGitProject/Farme/Library/ScriptAssemblies/Unity.AssetBundleBrowser.Editor.dll</HintPath>
+    </Reference>
     <Reference Include="Unity.Rider.Editor">
       <HintPath>S:/Unity Pro 2019.3.7f1/MyGitProject/Farme/Library/ScriptAssemblies/Unity.Rider.Editor.dll</HintPath>
     </Reference>
@@ -123,9 +126,6 @@
     </Reference>
     <Reference Include="UnityEditor.UI">
       <HintPath>S:/Unity Pro 2019.3.7f1/MyGitProject/Farme/Library/ScriptAssemblies/UnityEditor.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.AssetBundleBrowser.Editor">
-      <HintPath>S:/Unity Pro 2019.3.7f1/MyGitProject/Farme/Library/ScriptAssemblies/Unity.AssetBundleBrowser.Editor.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>S:/Unity Pro 2019.3.7f1/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -305,7 +305,7 @@
       <HintPath>S:/Unity Pro 2019.3.7f1/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.XRModule.dll</HintPath>
     </Reference>
     <Reference Include="Debuger">
-      <HintPath>S:/Unity Pro 2019.3.7f1/MyGitProject/Farme/Assets/Frame/Log/Debuger.dll</HintPath>
+      <HintPath>S:/Unity Pro 2019.3.7f1/MyGitProject/Farme/Assets/Frame/Plugins/Log/Debuger.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>S:/Unity Pro 2019.3.7f1/Unity/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
