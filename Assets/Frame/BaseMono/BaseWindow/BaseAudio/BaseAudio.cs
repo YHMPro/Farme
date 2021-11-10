@@ -28,8 +28,8 @@ namespace Farme
             m_IsPlay = false;
             m_Volume = 1;
             m_PanStereo = 0;
-            m_IsAutoRecycle = true;
-            m_Recoverer = null;
+            m_AbleRecycle = true;
+            m_Timer = null;
             GetRelyOnAudioMgr().NotInidleAudioControlLi.Add(Control);
         }
         #endregion
@@ -67,9 +67,9 @@ namespace Farme
         /// </summary>
         private bool m_Loop = false;
         /// <summary>
-        /// 是否自动回收
+        /// 是否可以回收利用(默认为可回收) 为True时{非循环模式下:停止播放或完成播放将会回收该音效播放器}
         /// </summary>
-        private bool m_IsAutoRecycle = true;
+        private bool m_AbleRecycle = true;
         /// <summary>
         /// 音量
         /// </summary>
@@ -83,37 +83,26 @@ namespace Farme
         /// </summary>
         private float m_PlayedTime = 0;
         /// <summary>
-        /// 附属回收器(在非循环状态下则会在播放结束时自动回收)
+        /// 附属计时器
         /// </summary>
-        private Coroutine m_Recoverer;
+        private Coroutine m_Timer;
         #endregion
 
         #region 属性
-        /// <summary>
-        /// 是否自动回收
-        /// </summary>
-        public bool IsAutoRecycle
+        public bool AbleRecycle
         {
             set
             {
-                if (m_IsAutoRecycle != value)
+                if(m_AbleRecycle!=value)
                 {
-                    if (value)
-                    {
-                        AppendRecoverer();
-                    }
-                    else
-                    {
-                        RemoveRecoverer();
-                    }
-                    m_IsAutoRecycle = value;
+                    m_AbleRecycle = value;
                 }
             }
             get
             {
-                return m_IsAutoRecycle;
+                return m_AbleRecycle;
             }
-        }
+        }      
         /// <summary>
         /// 是否绑定音效混合器
         /// </summary>
@@ -203,34 +192,37 @@ namespace Farme
 
         #region 方法
         /// <summary>
-        /// 附加回收器
+        /// 附加计时器
         /// </summary>
-        private void AppendRecoverer()
+        private void AppendTimer()
         {
-            if (m_Recoverer == null && m_As != null && m_Ac != null)
+            if (m_Timer == null && m_As != null && m_Ac != null)
             {
-                m_Recoverer = MonoSingletonFactory<ShareMono>.GetSingleton().DelayUAction(m_Ac.length - m_As.time, () =>//延迟回收时长为调用时音效剪辑总时长-已播放时长
+                m_Timer = MonoSingletonFactory<ShareMono>.GetSingleton().DelayUAction(m_Ac.length - m_As.time, () =>//延迟回收时长为调用时音效剪辑总时长-已播放时长
                 {
                     m_As.Stop();//停止播放
                     m_IsPause = false;//非暂停
                     m_IsPlay = false;//非播放
-                    m_IsStop = true;//停止
-                    m_As.time = 0;//重置播放时长                                                   
-                    MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(m_Recoverer);//停止协程
-                    m_Recoverer = null;//重置为NULL
-                    GetRelyOnAudioMgr().InidleWithNotInidleTransform(this);//置换     
+                    m_As.time = 0;//重置播放时长        
+                    m_IsStop = true;//停止                                                              
+                    MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(m_Timer);//停止协程
+                    m_Timer = null;//重置为NULL
+                    if (m_AbleRecycle)
+                    {
+                        GetRelyOnAudioMgr().InidleWithNotInidleTransform(this);//置换     
+                    }
                 });
             }
         }
 
         /// <summary>
-        /// 移除回收器
+        /// 移除计时器
         /// </summary>
-        private void RemoveRecoverer()
+        private void RemoveTimer()
         {
-            if (m_Recoverer != null)
+            if (m_Timer != null)
             {
-                MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(m_Recoverer);//停止协程
+                MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(m_Timer);//停止协程
             }
         }
 
@@ -249,12 +241,9 @@ namespace Farme
             if (m_As != null && !m_IsPlay)
             {
                 m_As.Play();
-                if (IsAutoRecycle)
+                if (!m_Loop)//非循环
                 {
-                    if (!m_Loop)//非循环
-                    {
-                        AppendRecoverer();//添加回收器
-                    }
+                    AppendTimer();//添加回收器
                 }
                 m_IsPlay = true;//播放
                 m_IsPause = false;//非暂停
@@ -273,12 +262,9 @@ namespace Farme
             if (m_As != null && !m_IsPause)
             {
                 m_As.Pause();
-                if (IsAutoRecycle)
+                if (!m_Loop)//非循环
                 {
-                    if (!m_Loop)//非循环
-                    {
-                        RemoveRecoverer();//移除回收器
-                    }
+                    RemoveTimer();//移除回收器
                 }
                 m_IsPlay = false;//非播放
                 m_IsStop = false;//非停止
@@ -297,18 +283,18 @@ namespace Farme
             if (m_As != null && !m_IsStop)
             {
                 m_As.Stop();//停止播放
-                if (IsAutoRecycle)
+                if (!m_Loop)//非循环
                 {
-                    if (!m_Loop)//非循环
-                    {
-                        RemoveRecoverer();//移除回收器
-                    }
+                    RemoveTimer();
                 }
                 m_As.time = 0;//重置播放时长
                 m_IsPause = false;//非暂停
                 m_IsPlay = false;//非播放           
                 m_IsStop = true;//停止
-                GetRelyOnAudioMgr().InidleWithNotInidleTransform(this);//置换
+                if (m_AbleRecycle)
+                {
+                    GetRelyOnAudioMgr().InidleWithNotInidleTransform(this);//置换
+                }
                 return true;
             }
             return false;
@@ -324,13 +310,10 @@ namespace Farme
             {
                 m_As.time = 0;//起始播放时长归零
                 m_As.Play();//播放
-                if (IsAutoRecycle)
+                if (!m_As.loop)//非循环
                 {
-                    if (!m_As.loop)//非循环
-                    {
-                        RemoveRecoverer();//移除回收器
-                        AppendRecoverer();//添加回收器
-                    }
+                    RemoveTimer();
+                    AppendTimer();
                 }
                 m_IsPlay = true;//播放
                 m_IsPause = false;//非暂停
@@ -407,19 +390,16 @@ namespace Farme
             {
                 if (m_Loop != loop)
                 {
-                    if (IsAutoRecycle)
+                    if (m_AbleRecycle)
                     {
                         if (loop)
                         {
-                            RemoveRecoverer();//移除回收器                       
+                            RemoveTimer();    
                         }
                         else
                         {
-                            if (IsAutoRecycle)
-                            {
 
-                                AppendRecoverer();//添加回收器
-                            }
+                            AppendTimer();
                         }
                     }
                     m_As.loop = loop;
@@ -450,13 +430,12 @@ namespace Farme
             {
                 m_As.time = playedTime;
                 m_PlayedTime = playedTime;
-                if (IsAutoRecycle)
+                if (m_AbleRecycle)
                 {
                     if (!m_Loop)
                     {
-                        //重新设置回收器
-                        RemoveRecoverer();//移除
-                        AppendRecoverer();//添加
+                        RemoveTimer();
+                        AppendTimer();
                     }
                 }
                 return true;

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 namespace Farme
@@ -134,6 +135,47 @@ namespace Farme
             }
             return audioControl;
         }        
+        /// <summary>
+        /// 渐变播放
+        /// </summary>
+        /// <param name="formAudio"></param>
+        /// <param name="toAudio"></param>
+        /// <param name="excessTime">渐变时长(0~1秒)</param>
+        public void ExcessPlay(BaseAudio formAudio,BaseAudio toAudio,float excessTime = 0.5f)
+        {
+            if(formAudio==null|| toAudio==null)
+            {
+                return;
+            }
+            MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IEExcessPlay(formAudio, toAudio, excessTime));
+        }
+        /// <summary>
+        /// 渐变播放
+        /// </summary>
+        /// <param name="formAudio"></param>
+        /// <param name="toAudio"></param>
+        /// <param name="excessTime">渐变时长(0~1秒)</param>
+        /// <returns></returns>
+        protected IEnumerator IEExcessPlay(BaseAudio formAudio, BaseAudio toAudio,float excessTime = 0.5f)
+        {
+            int num = (int)(Mathf.Clamp(excessTime,0,1.0f) /0.01f);
+            float setSize = 1.0f / num;
+            toAudio.Play();
+            toAudio.Volume = 0;
+            while (true)
+            {
+                num--;
+                if(num<=0)
+                {
+                    formAudio.Stop();
+                    formAudio.Volume = 1;
+                    break;
+                }
+                formAudio.Volume -= setSize;
+                toAudio.Volume += setSize;
+                yield return new WaitForSeconds(0.01f);
+            }           
+        }
         /// <summary>
         /// 暂停音效
         /// </summary>

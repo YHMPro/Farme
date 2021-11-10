@@ -9,7 +9,19 @@ namespace Farme
     {
         protected BaseMono() { }
         #region 字段
-        protected Dictionary<string, List<Component>> _componentDic;
+        private Dictionary<string, List<Component>> m_ComponentDic;
+        protected Dictionary<string,List<Component>> ComponentDic
+        {
+            get
+            {
+                if(m_ComponentDic==null)
+                {
+                    m_ComponentDic = new Dictionary<string, List<Component>>();
+                }
+                return m_ComponentDic;
+            }
+        }
+
         #endregion
         #region 生命周期
         /// <summary>
@@ -36,7 +48,7 @@ namespace Farme
         /// </summary>
         protected virtual void OnDestroy()
         {
-            _componentDic = null;
+            m_ComponentDic = null;
         }
 #if UNITY_EDITOR
         protected virtual void OnValidate() { }      
@@ -48,15 +60,11 @@ namespace Farme
         /// </summary>
         /// <typeparam name="T">需要注册的组件类型</typeparam>
         protected void RegisterComponentsTypes<T>(bool includeInactive=true) where T : Component
-        {           
-            if(_componentDic==null)
-            {
-                _componentDic = new Dictionary<string, List<Component>>();
-            }
+        {                     
             T[] tS = GetComponentsInChildren<T>(includeInactive);
             foreach (T t in tS)
             {             
-                if (_componentDic.TryGetValue(t.name,out List<Component> componentLi))
+                if (ComponentDic.TryGetValue(t.name,out List<Component> componentLi))
                 {
                     if(!componentLi.Contains(t))
                     {
@@ -65,7 +73,7 @@ namespace Farme
                 }
                 else
                 {
-                    _componentDic.Add(t.name, new List<Component>() { t });
+                    ComponentDic.Add(t.name, new List<Component>() { t });
                 }               
             }
         }     
@@ -77,12 +85,8 @@ namespace Farme
         /// <param name="result">组件</param>
         public virtual bool GetComponent<T>(string targetName,out T result) where T : Component
         {
-            result = null;
-            if (_componentDic==null)
-            {
-                _componentDic = new Dictionary<string, List<Component>>();
-            }
-            if(_componentDic.TryGetValue(targetName,out List<Component> componentLi))
+            result = null;          
+            if(ComponentDic.TryGetValue(targetName,out List<Component> componentLi))
             {
                 foreach(var component in componentLi)
                 {
@@ -106,12 +110,8 @@ namespace Farme
         /// <param name="targetName">对象名称</param>
         /// <returns></returns>
         public virtual T GetComponent<T>(string targetName) where T : Component
-        {
-            if (_componentDic == null)
-            {
-                _componentDic = new Dictionary<string, List<Component>>();
-            }
-            if (_componentDic.TryGetValue(targetName, out List<Component> componentLi))
+        {          
+            if (ComponentDic.TryGetValue(targetName, out List<Component> componentLi))
             {
                 foreach (var component in componentLi)
                 {
@@ -131,12 +131,8 @@ namespace Farme
         /// <param name="resultLi">组件列表</param>
         public virtual void GetComponents<T>(string targetName,out List<T> resultLi) where T : Component
         {
-            resultLi = new List<T>();
-            if (_componentDic == null)
-            {
-                _componentDic = new Dictionary<string, List<Component>>();
-            }
-            if (_componentDic.TryGetValue(targetName, out List<Component> componentLi))
+            resultLi = new List<T>();      
+            if (ComponentDic.TryGetValue(targetName, out List<Component> componentLi))
             {
                 foreach (var component in componentLi)
                 {
@@ -155,12 +151,8 @@ namespace Farme
         /// <returns></returns>
         public virtual List<T> GetComponents<T>(string targetName) where T:Component
         {
-            List<T> ts = new List<T>();
-            if (_componentDic == null)
-            {
-                _componentDic = new Dictionary<string, List<Component>>();
-            }
-            if (_componentDic.TryGetValue(targetName, out List<Component> componentLi))
+            List<T> ts = new List<T>();          
+            if (ComponentDic.TryGetValue(targetName, out List<Component> componentLi))
             {
                
                 foreach (var component in componentLi)
