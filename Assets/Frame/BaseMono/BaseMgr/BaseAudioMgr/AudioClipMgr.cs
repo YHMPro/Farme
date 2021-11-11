@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-namespace Farme
+namespace Farme.Audio
 {
     public class AudioClipMgr
     {
