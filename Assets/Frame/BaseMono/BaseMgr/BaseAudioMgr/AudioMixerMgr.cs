@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
-namespace Farme
+namespace Farme.Audio
 {
     /// <summary>
     /// 音效混合器值的类型

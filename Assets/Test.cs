@@ -8,7 +8,7 @@ using Farme.Net;
 using UnityEngine.Audio;
 using System.IO;
 using System.Text;
-
+using Farme.Audio;
 public class Test : MonoBehaviour
 {
     private Animator m_Anim;
@@ -18,15 +18,15 @@ public class Test : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        co= MonoSingletonFactory<ShareMono>.GetSingleton().DelayUAction(2, () =>
-        {
-            MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(co);
-            Debug.Log(co);
-        });
-        Debug.Log(co);
+        //co= MonoSingletonFactory<ShareMono>.GetSingleton().DelayUAction(2, () =>
+        //{
+        //    MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(co);
+        //    Debug.Log(co);
+        //});
+        //Debug.Log(co);
         //MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(co);
-        //AssetBundleLoad.MainABName = "PC";
-        //AssetBundleLoad.PackageCatalogueFile_URL = Application.streamingAssetsPath + "\\";
+        AssetBundleLoad.MainABName = "StandaloneWindows";
+        AssetBundleLoad.PackageCatalogueFile_URL = "S:\\UnityPro2019.3.7f1\\Project\\Farme\\AssetBundles\\StandaloneWindows\\";
 
         //string filePath = "F:\\Git忽略文件语法及示例.txt";
         //StreamReader SR = new StreamReader(filePath, Encoding.UTF8);
@@ -61,27 +61,30 @@ public class Test : MonoBehaviour
         //});
 
         //string textpath = "F:\\YHM\\项目\\识图用图模拟训练项目\\协作记录\\UI协作\\负责人(蔡云)\\2021.08.13\\压缩包\\24.识图用图模拟训练虚拟仿真\\切图\\button.png";
-        string abPath = "S:\\Unity Pro 2019.3.7f1\\Project\\Test\\AssetBundles\\PC\\audio";
-        WebDownloadTool.WebDownloadAssetBundle(abPath, (ab) =>
-        {
+        //string abPath = "S:\\Unity Pro 2019.3.7f1\\Project\\Test\\AssetBundles\\PC\\audio";
+        //WebDownloadTool.WebDownloadAssetBundle(abPath, (ab) =>
+        //{
 
-            //Sprite sp = ab.LoadAsset<Sprite>("组 4");
-            //button.sprite = sp;
-             // button.sprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), Vector2.one / 2.0f);
-         });
+        //    //Sprite sp = ab.LoadAsset<Sprite>("组 4");
+        //    //button.sprite = sp;
+        //     // button.sprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), Vector2.one / 2.0f);
+        // });
     }
     //private void 
     private void FixedUpdate()
     {
         //transform.position = Vector3.MoveTowards(transform.position, new Vector3(10, 0, 0),Time.fixedDeltaTime);
-        //if(Input.GetKeyDown(KeyCode.Space))
-        //{
-        //    //AssetBundleLoad.LoadAssetAsync<AudioMixer>("audio", "AudioMixer", (mix) =>
-        //    //{
-        //    //    Debug.Log(mix);
-        //    //});
-        //    Debug.Log(AssetBundleLoad.LoadAsset<AudioMixer>("audio", "AuioMixer"));
-        //}
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            AssetBundleLoad.LoadAssetAsync<AudioClip>("audio", "Effect", (clip) =>
+            {
+              Audio  audio = gameObject.AddComponent<Audio>();
+                audio.Clip = clip;
+                audio.Play(1,2);
+                //Debug.Log(audio);
+            });
+            //Debug.Log(AssetBundleLoad.LoadAsset<AudioMixer>("audio", "AuioMixer"));
+        }
     }
     private string Authorization = "Authorization";
     IEnumerator IEDownLoadTexture()
