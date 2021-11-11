@@ -14,12 +14,19 @@ public class Test : MonoBehaviour
     private Animator m_Anim;
     private Coroutine m_C;
     public Image button;
+    Coroutine co = null;
     // Start is called before the first frame update
     void Start()
     {
-
-        AssetBundleLoad.MainABName = "PC";
-        AssetBundleLoad.PackageCatalogueFile_URL = Application.streamingAssetsPath + "\\";
+        co= MonoSingletonFactory<ShareMono>.GetSingleton().DelayUAction(2, () =>
+        {
+            MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(co);
+            Debug.Log(co);
+        });
+        Debug.Log(co);
+        //MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(co);
+        //AssetBundleLoad.MainABName = "PC";
+        //AssetBundleLoad.PackageCatalogueFile_URL = Application.streamingAssetsPath + "\\";
 
         //string filePath = "F:\\Git忽略文件语法及示例.txt";
         //StreamReader SR = new StreamReader(filePath, Encoding.UTF8);
@@ -64,17 +71,17 @@ public class Test : MonoBehaviour
          });
     }
     //private void 
-    private void Update()
+    private void FixedUpdate()
     {
-        //transform.position = Vector3.MoveTowards(Vector3.zero, new Vector3(10, 0, 0), Time.deltaTime * 0.5f);
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            //AssetBundleLoad.LoadAssetAsync<AudioMixer>("audio", "AudioMixer", (mix) =>
-            //{
-            //    Debug.Log(mix);
-            //});
-            Debug.Log(AssetBundleLoad.LoadAsset<AudioMixer>("audio", "AuioMixer"));
-        }
+        //transform.position = Vector3.MoveTowards(transform.position, new Vector3(10, 0, 0),Time.fixedDeltaTime);
+        //if(Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    //AssetBundleLoad.LoadAssetAsync<AudioMixer>("audio", "AudioMixer", (mix) =>
+        //    //{
+        //    //    Debug.Log(mix);
+        //    //});
+        //    Debug.Log(AssetBundleLoad.LoadAsset<AudioMixer>("audio", "AuioMixer"));
+        //}
     }
     private string Authorization = "Authorization";
     IEnumerator IEDownLoadTexture()

@@ -101,7 +101,7 @@ namespace Farme
         /// <returns></returns>
         public Coroutine DelayUAction(float delayTime, UnityAction callBack)
         {
-            return StartCoroutine(IEDelayUAction(delayTime, callBack));
+            return StartCoroutine(IEDelayUAction(Mathf.Clamp(delayTime, 0, delayTime), callBack));
         }
         /// <summary>
         /// 延迟执行(含参数传递) 
@@ -113,7 +113,7 @@ namespace Farme
         /// <returns></returns>
         public Coroutine DelayUAction<T>(float delayTime, T tInfo, UnityAction<T> callBack)
         {
-            return StartCoroutine(IEDelayUAction(delayTime, tInfo, callBack));
+            return StartCoroutine(IEDelayUAction(Mathf.Clamp(delayTime, 0, delayTime), tInfo, callBack));
         }
         /// <summary>
         /// 延迟执行(含参数传递) 
@@ -127,7 +127,7 @@ namespace Farme
         /// <returns></returns>
         public Coroutine DelayUAction<T, K>(float delayTime, T tInfo, K kInfo, UnityAction<T, K> callBack)
         {
-            return StartCoroutine(IEDelayUAction(delayTime, tInfo, kInfo, callBack));
+            return StartCoroutine(IEDelayUAction(Mathf.Clamp(delayTime, 0, delayTime), tInfo, kInfo, callBack));
         }
         /// <summary>
         /// 协程延迟(无参数传递)
