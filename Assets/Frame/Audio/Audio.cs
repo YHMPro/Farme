@@ -371,19 +371,19 @@ namespace Farme.Audio
         {
             m_ListenVolumeExcess = MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IEVolumeExcess(volume,Mathf.Clamp(time,0,m_As.clip.length-m_As.time), finishCallback));        
         }
-        private IEnumerator IEVolumeExcess(float volume,float time, UnityAction finishCallback=null)
+        private IEnumerator IEVolumeExcess(float volume,float time, UnityAction finishCallback=null)//1秒   50次循环
         {
-            int num = (int)(time / 0.02f);
-            float interval = volume / num;
+            int num = (int)(50 * time);
+            float interval = Mathf.Abs(m_As.volume - volume) / num;
             while (true)
             {            
-                if(num<=0)
+                if(num < 0)
                 {
                     m_ListenVolumeExcess = null;
                     finishCallback?.Invoke();
                     break;
                 }
-                m_As.volume = Mathf.MoveTowards(m_As.volume, volume,interval);
+                m_As.volume = Mathf.MoveTowards(m_As.volume, volume, interval);
                 num--;
                 yield return new WaitForSeconds(0.02f);
             }

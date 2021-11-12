@@ -71,23 +71,38 @@ public class Test : MonoBehaviour
         //     // button.sprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), Vector2.one / 2.0f);
         // });
     }
+    Audio audio1;
+    Audio audio2;
     //private void 
     private void FixedUpdate()
     {
-        //transform.position = Vector3.MoveTowards(transform.position, new Vector3(10, 0, 0),Time.fixedDeltaTime);
+        transform.position = Vector3.MoveTowards(transform.position, new Vector3(-10, 0, 0),Time.fixedDeltaTime);
         if (Input.GetKeyDown(KeyCode.Space))
         {
             AssetBundleLoad.LoadAssetAsync<AudioClip>("audio", "Effect", (clip) =>
             {
-                Audio audio = AudioManager.ApplyForAudio();
-                audio.Clip = clip;
-                audio.Play();
+                audio1 = AudioManager.ApplyForAudio();
+                audio1.Clip = clip;
+                audio1.Play();
               //Audio  audio = gameObject.AddComponent<Audio>();
               //  audio.Clip = clip;
               //  audio.Play(1,2);
               //Debug.Log(audio);
             });
             //Debug.Log(AssetBundleLoad.LoadAsset<AudioMixer>("audio", "AuioMixer"));
+        }
+        if(Input.GetKeyDown(KeyCode.Q))
+        {
+            AssetBundleLoad.LoadAssetAsync<AudioClip>("audio", "BackGround", (clip) =>
+            {
+                audio2 = AudioManager.ApplyForAudio();
+                audio2.Clip = clip;
+                AudioManager.ExcessPlay(audio1, audio2, 1, 5);
+                //Audio  audio = gameObject.AddComponent<Audio>();
+                //  audio.Clip = clip;
+                //  audio.Play(1,2);
+                //Debug.Log(audio);
+            });
         }
     }
     private string Authorization = "Authorization";
