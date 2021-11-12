@@ -13,15 +13,15 @@ namespace Farme
         /// <summary>
         /// 回调
         /// </summary>
-        private event UnityAction _callBack;
+        private event UnityAction m_Callback;
         /// <summary>
         /// 回调
         /// </summary>
-        private event UnityAction _lateCallBack;
+        private event UnityAction m_LateCallback;
         /// <summary>
         /// 回调
         /// </summary>
-        private event UnityAction _fixCallBack;
+        private event UnityAction m_FixCallback;
         #endregion
         #region 方法      
         /// <summary>
@@ -29,79 +29,81 @@ namespace Farme
         /// </summary>
         private void Update()
         {
-            _callBack?.Invoke();
+            m_Callback?.Invoke();
         }
         /// <summary>
         /// 迟与Update更新
         /// </summary>
         private void LateUpdate()
         {
-            _lateCallBack?.Invoke();
+            m_LateCallback?.Invoke();
         }
         /// <summary>
         /// 固定更新
         /// </summary>
         private void FixedUpdate()
         {
-            _fixCallBack?.Invoke();
+            m_FixCallback?.Invoke();
         }
         /// <summary>
-        /// 添加Update行为
+        /// 申请Update行为
         /// </summary>
-        /// <param name="callBack">回调</param>
-        public void AddUpdateUAction(UnityAction callBack)
+        /// <param name="callback"></param>
+        public void ApplyUpdateAction(UnityAction callback)
         {
-            this._callBack += callBack;
+            m_Callback += callback;
         }
+        /// <summary>
+        /// 申请LateUpdate行为
+        /// </summary>
+        /// <param name="callback">回调</param>
+        public void AppleLateUpdateAction(UnityAction callback)
+        {
+            m_LateCallback += callback;
+        }
+        /// <summary>
+        /// 申请FixUpdate行为
+        /// </summary>
+        /// <param name="callback">回调</param>
+        public void ApplyFixUpdateAction(UnityAction callback)
+        {
+            m_LateCallback += callback;
+        }       
         /// <summary>
         /// 移除Update行为
         /// </summary>
-        /// <param name="callBack">回调</param>
-        public void RemoveUpdateUAction(UnityAction callBack)
+        /// <param name="callback"></param>
+        public void RemoveUpdateAction(UnityAction callback)
         {
-            this._callBack -= callBack;
+            m_Callback -= callback;
         }
         /// <summary>
         /// 移除LateUpdate行为
         /// </summary>
         /// <param name="callBack">回调</param>
-        public void RemoveLateUpdateUAction(UnityAction callBack)
+        public void RemoveLateUpdateAction(UnityAction callback)
         {
-            this._lateCallBack -= callBack;
+            m_LateCallback -= callback;
         }
-        /// <summary>
-        /// 添加LateUpdate行为
-        /// </summary>
-        /// <param name="callBack">回调</param>
-        public void AddLateUpdateUAction(UnityAction callBack)
-        {
-            this._lateCallBack += callBack;
-        }
+        
         /// <summary>
         /// 移除FixUpdate行为
         /// </summary>
         /// <param name="callBack">回调</param>
-        public void RemoveFixUpdateUAction(UnityAction callBack)
+        public void RemoveFixUpdateAction(UnityAction callback)
         {
-            this._fixCallBack -= callBack;
+            m_FixCallback -= callback;
         }
-        /// <summary>
-        /// 添加FixUpdate行为
-        /// </summary>
-        /// <param name="callBack">回调</param>
-        public void AddFixUpdateUAction(UnityAction callBack)
-        {
-            this._fixCallBack += callBack;
-        }
+        
         /// <summary>
         /// 延迟执行(无参数传递) 
         /// </summary>
         /// <param name="delayTime">延迟时长</param>
         /// <param name="callBack">回调</param>
         /// <returns></returns>
-        public Coroutine DelayUAction(float delayTime, UnityAction callBack)
+        public Coroutine DelayAction(float delayTime, UnityAction callback)
         {
-            return StartCoroutine(IEDelayUAction(Mathf.Clamp(delayTime, 0, delayTime), callBack));
+            return StartCoroutine(IEDelayAction(Mathf.Clamp(delayTime, 0, delayTime), callback));
         }
         /// <summary>
         /// 延迟执行(含参数传递) 
@@ -111,9 +113,9 @@ namespace Farme
         /// <param name="tInfo">信息</param>
         /// <param name="callBack">回调</param>
         /// <returns></returns>
-        public Coroutine DelayUAction<T>(float delayTime, T tInfo, UnityAction<T> callBack)
+        public Coroutine DelayAction<T>(float delayTime, T tInfo, UnityAction<T> callback)
         {
-            return StartCoroutine(IEDelayUAction(Mathf.Clamp(delayTime, 0, delayTime), tInfo, callBack));
+            return StartCoroutine(IEDelayAction(Mathf.Clamp(delayTime, 0, delayTime), tInfo, callback));
         }
         /// <summary>
         /// 延迟执行(含参数传递) 
@@ -125,9 +127,9 @@ namespace Farme
         /// <param name="kInfo">信息</param>
         /// <param name="callBack">回调</param>
         /// <returns></returns>
-        public Coroutine DelayUAction<T, K>(float delayTime, T tInfo, K kInfo, UnityAction<T, K> callBack)
+        public Coroutine DelayAction<T, K>(float delayTime, T tInfo, K kInfo, UnityAction<T, K> callback)
         {
-            return StartCoroutine(IEDelayUAction(Mathf.Clamp(delayTime, 0, delayTime), tInfo, kInfo, callBack));
+            return StartCoroutine(IEDelayAction(Mathf.Clamp(delayTime, 0, delayTime), tInfo, kInfo, callback));
         }
         /// <summary>
         /// 协程延迟(无参数传递)
@@ -135,10 +137,10 @@ namespace Farme
         /// <param name="delayTime">延迟时长</param>
         /// <param name="callBack">回调</param>
         /// <returns></returns>
-        private IEnumerator IEDelayUAction(float delayTime, UnityAction callBack)
+        private IEnumerator IEDelayAction(float delayTime, UnityAction callback)
         {
             yield return new WaitForSeconds(delayTime);
-            callBack?.Invoke();
+            callback?.Invoke();
         }
         /// <summary>
         /// 协程延迟(含参数传递)
@@ -148,10 +150,10 @@ namespace Farme
         /// <param name="tInfo">信息</param>
         /// <param name="callBack">回调</param>
         /// <returns></returns>
-        private IEnumerator IEDelayUAction<T>(float delayTime, T tInfo, UnityAction<T> callBack)
+        private IEnumerator IEDelayAction<T>(float delayTime, T tInfo, UnityAction<T> callback)
         {
             yield return new WaitForSeconds(delayTime);
-            callBack?.Invoke(tInfo);
+            callback?.Invoke(tInfo);
         }
         /// <summary>
         /// 协程延迟(含参数传递)
@@ -163,31 +165,31 @@ namespace Farme
         /// <param name="kInfo">信息</param>
         /// <param name="callBack">回调</param>
         /// <returns></returns>
-        private IEnumerator IEDelayUAction<T, K>(float delayTime, T tInfo, K kInfo, UnityAction<T, K> callBack)
+        private IEnumerator IEDelayAction<T, K>(float delayTime, T tInfo, K kInfo, UnityAction<T, K> callback)
         {
             yield return new WaitForSeconds(delayTime);
-            callBack?.Invoke(tInfo, kInfo);
+            callback?.Invoke(tInfo, kInfo);
         }
         /// <summary>
         /// 移除所有Update委托
         /// </summary>
-        public void ClearUA()
+        public void ClearUpdate()
         {
-            _callBack = null;
+            m_Callback = null;
         }
         /// <summary>
         /// 移除所有FixUpdate委托
         /// </summary>
-        public void ClearFixUA()
+        public void ClearFixedUpdate()
         {
-            _fixCallBack = null;
+            m_FixCallback = null;
         }
         /// <summary>
         /// 移除所有LateUpdate委托
         /// </summary>
-        public void ClearLateUA()
+        public void ClearLateUpdate()
         {
-            _lateCallBack = null;
+            m_LateCallback = null;
         }
         #endregion
     }

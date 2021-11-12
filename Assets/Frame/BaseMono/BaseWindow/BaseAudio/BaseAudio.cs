@@ -1,17 +1,20 @@
 ﻿using UnityEngine;
 using UnityEngine.Audio;
+using System;
 namespace Farme
 {
+    [Obsolete("已更替为Audio统一使用,未来将会删除")]
     [RequireComponent(typeof(AudioSource))]
     /// <summary>
     /// Audio基类
     /// </summary>
     public abstract class BaseAudio : BaseMono, IAudioControl
     {
+        
         protected BaseAudio() { }
 
         #region 生命周期函数
-
+        
         protected override void Awake()
         {
             base.Awake();
@@ -198,7 +201,7 @@ namespace Farme
         {
             if (m_Timer == null && m_As != null && m_Ac != null)
             {
-                m_Timer = MonoSingletonFactory<ShareMono>.GetSingleton().DelayUAction(m_Ac.length - m_As.time, () =>//延迟回收时长为调用时音效剪辑总时长-已播放时长
+                m_Timer = MonoSingletonFactory<ShareMono>.GetSingleton().DelayAction(m_Ac.length - m_As.time, () =>//延迟回收时长为调用时音效剪辑总时长-已播放时长
                 {
                     m_As.Stop();//停止播放
                     m_IsPause = false;//非暂停
@@ -322,7 +325,6 @@ namespace Farme
             }
             return false;
         }
-
         public float GetPlayedTime()
         {
             return m_PlayedTime;

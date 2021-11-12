@@ -1,14 +1,16 @@
 ManifestFileVersion: 0
-CRC: 2800336823
+CRC: 2218985787
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: c87abcd8f8b6e3d8e792ad346bcb5f5d
+    Hash: 97dd504e3e778fffb8b9a3f15ff64d2f
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 57836fec4db301e25a9e024c7b365096
+    Hash: 811b8b3dee7ee4d0e76641950dd120dd
 HashAppended: 0
 ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
 - Class: 241
   Script: {instanceID: 0}
 - Class: 243
@@ -16,5 +18,7 @@ ClassTypes:
 - Class: 245
   Script: {instanceID: 0}
 Assets:
+- Assets/Frame/Resources/Effect.mp3
 - Assets/Frame/Resources/YHMFarmeLockFile/AudioMixer.mixer
+- Assets/Frame/Resources/BackGround.mp3
 Dependencies: []

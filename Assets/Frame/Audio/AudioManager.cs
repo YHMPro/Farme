@@ -90,13 +90,33 @@ namespace Farme.Audio
         /// </summary>
         public static void ClearCache()
         {
-            while(m_InidleAudioLi.Count > m_cacheAudioMax)
+            while(InidleAudioLi.Count > m_cacheAudioMax)
             {              
-                Audio audio = m_InidleAudioLi[m_InidleAudioLi.Count - 1];
+                Audio audio = InidleAudioLi[InidleAudioLi.Count - 1];
                 if (audio != null)
                 {
-                    m_InidleAudioLi.Remove(audio);
+                    InidleAudioLi.Remove(audio);
                     Object.Destroy(audio.gameObject);
+                }
+            }
+        }
+        /// <summary>
+        /// 清除空引用
+        /// </summary>
+        public static void ClearNULLUSING()
+        {
+            for (int index = NotInidleAudioLi.Count - 1; index >= 0; index--)
+            {
+                if (NotInidleAudioLi[index] == null)
+                {
+                    NotInidleAudioLi.RemoveAt(index);
+                }
+            }
+            for (int index = InidleAudioLi.Count - 1; index >= 0; index--)
+            {
+                if (InidleAudioLi[index] == null)
+                {
+                    InidleAudioLi.RemoveAt(index);
                 }
             }
         }
@@ -106,15 +126,17 @@ namespace Farme.Audio
         /// <returns></returns>
         public static Audio ApplyForAudio()
         {
+            ClearNULLUSING();//清除一次空引用
             Audio audio;
-            if (m_InidleAudioLi.Count > 0)
+            if (InidleAudioLi.Count > 0)
             {
                 audio = m_InidleAudioLi[0];
-                m_InidleAudioLi.Remove(audio);
-                if(!m_NotInidleAudioLi.Contains(audio))
+                InidleAudioLi.Remove(audio);
+                if(!NotInidleAudioLi.Contains(audio))
                 {
-                    m_NotInidleAudioLi.Add(audio);
-                }                
+                    NotInidleAudioLi.Add(audio);
+                }
+                audio.gameObject.SetActive(true);
             }
             else
             {
@@ -127,9 +149,9 @@ namespace Farme.Audio
         /// </summary>
         public static void GlobalPause()
         {
-            for (int index = m_NotInidleAudioLi.Count - 1; index >= 0; index--)
+            for (int index = NotInidleAudioLi.Count - 1; index >= 0; index--)
             {
-                Audio audio = m_NotInidleAudioLi[index];
+                Audio audio = NotInidleAudioLi[index];
                 if (audio != null)
                 {
                     audio.Pause();
@@ -141,9 +163,9 @@ namespace Farme.Audio
         /// </summary>
         public static void GlobalStop()
         {
-            for (int index = m_NotInidleAudioLi.Count - 1; index >= 0; index--)
+            for (int index = NotInidleAudioLi.Count - 1; index >= 0; index--)
             {
-                Audio audio = m_NotInidleAudioLi[index];
+                Audio audio = NotInidleAudioLi[index];
                 if (audio != null)
                 {
                     audio.Pause();
@@ -155,9 +177,9 @@ namespace Farme.Audio
         /// </summary>
         public static void GlobalPlay()
         {
-            for (int index = m_NotInidleAudioLi.Count - 1; index >= 0; index--)
+            for (int index = NotInidleAudioLi.Count - 1; index >= 0; index--)
             {
-                Audio audio = m_NotInidleAudioLi[index];
+                Audio audio = NotInidleAudioLi[index];
                 if (audio != null)
                 {
                     audio.Pause();
@@ -170,9 +192,9 @@ namespace Farme.Audio
         /// <param name="audioMixerGroup">音效混合组</param>
         public static void Pause(AudioMixerGroup audioMixerGroup)
         {
-            for (int index = m_NotInidleAudioLi.Count - 1; index >= 0; index--)
+            for (int index = NotInidleAudioLi.Count - 1; index >= 0; index--)
             {
-                Audio audio = m_NotInidleAudioLi[index];
+                Audio audio = NotInidleAudioLi[index];
                 if (audio != null && audio.Group == audioMixerGroup)
                 {
                     audio.Pause();
@@ -185,9 +207,9 @@ namespace Farme.Audio
         /// <param name="audioMixerGroup">音效混合组</param>
         public static void Stop(AudioMixerGroup audioMixerGroup)
         {
-            for (int index = m_NotInidleAudioLi.Count - 1; index >= 0; index--)
+            for (int index = NotInidleAudioLi.Count - 1; index >= 0; index--)
             {
-                Audio audio = m_NotInidleAudioLi[index];
+                Audio audio = NotInidleAudioLi[index];
                 if (audio != null&& audio.Group== audioMixerGroup)
                 {
                     audio.Stop();
@@ -200,9 +222,9 @@ namespace Farme.Audio
         /// <param name="audioMixerGroup">音效混合组</param>
         public void Play(AudioMixerGroup audioMixerGroup)
         {
-            for (int index = m_NotInidleAudioLi.Count - 1; index >= 0; index--)
+            for (int index = NotInidleAudioLi.Count - 1; index >= 0; index--)
             {
-                Audio audio = m_NotInidleAudioLi[index];
+                Audio audio = NotInidleAudioLi[index];
                 if (audio != null && audio.Group == audioMixerGroup)
                 {
                     audio.Play();
@@ -215,9 +237,9 @@ namespace Farme.Audio
         /// <param name="audioMixerGroup">音效混合组</param>
         public static void RePlay(AudioMixerGroup audioMixerGroup)
         {
-            for (int index = m_NotInidleAudioLi.Count - 1; index >= 0; index--)
+            for (int index = NotInidleAudioLi.Count - 1; index >= 0; index--)
             {
-                Audio audio = m_NotInidleAudioLi[index];
+                Audio audio = NotInidleAudioLi[index];
                 if (audio != null&& audio.Group == audioMixerGroup)
                 {
                     audio.RePlay();
@@ -235,7 +257,7 @@ namespace Farme.Audio
         {
             form.Stop(0, time);
             to.Play(volume, time);
-        }
+        }      
         /// <summary>
         /// 设置音量
         /// </summary>

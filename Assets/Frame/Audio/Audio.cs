@@ -8,13 +8,12 @@ namespace Farme.Audio
     /// <summary>
     /// 音效
     /// </summary>
-    public class Audio : BaseMono
+    public class Audio : MonoBehaviour
     {
         protected Audio() { }
         #region 生命周期函数
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
             m_As = GetComponent<AudioSource>();
             m_As.panStereo = 0;
             m_As.time = 0;
@@ -25,7 +24,7 @@ namespace Farme.Audio
             m_Timer = null;
             m_ListenVolumeExcess = null;
             AudioManager.NotInidleAudioLi.Add(this);
-        }      
+        }       
         #endregion
 
         #region 字段         
@@ -235,7 +234,7 @@ namespace Farme.Audio
         {
             if(m_Timer == null&& m_As.clip!=null)
             {
-                m_Timer = MonoSingletonFactory<ShareMono>.GetSingleton().DelayUAction(m_As.clip.length - m_As.time, () =>
+                m_Timer = MonoSingletonFactory<ShareMono>.GetSingleton().DelayAction(m_As.clip.length - m_As.time, ()=>
                 {
                     RemoveTimer();
                     if (m_As.loop)
@@ -250,8 +249,7 @@ namespace Farme.Audio
                     {
                         InidleWithNotInidleTransform(this);
                     }
-                });
-               
+                });            
             }
         }
         /// <summary>
@@ -391,7 +389,7 @@ namespace Farme.Audio
             }
         }
         /// <summary>
-        /// 闲置与非闲置的置换
+        /// 闲置与非闲置的相互置换
         /// </summary>
         /// <param name="audio">音效</param>
         private void InidleWithNotInidleTransform(Audio audio)
@@ -400,12 +398,14 @@ namespace Farme.Audio
             {
                 AudioManager.InidleAudioLi.Remove(audio);
                 AudioManager.NotInidleAudioLi.Add(audio);
+                audio.gameObject.SetActive(true);
                 return;
             }
             if (AudioManager.NotInidleAudioLi.Contains(audio))
             {
                 AudioManager.NotInidleAudioLi.Remove(audio);
                 AudioManager.InidleAudioLi.Add(audio);
+                audio.gameObject.SetActive(false);
                 return;
             }
         }

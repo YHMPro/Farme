@@ -28,7 +28,6 @@ namespace Farme
         /// </summary>
         /// <param name="reuseGroup">复用组</param>
         /// <param name="result">结果</param>
-        /// <param name="parent">父级</param>
         /// <returns></returns>
         public static bool Take(string reuseGroup, out GameObject result)
         {

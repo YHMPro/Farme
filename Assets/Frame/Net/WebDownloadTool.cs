@@ -25,7 +25,7 @@ namespace Farme.Net
         {
             UnityWebRequest www = UnityWebRequest.Get(url);//创建网络请求
             www.SendWebRequest();//发送请求
-            Coroutine cor = MonoSingletonFactory<ShareMono>.GetSingleton().DelayUAction(m_DownloadAssetBundleOutTime, requestTimeOutCallback);
+            Coroutine cor = MonoSingletonFactory<ShareMono>.GetSingleton().DelayAction(m_DownloadAssetBundleOutTime, requestTimeOutCallback);
             while (true)
             {
                 downLoadProgress?.Invoke(www.downloadProgress);//回调下载进度
@@ -102,7 +102,7 @@ namespace Farme.Net
         {
             UnityWebRequest www = UnityWebRequestTexture.GetTexture(url);//创建网络请求
             www.SendWebRequest();//发送请求
-            Coroutine cor = MonoSingletonFactory<ShareMono>.GetSingleton().DelayUAction(m_DownloadAssetBundleOutTime, requestTimeOutCallback);
+            Coroutine cor = MonoSingletonFactory<ShareMono>.GetSingleton().DelayAction(m_DownloadAssetBundleOutTime, requestTimeOutCallback);
             while (true)
             {
                 downLoadProgress?.Invoke(www.downloadProgress);//回调下载进度

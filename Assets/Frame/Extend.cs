@@ -19,7 +19,7 @@ namespace Farme
         /// <param name="delay">延迟时长</param>
         public static void Recycle(this GameObject target,string reuseGroup, float delay = 0)
         {
-            MonoSingletonFactory<ShareMono>.GetSingleton().DelayUAction(delay, () =>
+            MonoSingletonFactory<ShareMono>.GetSingleton().DelayAction(delay, () =>
              {
                  if(target!=null)
                  {

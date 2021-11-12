@@ -26,7 +26,8 @@ public class Test : MonoBehaviour
         //Debug.Log(co);
         //MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(co);
         AssetBundleLoad.MainABName = "StandaloneWindows";
-        AssetBundleLoad.PackageCatalogueFile_URL = "S:\\UnityPro2019.3.7f1\\Project\\Farme\\AssetBundles\\StandaloneWindows\\";
+        AssetBundleLoad.PackageCatalogueFile_URL = "S:\\Unity Pro 2019.3.7f1\\MyGitProject\\Farme\\AssetBundles\\StandaloneWindows\\";
+            //"S:\\UnityPro2019.3.7f1\\Project\\Farme\\AssetBundles\\StandaloneWindows\\";
 
         //string filePath = "F:\\Git忽略文件语法及示例.txt";
         //StreamReader SR = new StreamReader(filePath, Encoding.UTF8);
@@ -78,10 +79,13 @@ public class Test : MonoBehaviour
         {
             AssetBundleLoad.LoadAssetAsync<AudioClip>("audio", "Effect", (clip) =>
             {
-              Audio  audio = gameObject.AddComponent<Audio>();
+                Audio audio = AudioManager.ApplyForAudio();
                 audio.Clip = clip;
-                audio.Play(1,2);
-                //Debug.Log(audio);
+                audio.Play();
+              //Audio  audio = gameObject.AddComponent<Audio>();
+              //  audio.Clip = clip;
+              //  audio.Play(1,2);
+              //Debug.Log(audio);
             });
             //Debug.Log(AssetBundleLoad.LoadAsset<AudioMixer>("audio", "AuioMixer"));
         }
@@ -102,6 +106,7 @@ public class Test : MonoBehaviour
             }
             yield return uwr.downloadProgress;
         }
+     
         AssetBundle ab = (uwr.downloadHandler as DownloadHandlerAssetBundle).assetBundle;
 
         Sprite sp= ab.LoadAsset<Sprite>("组 4");

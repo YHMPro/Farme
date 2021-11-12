@@ -3,8 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using System;
 namespace Farme
 {
+    [Obsolete("已更替为:AudioManager统一管理")]
     /// <summary>
     /// Audio管理基类
     /// </summary>

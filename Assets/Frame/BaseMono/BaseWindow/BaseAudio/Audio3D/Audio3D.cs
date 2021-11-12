@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
+using System;
 namespace Farme
 {
+    [Obsolete("已更替为Audio统一使用,未来将会删除")]
     /// <summary>
     /// Audio3D
     /// </summary>

@@ -33,7 +33,7 @@ namespace Farme
         /// </summary>
         protected virtual void OnEnable()
         {
-            MonoSingletonFactory<ShareMono>.GetSingleton().DelayUAction(Time.deltaTime, DataInit);
+            MonoSingletonFactory<ShareMono>.GetSingleton().DelayAction(Time.deltaTime, DataInit);
         }
         /// <summary>
         /// 组件初始化完成之后执行一次(注:在Awake之后执行)
