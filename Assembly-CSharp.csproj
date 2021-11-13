@@ -66,6 +66,9 @@
   <ItemGroup>
     <Compile Include="Assets\Frame\Audio\Audio.cs" />
     <Compile Include="Assets\Frame\Audio\AudioManager.cs" />
+    <Compile Include="Assets\Frame\BaseMono\BaseAudio\Audio2D\Audio2D.cs" />
+    <Compile Include="Assets\Frame\BaseMono\BaseAudio\Audio3D\Audio3D.cs" />
+    <Compile Include="Assets\Frame\BaseMono\BaseAudio\BaseAudio.cs" />
     <Compile Include="Assets\Frame\BaseMono\BaseMgr\BaseAudioMgr\Audio2DMgr\Audio2DMgr.cs" />
     <Compile Include="Assets\Frame\BaseMono\BaseMgr\BaseAudioMgr\Audio3DMgr\Audio3DMgr.cs" />
     <Compile Include="Assets\Frame\BaseMono\BaseMgr\BaseAudioMgr\AudioClipMgr.cs" />
@@ -75,9 +78,6 @@
     <Compile Include="Assets\Frame\BaseMono\BaseMgr\BaseWindowMgr\BaseWindowMgr.cs" />
     <Compile Include="Assets\Frame\BaseMono\BaseMgr\BaseWindowMgr\BaseWorldWindowMgr\BaseWorldWindowMgr.cs" />
     <Compile Include="Assets\Frame\BaseMono\BaseMono.cs" />
-    <Compile Include="Assets\Frame\BaseMono\BaseWindow\BaseAudio\Audio2D\Audio2D.cs" />
-    <Compile Include="Assets\Frame\BaseMono\BaseWindow\BaseAudio\Audio3D\Audio3D.cs" />
-    <Compile Include="Assets\Frame\BaseMono\BaseWindow\BaseAudio\BaseAudio.cs" />
     <Compile Include="Assets\Frame\BaseMono\BaseWindow\BaseScreenWindow\BaseScreenWindow.cs" />
     <Compile Include="Assets\Frame\BaseMono\BaseWindow\BaseWorldWindow\BaseWorldWindow.cs" />
     <Compile Include="Assets\Frame\BaseMono\BaseWindow\WindowBase.cs" />
@@ -97,6 +97,9 @@
     <Compile Include="Assets\Frame\Load\ResourcesLoad.cs" />
     <Compile Include="Assets\Frame\Load\SceneLoad.cs" />
     <Compile Include="Assets\Frame\Net\WebDownloadTool.cs" />
+    <Compile Include="Assets\Frame\UI\BasePanel.cs" />
+    <Compile Include="Assets\Frame\UI\WindowModel.cs" />
+    <Compile Include="Assets\Frame\UI\WindowRoot.cs" />
     <Compile Include="Assets\Test.cs" />
     <None Include="Assets\Frame\Plugins\Log\Debuger.xml" />
     <Reference Include="Unity.Timeline.Editor">

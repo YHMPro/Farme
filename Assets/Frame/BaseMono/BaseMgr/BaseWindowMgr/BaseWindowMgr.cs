@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-namespace Farme
+using Farme.Tool;
+namespace Farme.UI
 {
     /// <summary>
     /// 窗口管理基类
@@ -16,29 +17,29 @@ namespace Farme
         /// <summary>
         /// 自身指针事件数据
         /// </summary>
-        protected PointerEventData _mPED = null;
+        protected PointerEventData m_PED = null;
         /// <summary>
         /// 自身画布
         /// </summary>
-        protected Canvas _mCanvas = null;
+        protected Canvas m_Canvas = null;
         /// <summary>
-        /// 事件系统
+        /// 窗口根节点
         /// </summary>
-        protected static EventSystem _eS = null;
+        protected static WindowRoot m_WindowRoot = null;       
         #endregion
         #region 属性
         /// <summary>
         /// 画布
         /// </summary>
-        public Canvas MCanvas
+        public Canvas Canvas
         {
             get
             {
-                if (_mCanvas == null)
+                if (m_Canvas == null)
                 {
-                    _mCanvas = GetComponent<Canvas>();
+                    m_Canvas = GetComponent<Canvas>();
                 }
-                return _mCanvas;
+                return m_Canvas;
             }
         }
         #endregion
@@ -46,21 +47,22 @@ namespace Farme
         protected override void Awake()
         {
             base.Awake();
-            if (_eS == null)
+            RegisterComponentsTypes<Transform>();
+            if (m_WindowRoot==null)
             {
-                GameObject go = new GameObject("EventSystem");
-                MonoSingletonFactory<StandaloneInputModule>.GetSingleton(go);
-                MonoSingletonFactory<EventSystem>.GetSingleton(out _eS,go);
-                _mPED = new PointerEventData(_eS);
-            }
-            RegisterComponentsTypes<Transform>(false);
-            _ = MCanvas;
-            gameObject.name = GetType().Name;
-           
+                if(GoLoad.Take("FarmeLockFile/WindowRoot",out GameObject go))
+                {
+                    Debuger.Log("窗口根节点加载成功");
+                    m_WindowRoot = go.GetComponent<WindowRoot>();
+                    m_PED = new PointerEventData(m_WindowRoot.ES);
+                }
+            }                             
+            m_Canvas = GetComponent<Canvas>();
+            gameObject.name = GetType().Name;          
         }     
         /// <summary>
         /// UI事件注册
-        /// 注:指针事件触发条件(1:UI透明的>=1 2:UI的RaycastTarget为True)
+        /// 注:指针事件触发条件(1:UI透明的>=0.1 2:UI的RaycastTarget为True)
         /// </summary>
         /// <param name="uiB">ui对象</param>
         /// <param name="eTType">添加的事件触发类型</param>
@@ -69,19 +71,16 @@ namespace Farme
         {
             if (uiB == null)
             {
-                Debug.Log("申请对象为NULL");
+                Debuger.Log("申请对象为NULL");
                 return;
             }
             if(callBack==null)
             {
-                Debug.Log("回调为NULL");
+                Debuger.Log("回调为NULL");
                 return;
             }
             //获取UI对象身下的EventTrigger组件实例
-            if(!uiB.gameObject.TryGetComponent(out EventTrigger eT))
-            {
-                eT = uiB.gameObject.AddComponent<EventTrigger>();
-            }
+            EventTrigger eT = uiB.gameObject.InspectComponent<EventTrigger>();                     
             //便利已添加的事件
             foreach (var t in eT.triggers)
             {
@@ -112,12 +111,12 @@ namespace Farme
         {
             if (uiB == null)
             {
-                Debug.Log("申请对象为NULL");
+                Debuger.Log("申请对象为NULL");
                 return;
             }
             if (callBack == null)
             {
-                Debug.Log("回调为NULL");
+                Debuger.Log("回调为NULL");
                 return;
             }
             //获取UI对象身下的EventTrigger组件实例

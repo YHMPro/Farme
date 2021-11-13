@@ -9,49 +9,25 @@ namespace Farme
         protected BaseWindow() { }
         protected override void Awake()
         {
-            base.Awake();
-            _ = MRectTrans;
-            _ = RelyCanvas;
+            base.Awake();          
         }
         #region 字段
         /// <summary>
-        /// 矩形转换
+        /// 自身依赖的画布
         /// </summary>
-        protected RectTransform _mRectTrans = null;
-        /// <summary>
-        /// 依赖的画布
-        /// </summary>
-        protected Canvas _relyCanvas = null;
+        public Canvas m_RelyCanvas = null;         
         #endregion
         #region 属性
         /// <summary>
-        /// 窗口依赖的画布
-        /// </summary>
-        public Canvas RelyCanvas
-        {
-            get
-            {
-                if(_relyCanvas)
-                {
-                    _relyCanvas = transform.parent.parent.GetComponent<Canvas>();
-                }
-                return _relyCanvas;
-            }
-        }
-        /// <summary>
         /// 矩形转换
         /// </summary>
-        public RectTransform MRectTrans 
+        public RectTransform RT
         {
             get
             {
-                if (_mRectTrans == null)
-                {
-                    _mRectTrans = transform as RectTransform;
-                }
-                return _mRectTrans;
+                return transform as RectTransform;
             }
-        }
+        }       
         #endregion
         #region 方法            
         /// <summary>

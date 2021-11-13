@@ -58,7 +58,8 @@ namespace Farme
         /// <summary>
         /// 注册组件类型
         /// </summary>
-        /// <typeparam name="T">需要注册的组件类型</typeparam>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="includeInactive">不活跃的对象是否查找</param>
         protected void RegisterComponentsTypes<T>(bool includeInactive=true) where T : Component
         {                     
             T[] tS = GetComponentsInChildren<T>(includeInactive);

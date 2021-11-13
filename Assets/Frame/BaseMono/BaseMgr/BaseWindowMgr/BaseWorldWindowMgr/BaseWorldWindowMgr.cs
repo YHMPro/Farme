@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-namespace Farme
+namespace Farme.UI
 {
     public class BaseWorldWindowMgr : BaseWindowMgr,ILocationSync
     {

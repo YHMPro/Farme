@@ -289,7 +289,6 @@ namespace Farme.Audio
             Play();
             VolumeExcess(volume, time);
         }
-
         /// <summary>
         /// 重播
         /// </summary>

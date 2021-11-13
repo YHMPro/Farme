@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-namespace Farme
+namespace Farme.UI
 {
     /// <summary>
     /// 屏幕窗口基类
@@ -32,11 +32,11 @@ namespace Farme
         protected override void Awake()
         {
             base.Awake();
-            if (_bindCamera == null)
+            if (m_bindCamera == null)
             {
-                _bindCamera = RootScreenWindowGo.GetComponent<Camera>();
+                m_bindCamera = RootScreenWindowGo.GetComponent<Camera>();
             }
-            GetComponent<Canvas>().worldCamera = _bindCamera;         
+            GetComponent<Canvas>().worldCamera = m_bindCamera;         
             if (!GetComponent("Bottom", out _tranBottom))
             {
                 Debug.Log("错误!");
@@ -62,7 +62,7 @@ namespace Farme
         /// <summary>
         /// 画布绑定的相机
         /// </summary>
-        protected static Camera _bindCamera = null;
+        protected static Camera m_bindCamera = null;
         /// <summary>
         /// 底层
         /// </summary>
@@ -105,11 +105,11 @@ namespace Farme
         {
             get
             {
-                if(_bindCamera==null)
+                if(m_bindCamera == null)
                 {
-                    _bindCamera = RootScreenWindowGo.GetComponent<Camera>();
+                    m_bindCamera = RootScreenWindowGo.GetComponent<Camera>();
                 }
-                return _bindCamera;
+                return m_bindCamera;
             }
         }
         #endregion     
