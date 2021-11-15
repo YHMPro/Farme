@@ -14,12 +14,12 @@ namespace Farme.UI
                 _bindCamera = RootWorldWindowGo.GetComponent<Camera>();
             }
             GetComponent<Canvas>().worldCamera = _bindCamera;
-            InterfaceMgr.AddInterface(_interfaceGroup, this);
+            InterfaceManager.AddInterface(_interfaceGroup, this);
         }
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            InterfaceMgr.RemoveInterface(_interfaceGroup, this);
+            InterfaceManager.RemoveInterface(_interfaceGroup, this);
         }
         #region 字段
         /// <summary>

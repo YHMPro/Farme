@@ -2,6 +2,8 @@
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Events;
+using System;
+using Farme.Tool;
 namespace Farme.Audio
 {
     [RequireComponent(typeof(AudioSource))]
@@ -66,7 +68,11 @@ namespace Farme.Audio
         {
             set
             {
-                m_As.outputAudioMixerGroup = value;
+                if (m_As.outputAudioMixerGroup != value)
+                {
+                    Debuger.Log("音效赋予了新的音效组");
+                    m_As.outputAudioMixerGroup = value;
+                }
             }
             get
             {
@@ -80,8 +86,11 @@ namespace Farme.Audio
         {
             set
             {
-                m_As.clip = value;
-                Pause();
+                if (m_As.clip != value)
+                {
+                    m_As.clip = value;
+                    Pause();
+                }             
             }
             get
             {
@@ -247,7 +256,16 @@ namespace Farme.Audio
                     m_IsStop = true;
                     if (m_AbleRecycle)
                     {
-                        InidleWithNotInidleTransform(this);
+                        if (AudioManager.NotInidleAudioLi.Contains(this))
+                        {
+                            AudioManager.NotInidleAudioLi.Remove(this);
+                            //判断音效闲置栈中是否存该音效
+                            if (!AudioManager.InidleAudios.Contains(this))
+                            {
+                                AudioManager.InidleAudios.Push(this);
+                            }
+                            gameObject.SetActive(false);
+                        }
                     }
                 });            
             }
@@ -277,17 +295,18 @@ namespace Farme.Audio
         /// <summary>
         /// 播放(先播放，然后音量过度到目标值)
         /// </summary>
-        /// <param name="volume"></param>
-        /// <param name="time"></param>
-        public void Play(float volume,float time)
+        /// <param name="startVolume">过度起始时音量</param>
+        /// <param name="endVolume">过度结束时音量</param>
+        /// <param name="time">过度消耗的时间</param>
+        public void Play(float startVolume,float endVolume,float time)
         {
             if (m_ListenVolumeExcess != null)
             {
                 MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(m_ListenVolumeExcess);
             }
-            m_As.volume = 0;
+            m_As.volume = Mathf.Clamp(startVolume,0,1);
             Play();
-            VolumeExcess(volume, time);
+            VolumeExcess(endVolume, time);
         }
         /// <summary>
         /// 重播
@@ -297,6 +316,9 @@ namespace Farme.Audio
             m_As.time = 0;
             RemoveTimer();
             m_As.Play();
+             m_IsPause = false;
+            m_IsPlay = true;
+            m_IsStop = false;       
             AppendTimer();
         }
         /// <summary>
@@ -313,15 +335,15 @@ namespace Farme.Audio
         /// <summary>
         /// 暂停(等待音量过度到目标值，然后暂停)
         /// </summary>
-        /// <param name="volume"></param>
-        /// <param name="time"></param>
-        public void Pause(float volume, float time)
+        /// <param name="endVolume">过度结束时音量</param>
+        /// <param name="time">过度消耗的时间</param>
+        public void Pause(float endVolume, float time)
         {
             if (m_ListenVolumeExcess != null)
             {
                 MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(m_ListenVolumeExcess);
             }
-            VolumeExcess(volume, time,()=> 
+            VolumeExcess(endVolume, time,()=> 
             {
                 Pause();
             });
@@ -339,21 +361,30 @@ namespace Farme.Audio
             m_As.time = 0;
             if (m_AbleRecycle)
             {
-                InidleWithNotInidleTransform(this);
+                if (AudioManager.NotInidleAudioLi.Contains(this))
+                {
+                    AudioManager.NotInidleAudioLi.Remove(this);
+                    //判断音效闲置栈中是否存该音效
+                    if (!AudioManager.InidleAudios.Contains(this))
+                    {
+                        AudioManager.InidleAudios.Push(this);
+                    }
+                    gameObject.SetActive(false);
+                }
             }
         }
         /// <summary>
         /// 停止(等待音量过度到目标值，然后停止)
         /// </summary>
-        /// <param name="volume"></param>
-        /// <param name="time"></param>
-        public void Stop(float volume, float time)
+        /// <param name="endVolume">过度结束时音量</param>
+        /// <param name="time">过度消耗的时间</param>
+        public void Stop(float endVolume, float time)
         {
             if (m_ListenVolumeExcess != null)
             {
                 MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(m_ListenVolumeExcess);
             }
-            VolumeExcess(volume, time, () =>
+            VolumeExcess(endVolume, time, () =>
             {
                 Stop();
                 m_As.volume = 1;
@@ -361,7 +392,7 @@ namespace Farme.Audio
 
         }
         /// <summary>
-        /// 音量过度
+        /// 音量过度(匀速变化)
         /// </summary>
         /// <param name="volume">目标音量</param>
         /// <param name="time">耗时</param>
@@ -373,7 +404,7 @@ namespace Farme.Audio
         private IEnumerator IEVolumeExcess(float volume,float time, UnityAction finishCallback=null)//1秒   50次循环
         {
             int num = (int)(50 * time);
-            float interval = Mathf.Abs(m_As.volume - volume) / num;
+            float interval = Mathf.Abs(m_As.volume - Mathf.Clamp(volume,0,1)) / num;
             while (true)
             {            
                 if(num < 0)
@@ -385,27 +416,6 @@ namespace Farme.Audio
                 m_As.volume = Mathf.MoveTowards(m_As.volume, volume, interval);
                 num--;
                 yield return new WaitForSeconds(0.02f);
-            }
-        }
-        /// <summary>
-        /// 闲置与非闲置的相互置换
-        /// </summary>
-        /// <param name="audio">音效</param>
-        private void InidleWithNotInidleTransform(Audio audio)
-        {
-            if (AudioManager.InidleAudioLi.Contains(audio))
-            {
-                AudioManager.InidleAudioLi.Remove(audio);
-                AudioManager.NotInidleAudioLi.Add(audio);
-                audio.gameObject.SetActive(true);
-                return;
-            }
-            if (AudioManager.NotInidleAudioLi.Contains(audio))
-            {
-                AudioManager.NotInidleAudioLi.Remove(audio);
-                AudioManager.InidleAudioLi.Add(audio);
-                audio.gameObject.SetActive(false);
-                return;
             }
         }
         #endregion

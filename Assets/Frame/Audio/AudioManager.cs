@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using Farme.Tool;
 namespace Farme.Audio
 {
     /// <summary>
@@ -10,9 +11,9 @@ namespace Farme.Audio
     {
         #region 字段
         /// <summary>
-        /// 闲置的音效
+        /// 闲置音效栈
         /// </summary>
-        private static List<Audio> m_InidleAudioLi = null;
+        private static Stack<Audio> m_InidleAudios = null;       
         /// <summary>
         /// 非闲置的音效
         /// </summary>
@@ -39,19 +40,19 @@ namespace Farme.Audio
             }
         }
         /// <summary>
-        /// 闲置的音效列表
+        /// 闲置音效栈
         /// </summary>
-        public static List<Audio> InidleAudioLi
+        public static Stack<Audio> InidleAudios
         {
             get
             {
-                if(m_InidleAudioLi==null)
+                if (m_InidleAudios == null)
                 {
-                    m_InidleAudioLi = new List<Audio>();
+                    m_InidleAudios = new Stack<Audio>();
                 }
-                return m_InidleAudioLi;
+                return m_InidleAudios;
             }
-        }
+        }      
         /// <summary>
         /// 缓存的最大音效数量
         /// </summary>
@@ -73,12 +74,11 @@ namespace Farme.Audio
         {
             set
             {
-                AudioMixerMgr.MainAudioMixer.SetFloat("MasterVolume", Mathf.Clamp(value, 0, 1));
-                SetVolume("Master", "MasterVolume", Mathf.Clamp(value,0,1));       
+                AudioMixerManager.MainAudioMixer.SetFloat("MasterVolume", Mathf.Clamp(value, 0, 1));
             }
             get
             {
-                AudioMixerMgr.MainAudioMixer.GetFloat("MasterVolume", out float volume);
+                AudioMixerManager.MainAudioMixer.GetFloat("MasterVolume", out float volume);
                 return volume;
             }
         }
@@ -86,24 +86,21 @@ namespace Farme.Audio
 
         #region 方法
         /// <summary>
-        /// 清除缓存
+        /// 清除缓存(清除掉[现有数量-m_cacheAudioMax])
         /// </summary>
         public static void ClearCache()
         {
-            while(InidleAudioLi.Count > m_cacheAudioMax)
-            {              
-                Audio audio = InidleAudioLi[InidleAudioLi.Count - 1];
-                if (audio != null)
-                {
-                    InidleAudioLi.Remove(audio);
-                    Object.Destroy(audio.gameObject);
-                }
+            ClearNULL_USING();//清除一次空引用
+            while(InidleAudios.Count > m_cacheAudioMax)
+            {             
+                //销毁掉多余的音效
+                Object.Destroy(InidleAudios.Pop().gameObject);              
             }
         }
         /// <summary>
         /// 清除空引用
         /// </summary>
-        public static void ClearNULLUSING()
+        public static void ClearNULL_USING()
         {
             for (int index = NotInidleAudioLi.Count - 1; index >= 0; index--)
             {
@@ -112,13 +109,11 @@ namespace Farme.Audio
                     NotInidleAudioLi.RemoveAt(index);
                 }
             }
-            for (int index = InidleAudioLi.Count - 1; index >= 0; index--)
+            //保证音效闲置栈中的第一个Head元素不为NULL即可
+            while(InidleAudios.Count>0&& InidleAudios.Peek()==null)
             {
-                if (InidleAudioLi[index] == null)
-                {
-                    InidleAudioLi.RemoveAt(index);
-                }
-            }
+                InidleAudios.Pop();//弹出该NULL  
+            }            
         }
         /// <summary>
         /// 申请音效
@@ -126,13 +121,12 @@ namespace Farme.Audio
         /// <returns></returns>
         public static Audio ApplyForAudio()
         {
-            ClearNULLUSING();//清除一次空引用
+            ClearNULL_USING();//清除一次空引用
             Audio audio;
-            if (InidleAudioLi.Count > 0)
+            if(InidleAudios.Count>0)
             {
-                audio = m_InidleAudioLi[0];
-                InidleAudioLi.Remove(audio);
-                if(!NotInidleAudioLi.Contains(audio))
+                audio = InidleAudios.Pop();
+                if (!NotInidleAudioLi.Contains(audio))
                 {
                     NotInidleAudioLi.Add(audio);
                 }
@@ -140,8 +134,8 @@ namespace Farme.Audio
             }
             else
             {
-                audio = MonoFactory<Audio>.GetInstance(new GameObject("Audio"));             
-            }
+                audio = MonoFactory<Audio>.GetInstance(new GameObject("Audio"));
+            }                   
             return audio;
         }
         /// <summary>
@@ -168,7 +162,7 @@ namespace Farme.Audio
                 Audio audio = NotInidleAudioLi[index];
                 if (audio != null)
                 {
-                    audio.Pause();
+                    audio.Stop();
                 }
             }
         }
@@ -182,7 +176,7 @@ namespace Farme.Audio
                 Audio audio = NotInidleAudioLi[index];
                 if (audio != null)
                 {
-                    audio.Pause();
+                    audio.Play();
                 }
             }
         }
@@ -249,14 +243,18 @@ namespace Farme.Audio
         /// <summary>
         /// 过度播放  一个音频过度到另一个音频的播放形式
         /// </summary>
-        /// <param name="form"></param>
-        /// <param name="to"></param>
-        /// <param name="volume">音量</param>
-        /// <param name="time">耗时</param>
-        public static void ExcessPlay(Audio form,Audio to,float volume=1,float time=0)
+        /// <param name="form">即将停止播放的音效</param>
+        /// <param name="to">即将开始播放的音效</param>
+        /// <param name="endVolume">过度结束时的音量</param>
+        /// <param name="time">过度所消耗的时间</param>
+        public static void ExcessPlay(Audio form,Audio to,float endVolume=1,float time=0)
         {
+            if(form == to)
+            {
+                Debuger.LogWarning("相同的音效不能进行过度播放。");
+            }
             form.Stop(0, time);
-            to.Play(volume, time);
+            to.Play(0, endVolume, time);
         }      
         /// <summary>
         /// 设置音量
@@ -296,7 +294,7 @@ namespace Farme.Audio
         /// <returns>是否设置成功</returns>
         private static bool SetFloat(string groupName, string valueName, float value)
         {
-            return AudioMixerMgr.SetFloat(groupName, valueName, value);
+            return AudioMixerManager.SetFloat(groupName, valueName, value);
         }
         /// <summary>
         /// 设置值
@@ -307,7 +305,7 @@ namespace Farme.Audio
         /// <returns>是否获取成功</returns>
         private static bool GetFloat(string groupName, string valueName, out float value)
         {
-            return AudioMixerMgr.GetFloat(groupName, valueName, out value);
+            return AudioMixerManager.GetFloat(groupName, valueName, out value);
         }
         #endregion
     }

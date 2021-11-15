@@ -14,7 +14,7 @@ namespace Farme.Audio
     /// <summary>
     /// 音效混合器管理器
     /// </summary>
-    public class AudioMixerMgr
+    public class AudioMixerManager
     {
         #region 字段
         private static string m_MainAudioMixerPath = "YHMFarmeLockFile/AudioMixer";

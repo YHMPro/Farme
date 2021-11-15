@@ -122,7 +122,7 @@ namespace Farme
                     }
                 }
             }
-            return default(T);
+            return null;
         }
         /// <summary>
         /// 获取多个同类型组件

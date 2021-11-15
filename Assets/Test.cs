@@ -27,7 +27,7 @@ public class Test : MonoBehaviour
         //MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(co);
         AssetBundleLoad.MainABName = "StandaloneWindows";
         AssetBundleLoad.PackageCatalogueFile_URL = "S:\\Unity Pro 2019.3.7f1\\MyGitProject\\Farme\\AssetBundles\\StandaloneWindows\\";
-            //"S:\\UnityPro2019.3.7f1\\Project\\Farme\\AssetBundles\\StandaloneWindows\\";
+        //"S:\\UnityPro2019.3.7f1\\Project\\Farme\\AssetBundles\\StandaloneWindows\\";
 
         //string filePath = "F:\\Git忽略文件语法及示例.txt";
         //StreamReader SR = new StreamReader(filePath, Encoding.UTF8);
@@ -56,8 +56,8 @@ public class Test : MonoBehaviour
         // {
 
 
-
-
+        
+        co=StartCoroutine(AudioPlay());
 
         //});
 
@@ -74,36 +74,62 @@ public class Test : MonoBehaviour
     Audio audio1;
     Audio audio2;
     //private void 
-    private void FixedUpdate()
+    
+    IEnumerator AudioPlay()
     {
-        transform.position = Vector3.MoveTowards(transform.position, new Vector3(-10, 0, 0),Time.fixedDeltaTime);
-        if (Input.GetKeyDown(KeyCode.Space))
+        while(true)
         {
-            AssetBundleLoad.LoadAssetAsync<AudioClip>("audio", "Effect", (clip) =>
+            if (AudioClipManager.GetAudioClip("按下提示音", out AudioClip clip))
             {
                 audio1 = AudioManager.ApplyForAudio();
                 audio1.Clip = clip;
                 audio1.Play();
-              //Audio  audio = gameObject.AddComponent<Audio>();
-              //  audio.Clip = clip;
-              //  audio.Play(1,2);
-              //Debug.Log(audio);
-            });
-            //Debug.Log(AssetBundleLoad.LoadAsset<AudioMixer>("audio", "AuioMixer"));
+            }
+            yield return new WaitForSeconds(0.01f);
         }
-        if(Input.GetKeyDown(KeyCode.Q))
+    }
+    private void Update()
+    {
+       if(Input.GetKeyDown(KeyCode.S))
         {
-            AssetBundleLoad.LoadAssetAsync<AudioClip>("audio", "BackGround", (clip) =>
-            {
-                audio2 = AudioManager.ApplyForAudio();
-                audio2.Clip = clip;
-                AudioManager.ExcessPlay(audio1, audio2, 1, 5);
-                //Audio  audio = gameObject.AddComponent<Audio>();
-                //  audio.Clip = clip;
-                //  audio.Play(1,2);
-                //Debug.Log(audio);
-            });
+            StopCoroutine(co);
         }
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            AudioManager.ClearCache();
+        }
+    }
+    private void FixedUpdate()
+    {
+        
+        //transform.position = Vector3.MoveTowards(transform.position, new Vector3(-10, 0, 0),Time.fixedDeltaTime);
+        //if (Input.GetKeyDown(KeyCode.Space))
+        //{
+        //    AssetBundleLoad.LoadAssetAsync<AudioClip>("audio", "Effect", (clip) =>
+        //    {
+        //        audio1 = AudioManager.ApplyForAudio();
+        //        audio1.Clip = clip;
+        //        audio1.Play();
+        //      //Audio  audio = gameObject.AddComponent<Audio>();
+        //      //  audio.Clip = clip;
+        //      //  audio.Play(1,2);
+        //      //Debug.Log(audio);
+        //    });
+        //    //Debug.Log(AssetBundleLoad.LoadAsset<AudioMixer>("audio", "AuioMixer"));
+        //}
+        //if(Input.GetKeyDown(KeyCode.Q))
+        //{
+        //    AssetBundleLoad.LoadAssetAsync<AudioClip>("audio", "BackGround", (clip) =>
+        //    {
+        //        audio2 = AudioManager.ApplyForAudio();
+        //        audio2.Clip = clip;
+        //        AudioManager.ExcessPlay(audio1, audio2, 1, 5);
+        //        //Audio  audio = gameObject.AddComponent<Audio>();
+        //        //  audio.Clip = clip;
+        //        //  audio.Play(1,2);
+        //        //Debug.Log(audio);
+        //    });
+        //}
     }
     private string Authorization = "Authorization";
     IEnumerator IEDownLoadTexture()

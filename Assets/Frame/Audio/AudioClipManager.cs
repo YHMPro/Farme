@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 namespace Farme.Audio
 {
-    public class AudioClipMgr
+    /// <summary>
+    /// 音效剪辑管理器
+    /// </summary>
+    public class AudioClipManager
     {
         #region 字段
         private static Dictionary<string, AudioClip> m_AudioClipDic = null;

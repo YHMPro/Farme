@@ -65,15 +65,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Frame\Audio\Audio.cs" />
+    <Compile Include="Assets\Frame\Audio\AudioClipManager.cs" />
     <Compile Include="Assets\Frame\Audio\AudioManager.cs" />
-    <Compile Include="Assets\Frame\BaseMono\BaseAudio\Audio2D\Audio2D.cs" />
-    <Compile Include="Assets\Frame\BaseMono\BaseAudio\Audio3D\Audio3D.cs" />
-    <Compile Include="Assets\Frame\BaseMono\BaseAudio\BaseAudio.cs" />
-    <Compile Include="Assets\Frame\BaseMono\BaseMgr\BaseAudioMgr\Audio2DMgr\Audio2DMgr.cs" />
-    <Compile Include="Assets\Frame\BaseMono\BaseMgr\BaseAudioMgr\Audio3DMgr\Audio3DMgr.cs" />
-    <Compile Include="Assets\Frame\BaseMono\BaseMgr\BaseAudioMgr\AudioClipMgr.cs" />
-    <Compile Include="Assets\Frame\BaseMono\BaseMgr\BaseAudioMgr\AudioMixerMgr.cs" />
-    <Compile Include="Assets\Frame\BaseMono\BaseMgr\BaseAudioMgr\BaseAudioMgr.cs" />
+    <Compile Include="Assets\Frame\Audio\AudioMixerManager.cs" />
     <Compile Include="Assets\Frame\BaseMono\BaseMgr\BaseWindowMgr\BaseScreenWindowMgr\BaseScreenWindowMgr.cs" />
     <Compile Include="Assets\Frame\BaseMono\BaseMgr\BaseWindowMgr\BaseWindowMgr.cs" />
     <Compile Include="Assets\Frame\BaseMono\BaseMgr\BaseWindowMgr\BaseWorldWindowMgr\BaseWorldWindowMgr.cs" />
@@ -81,8 +75,8 @@
     <Compile Include="Assets\Frame\BaseMono\BaseWindow\BaseScreenWindow\BaseScreenWindow.cs" />
     <Compile Include="Assets\Frame\BaseMono\BaseWindow\BaseWorldWindow\BaseWorldWindow.cs" />
     <Compile Include="Assets\Frame\BaseMono\BaseWindow\WindowBase.cs" />
-    <Compile Include="Assets\Frame\Common\InterfaceMgr.cs" />
-    <Compile Include="Assets\Frame\Common\MesgMgr.cs" />
+    <Compile Include="Assets\Frame\Common\InterfaceManager.cs" />
+    <Compile Include="Assets\Frame\Common\MesgManager.cs" />
     <Compile Include="Assets\Frame\Common\ShareMono.cs" />
     <Compile Include="Assets\Frame\Extend.cs" />
     <Compile Include="Assets\Frame\Factory\AbstractSingletonFactory.cs" />
@@ -98,7 +92,7 @@
     <Compile Include="Assets\Frame\Load\SceneLoad.cs" />
     <Compile Include="Assets\Frame\Net\WebDownloadTool.cs" />
     <Compile Include="Assets\Frame\UI\BasePanel.cs" />
-    <Compile Include="Assets\Frame\UI\WindowModel.cs" />
+    <Compile Include="Assets\Frame\UI\StandardWindow.cs" />
     <Compile Include="Assets\Frame\UI\WindowRoot.cs" />
     <Compile Include="Assets\Test.cs" />
     <None Include="Assets\Frame\Plugins\Log\Debuger.xml" />

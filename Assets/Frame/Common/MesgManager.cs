@@ -3,11 +3,11 @@ using UnityEngine.Events;
 namespace Farme
 {   
     /// <summary>
-    /// 消息托管
+    /// 消息管理器
     /// </summary>
-    public class MesgMgr
+    public class MesgManager
     {
-        protected MesgMgr() { }
+        protected MesgManager() { }
         #region 字段      
         private static Dictionary<string, IMesg> m_MesgDic = null;
         #endregion

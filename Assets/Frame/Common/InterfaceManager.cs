@@ -1,12 +1,12 @@
-﻿namespace Farme
-{
-    using System.Collections.Generic;
+﻿using System.Collections.Generic;
+namespace Farme
+{  
     /// <summary>
-    /// 接口托管
+    /// 接口管理器
     /// </summary>
-    public class InterfaceMgr
+    public class InterfaceManager
     {
-        protected InterfaceMgr() { }
+        protected InterfaceManager() { }
         #region 字段
         /// <summary>
         /// 接口容器  key:接口分组   value:接口
