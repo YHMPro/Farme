@@ -5,13 +5,6 @@ using UnityEngine.Audio;
 namespace Farme.Audio
 {
     /// <summary>
-    /// 音效混合器值的类型
-    /// </summary>
-    public enum EnumAudioMixerValueType
-    {
-
-    }
-    /// <summary>
     /// 音效混合器管理器
     /// </summary>
     public class AudioMixerManager
@@ -24,6 +17,20 @@ namespace Farme.Audio
         #endregion
 
         #region 属性
+        /// <summary>
+        /// 主音效混合器路径
+        /// </summary>
+        public static string MainAudioMixerPath
+        {
+            set
+            {
+                m_MainAudioMixerPath = value;
+            }
+            get
+            {
+                return m_MainAudioMixerPath;
+            }
+        }
         /// <summary>
         /// 主音效混合器
         /// </summary>

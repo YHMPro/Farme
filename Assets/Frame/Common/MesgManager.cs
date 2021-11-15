@@ -11,7 +11,6 @@ namespace Farme
         #region 字段      
         private static Dictionary<string, IMesg> m_MesgDic = null;
         #endregion
-
         #region 属性
         /// <summary>
         /// 消息容器
@@ -139,7 +138,6 @@ namespace Farme
             {
                 this.mesgAction += mesgAction;
             }
-   
         }
 
 

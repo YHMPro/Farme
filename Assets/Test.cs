@@ -9,6 +9,7 @@ using UnityEngine.Audio;
 using System.IO;
 using System.Text;
 using Farme.Audio;
+using Farme.UI;
 public class Test : MonoBehaviour
 {
     private Animator m_Anim;
@@ -55,7 +56,7 @@ public class Test : MonoBehaviour
         //WebDownloadTool.WebDownloadAssetBundle(AssetBundleLoad.MainAB_URL, (ab) =>
         // {
 
-
+        //MonoSingletonFactory<WindowRoot>.GetSingleton().CreateWindow()
         
         co=StartCoroutine(AudioPlay());
 

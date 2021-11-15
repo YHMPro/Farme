@@ -65,7 +65,7 @@ namespace Farme
         /// <param name="callBack">添加的回调</param>
         public static void UIEventRegistered(this UIBehaviour target, EventTriggerType eTType, UnityAction<BaseEventData> callBack)
         {
-            BaseWindowMgr.UIEventRegistered(target, eTType, callBack);
+            WindowRoot.UIEventRegistered(target, eTType, callBack);
         }
         /// <summary>
         /// UI事件移除      
@@ -75,7 +75,7 @@ namespace Farme
         /// <param name="callBack">添加的回调</param>
         public static void UIEventRemove(this UIBehaviour target, EventTriggerType eTType, UnityAction<BaseEventData> callBack)
         {
-            BaseWindowMgr.UIEventRemove(target, eTType, callBack);
+            WindowRoot.UIEventRemove(target, eTType, callBack);
         }
         #endregion
         #region 为flaot类扩展相关功能

@@ -283,10 +283,7 @@ namespace Farme.UI
 
             }
             return tran;
-        }
-
-
-        
+        }        
         #endregion
     }
 }

@@ -264,6 +264,19 @@ namespace Farme
             return null;
         }
         /// <summary>
+        /// 加载资源
+        /// </summary>
+        /// <typeparam name="T">资源类型</typeparam>
+        /// <param name="abName">包名</param>
+        /// <param name="resName">资源名</param>
+        /// <param name="result">结果</param>
+        /// <returns>是否加载成功</returns>
+        public static bool LoadAsset<T>(string abName, string resName,out T result) where T : Object
+        {
+            result = LoadAsset<T>(abName, resName);
+            return result == null ? false : true;
+        }
+        /// <summary>
         /// 初始化AB包的依赖关系并加载包
         /// </summary>
         /// <param name="abName">包名</param>

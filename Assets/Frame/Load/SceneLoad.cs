@@ -2,9 +2,6 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
-/// <summary>
-/// YHM工具
-/// </summary>
 namespace Farme
 {
     /// <summary>
