@@ -33,7 +33,7 @@ namespace Farme
         /// </summary>
         protected virtual void OnEnable()
         {
-            MonoSingletonFactory<ShareMono>.GetSingleton().DelayAction(Time.deltaTime, DataInit);
+            Invoke("LateOnEnable", 0);
         }
         /// <summary>
         /// 组件初始化完成之后执行一次(注:在Awake之后执行)
@@ -167,9 +167,10 @@ namespace Farme
             return ts;
         }
         /// <summary>
-        /// 数据初始化  自动调用  在OnEnable之后  晚于Start调用
+        /// 自动调用  在OnEnable之后调用且慢于Start调用快于Update的第一帧调用
+        /// OnEnable函数不能被子类完全重写
         /// </summary>
-        protected virtual void DataInit() {  }    
+        protected virtual void LateOnEnable() {  }    
         #endregion
     }
 }

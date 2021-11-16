@@ -32,7 +32,7 @@ namespace Farme
             m_Callback?.Invoke();
         }
         /// <summary>
-        /// 迟与Update更新
+        /// 延迟更新
         /// </summary>
         private void LateUpdate()
         {

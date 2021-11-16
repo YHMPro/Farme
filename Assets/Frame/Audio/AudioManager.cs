@@ -15,7 +15,7 @@ namespace Farme.Audio
         /// </summary>
         private static Stack<Audio> m_InidleAudios = null;       
         /// <summary>
-        /// 非闲置的音效
+        /// 非闲置的音效列表
         /// </summary>
         private static List<Audio> m_NotInidleAudioLi = null;
         /// <summary>

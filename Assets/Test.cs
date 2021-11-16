@@ -10,15 +10,22 @@ using System.IO;
 using System.Text;
 using Farme.Audio;
 using Farme.UI;
-public class Test : MonoBehaviour
+public class Test : BaseMono
 {
     private Animator m_Anim;
     private Coroutine m_C;
     public Image button;
     Coroutine co = null;
-    // Start is called before the first frame update
-    void Start()
+
+   
+    protected override void LateOnEnable()
     {
+        Debug.Log(2);
+    }
+    // Start is called before the first frame update
+    protected override void Start()
+    {
+        Debug.Log(1);
         //co= MonoSingletonFactory<ShareMono>.GetSingleton().DelayUAction(2, () =>
         //{
         //    MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(co);
@@ -91,6 +98,7 @@ public class Test : MonoBehaviour
     }
     private void Update()
     {
+        Debug.Log(3);
        if(Input.GetKeyDown(KeyCode.S))
         {
             StopCoroutine(co);

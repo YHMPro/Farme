@@ -2,7 +2,6 @@
 using UnityEngine;
 using UnityEngine.Audio;
 using UnityEngine.Events;
-using System;
 using Farme.Tool;
 namespace Farme.Audio
 {
