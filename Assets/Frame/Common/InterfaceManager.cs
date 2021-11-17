@@ -11,7 +11,7 @@ namespace Farme
         /// <summary>
         /// 接口容器  key:接口分组   value:接口
         /// </summary>
-        private static Dictionary<string, List<IInterfaceBase>> _interfaceDic;
+        private static Dictionary<string, List<IInterfaceBase>> m_InterfaceDic;
         #endregion
         #region 方法
         /// <summary>
@@ -22,17 +22,17 @@ namespace Farme
         /// <param name="i">接口</param>
         public static void AddInterface<T>(string interfaceGroup,T i)where T: IInterfaceBase
         {
-            if(_interfaceDic==null)
+            if(m_InterfaceDic == null)
             {
-                _interfaceDic = new Dictionary<string, List<IInterfaceBase>>();
+                m_InterfaceDic = new Dictionary<string, List<IInterfaceBase>>();
             }
-            if(_interfaceDic.TryGetValue(interfaceGroup,out List<IInterfaceBase> _interfaceLi))
+            if(m_InterfaceDic.TryGetValue(interfaceGroup,out List<IInterfaceBase> _interfaceLi))
             {
                 _interfaceLi.Add(i);
             }
             else
             {
-                _interfaceDic.Add(interfaceGroup, new List<IInterfaceBase>() { i });
+                m_InterfaceDic.Add(interfaceGroup, new List<IInterfaceBase>() { i });
             }
         }
         /// <summary>
@@ -43,11 +43,11 @@ namespace Farme
         /// <param name="i">接口</param>
         public static void RemoveInterface<T>(string interfaceGroup,T i)where T:IInterfaceBase
         {
-            if (_interfaceDic == null)
+            if (m_InterfaceDic == null)
             {
-                _interfaceDic = new Dictionary<string, List<IInterfaceBase>>();
+                m_InterfaceDic = new Dictionary<string, List<IInterfaceBase>>();
             }
-            if (_interfaceDic.TryGetValue(interfaceGroup, out List<IInterfaceBase> _interfaceLi))
+            if (m_InterfaceDic.TryGetValue(interfaceGroup, out List<IInterfaceBase> _interfaceLi))
             {
                 if(i!=null)
                 {
@@ -65,11 +65,11 @@ namespace Farme
         public static bool GetInterfaceLi<T>(string interfaceGroup,out List<T> iLi) where T: IInterfaceBase
         {
             iLi = null;
-            if (_interfaceDic == null)
+            if (m_InterfaceDic == null)
             {
-                _interfaceDic = new Dictionary<string, List<IInterfaceBase>>();
+                m_InterfaceDic = new Dictionary<string, List<IInterfaceBase>>();
             }
-            if (_interfaceDic.TryGetValue(interfaceGroup, out List<IInterfaceBase> _interfaceLi))
+            if (m_InterfaceDic.TryGetValue(interfaceGroup, out List<IInterfaceBase> _interfaceLi))
             {
                 iLi = new List<T>();
                 foreach (T i in _interfaceLi)

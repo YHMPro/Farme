@@ -80,26 +80,26 @@ namespace Farme
         /// <summary>
         /// 移除LateUpdate行为
         /// </summary>
-        /// <param name="callBack">回调</param>
+        /// <param name="callback">回调</param>
         public void RemoveLateUpdateAction(UnityAction callback)
         {
             m_LateCallback -= callback;
         }
-        
+
         /// <summary>
         /// 移除FixUpdate行为
         /// </summary>
-        /// <param name="callBack">回调</param>
+        /// <param name="callback">回调</param>
         public void RemoveFixUpdateAction(UnityAction callback)
         {
             m_FixCallback -= callback;
         }
-        
+
         /// <summary>
         /// 延迟执行(无参数传递) 
         /// </summary>
         /// <param name="delayTime">延迟时长</param>
-        /// <param name="callBack">回调</param>
+        /// <param name="callback">回调</param>
         /// <returns></returns>
         public Coroutine DelayAction(float delayTime, UnityAction callback)
         {
@@ -111,7 +111,7 @@ namespace Farme
         /// <typeparam name="T">参数类型</typeparam>
         /// <param name="delayTime">延迟时长</param>
         /// <param name="tInfo">信息</param>
-        /// <param name="callBack">回调</param>
+        /// <param name="callback">回调</param>
         /// <returns></returns>
         public Coroutine DelayAction<T>(float delayTime, T tInfo, UnityAction<T> callback)
         {
@@ -125,7 +125,7 @@ namespace Farme
         /// <param name="delayTime">延迟时长</param>
         /// <param name="tInfo">信息</param>
         /// <param name="kInfo">信息</param>
-        /// <param name="callBack">回调</param>
+        /// <param name="callback">回调</param>
         /// <returns></returns>
         public Coroutine DelayAction<T, K>(float delayTime, T tInfo, K kInfo, UnityAction<T, K> callback)
         {
@@ -135,7 +135,7 @@ namespace Farme
         /// 协程延迟(无参数传递)
         /// </summary>
         /// <param name="delayTime">延迟时长</param>
-        /// <param name="callBack">回调</param>
+        /// <param name="callback">回调</param>
         /// <returns></returns>
         private IEnumerator IEDelayAction(float delayTime, UnityAction callback)
         {
@@ -148,7 +148,7 @@ namespace Farme
         /// <typeparam name="T">参数类型</typeparam>
         /// <param name="delayTime">延迟时长</param>
         /// <param name="tInfo">信息</param>
-        /// <param name="callBack">回调</param>
+        /// <param name="callback">回调</param>
         /// <returns></returns>
         private IEnumerator IEDelayAction<T>(float delayTime, T tInfo, UnityAction<T> callback)
         {
@@ -163,7 +163,7 @@ namespace Farme
         /// <param name="delayTime">延迟时长</param>
         /// <param name="tInfo">信息</param>
         /// <param name="kInfo">信息</param>
-        /// <param name="callBack">回调</param>
+        /// <param name="callback">回调</param>
         /// <returns></returns>
         private IEnumerator IEDelayAction<T, K>(float delayTime, T tInfo, K kInfo, UnityAction<T, K> callback)
         {

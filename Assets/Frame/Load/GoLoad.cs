@@ -42,7 +42,6 @@ namespace Farme
         /// <param name="abName">包名</param>
         /// <param name="resName">资源名</param>
         /// <param name="parent">父级</param>
-        /// <param name="callback">回调</param>
         /// <returns>是否成功</returns>
         public static bool Take(string abName,string resName,out GameObject result,Transform parent=null)
         {
@@ -96,7 +95,7 @@ namespace Farme
         /// </summary>
         /// <param name="goPath">go路径</param>
         /// <param name="parent">父级</param>
-        /// <param name="callBack">回调</param>
+        /// <param name="callback">回调</param>
         public static void TakeAsync(string goPath, Transform parent = null,UnityAction<GameObject> callback=null)
         {
             ResourcesLoad.LoadAsync<GameObject>(goPath, (go) =>
