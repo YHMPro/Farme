@@ -26,15 +26,19 @@ public class Test : BaseMono
     protected override void Start()
     {
         Debug.Log(1);
+
+
+
+
         //co= MonoSingletonFactory<ShareMono>.GetSingleton().DelayUAction(2, () =>
         //{
         //    MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(co);
         //    Debug.Log(co);
         //});
         //Debug.Log(co);
-        //MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(co);
-        AssetBundleLoad.MainABName = "StandaloneWindows";
-        AssetBundleLoad.PackageCatalogueFile_URL = "S:\\Unity Pro 2019.3.7f1\\MyGitProject\\Farme\\AssetBundles\\StandaloneWindows\\";
+        ////MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(co);
+        //AssetBundleLoad.MainABName = "StandaloneWindows";
+        //AssetBundleLoad.PackageCatalogueFile_URL = "S:\\Unity Pro 2019.3.7f1\\MyGitProject\\Farme\\AssetBundles\\StandaloneWindows\\";
         //"S:\\UnityPro2019.3.7f1\\Project\\Farme\\AssetBundles\\StandaloneWindows\\";
 
         //string filePath = "F:\\Git忽略文件语法及示例.txt";
