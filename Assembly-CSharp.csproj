@@ -88,6 +88,7 @@
     <Compile Include="Assets\Frame\UI\BasePanel.cs" />
     <Compile Include="Assets\Frame\UI\StandardWindow.cs" />
     <Compile Include="Assets\Frame\UI\WindowRoot.cs" />
+    <Compile Include="Assets\PanelTest.cs" />
     <Compile Include="Assets\Test.cs" />
     <None Include="Assets\Frame\Plugins\Log\Debuger.xml" />
     <Reference Include="Unity.Timeline.Editor">

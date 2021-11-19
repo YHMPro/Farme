@@ -95,4 +95,11 @@ namespace Farme.UI
         }          
         #endregion
     }
+    /// <summary>
+    /// 提供无功能的面板
+    /// </summary>
+    public class EmptyPanel : BasePanel
+    {
+        
+    }
 }

@@ -3,6 +3,8 @@ using UnityEngine;
 using Farme.Tool;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using Farme.Extend;
+using UnityEngine.EventSystems;
 namespace Farme.UI
 {
     /// <summary>
@@ -64,6 +66,7 @@ namespace Farme.UI
             m_PanelDic = new Dictionary<string, BasePanel>();
             m_Canvas = GetComponent<Canvas>();
             m_CS = GetComponent<CanvasScaler>();
+            m_GR = GetComponent<GraphicRaycaster>();
             m_TranBottom = transform.Find("Bottom");
             m_TranMiddle = transform.Find("Middel");
             m_TranTop = transform.Find("Top");
@@ -71,10 +74,11 @@ namespace Farme.UI
         }
         #endregion
         #region 字段
+        private PointerEventData m_PED = null;
         /// <summary>
         /// 面板容器
         /// </summary>
-        private Dictionary<string, BasePanel> m_PanelDic;       
+        private Dictionary<string, BasePanel> m_PanelDic = null;       
         /// <summary>
         /// 底层
         /// </summary>
@@ -96,7 +100,7 @@ namespace Farme.UI
         /// </summary>
         private Canvas m_Canvas = null;
         /// <summary>
-        /// 
+        /// 射线
         /// </summary>
         private GraphicRaycaster m_GR = null;
         /// <summary>
@@ -108,7 +112,7 @@ namespace Farme.UI
         /// <summary>
         /// 画布布局
         /// </summary>
-        public CanvasScaler CS
+        public CanvasScaler CanvasScaler
         {
             get
             {
@@ -136,6 +140,32 @@ namespace Farme.UI
         #endregion
         #region 方法
         /// <summary>
+        /// 检测鼠标击中的所以UI(仅限本画布下的UI)
+        /// </summary>
+        /// <param name="result">结果</param>
+        /// <returns>是否检测成功</returns>
+        public bool Raycast(out List<RaycastResult> resultLi)
+        {
+            resultLi = new List<RaycastResult>();
+            if (m_PED==null)
+            {
+                if (!MonoSingletonFactory<WindowRoot>.SingletonExist)
+                {
+                    Debuger.LogError("无事件处理系统(EventSystem)实例");
+                    return false;
+                }
+                m_PED = new PointerEventData(MonoSingletonFactory<WindowRoot>.GetSingleton().ES);
+            }
+            if(m_PED==null)
+            {
+                Debuger.LogError("指针数据实例失败。");
+                return false;
+            }
+            m_PED.position = Input.mousePosition;
+            m_GR.Raycast(m_PED, resultLi);
+            return true;
+        }
+        /// <summary>
         /// 创建面板
         /// </summary>
         /// <typeparam name="T">面板类型</typeparam>
@@ -158,6 +188,16 @@ namespace Farme.UI
                 return;
             }
             Debuger.LogWarning("面板加载失败。");
+        }
+        /// <summary>
+        /// 创建面板(提供无功能的面板)
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="panelName"></param>
+        /// <param name="layer"></param>
+        public void CreatePanel(string path, string panelName, EnumPanelLayer layer = EnumPanelLayer.BOTTOM)
+        {
+            CreatePanel<EmptyPanel>(path, panelName, layer);
         }
         /// <summary>
         /// 移除面板引用

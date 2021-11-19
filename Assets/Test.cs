@@ -20,16 +20,35 @@ public class Test : BaseMono
    
     protected override void LateOnEnable()
     {
-        Debug.Log(2);
+        ///Debug.Log(2);
     }
     // Start is called before the first frame update
     protected override void Start()
     {
-        Debug.Log(1);
+        //Debug.Log(1);
+
+        if(GoLoad.Take("FarmeLockFile/WindowRoot",out GameObject go))
+        {
+            MonoSingletonFactory<WindowRoot>.GetSingleton(go, false);
+            if(MonoSingletonFactory<WindowRoot>.SingletonExist)
+            {
+                WindowRoot root = MonoSingletonFactory<WindowRoot>.GetSingleton();
+                root.CreateWindow("MyFirstWindow", RenderMode.ScreenSpaceOverlay,(window)=> 
+                {
+                    window.CanvasScaler.referenceResolution = new Vector2(1920,1080);
+                    //new Vector2(960, 540);
+
+                     window.CreatePanel<PanelTest>("PanelTest", "PanelTest", EnumPanelLayer.BOTTOM, (panel) =>
+                     {
+                         
+                     });
+                });
+                
+            }
 
 
-
-
+        }
+      
         //co= MonoSingletonFactory<ShareMono>.GetSingleton().DelayUAction(2, () =>
         //{
         //    MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(co);
@@ -68,8 +87,8 @@ public class Test : BaseMono
         // {
 
         //MonoSingletonFactory<WindowRoot>.GetSingleton().CreateWindow()
-        
-        co=StartCoroutine(AudioPlay());
+
+        //co=StartCoroutine(AudioPlay());
 
         //});
 
@@ -86,7 +105,16 @@ public class Test : BaseMono
     Audio audio1;
     Audio audio2;
     //private void 
-    
+    private void InputKeyDonw()
+    {
+        Debug.Log("A键按下");
+    }
+
+    private void ClearInputKeyDonw()
+    {
+      
+        Debug.Log("清除A键按下");
+    }
     IEnumerator AudioPlay()
     {
         while(true)
@@ -102,7 +130,6 @@ public class Test : BaseMono
     }
     private void Update()
     {
-        Debug.Log(3);
        if(Input.GetKeyDown(KeyCode.S))
         {
             StopCoroutine(co);

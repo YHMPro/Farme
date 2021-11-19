@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using Farme.Tool;
 using UnityEngine.Events;
-
+using Farme.Extend;
 namespace Farme.UI
 {
     /// <summary>
@@ -17,11 +17,7 @@ namespace Farme.UI
         private EventSystem m_ES = null;
         private StandaloneInputModule m_InputModule = null;
         private Camera m_Camera = null;
-        private Dictionary<string, StandardWindow> m_WindowModelDic = null;
-        /// <summary>
-        /// 自身指针事件数据
-        /// </summary>
-        private PointerEventData m_PED = null;
+        private Dictionary<string, StandardWindow> m_WindowModelDic = null;            
         #endregion
         #region 属性
         /// <summary>
@@ -60,7 +56,6 @@ namespace Farme.UI
             m_ES = GetComponent<EventSystem>();
             m_InputModule = GetComponent<StandaloneInputModule>();
             m_Camera = GetComponent<Camera>();
-            m_PED = new PointerEventData(ES);                   
         }
         #endregion
         #region 方法
@@ -69,7 +64,8 @@ namespace Farme.UI
         /// </summary>
         /// <param name="windowName">窗口名称</param>
         /// <param name="renderMode">渲染模式</param>
-        public void CreateWindow(string windowName, RenderMode renderMode=RenderMode.ScreenSpaceOverlay)
+        /// <param name="callback">回调</param>
+        public void CreateWindow(string windowName, RenderMode renderMode=RenderMode.ScreenSpaceOverlay,UnityAction<StandardWindow> callback=null)
         {
             if(m_WindowModelDic.ContainsKey(windowName))
             {
@@ -78,6 +74,7 @@ namespace Farme.UI
             }
             if (GoLoad.Take(m_WindowModelPath,out GameObject go))
             {
+                go.transform.SetParent(transform);
                 StandardWindow windowModel = go.InspectComponent<StandardWindow>();
                 windowModel.gameObject.name = windowName;          
                 windowModel.Canvas.renderMode = renderMode;
@@ -99,6 +96,7 @@ namespace Farme.UI
                         }
                 }
                 m_WindowModelDic.Add(windowName, windowModel);
+                callback?.Invoke(windowModel);
             }                                      
         }
         /// <summary>
@@ -124,17 +122,7 @@ namespace Farme.UI
             {
                 m_WindowModelDic.Remove(windowName);
             }          
-        }
-        /// <summary>
-        /// 返回所有被射线击中的UI
-        /// </summary>
-        /// <param name="results"></param>
-        public void RaycastAll(out List<RaycastResult> results)
-        {
-            results = new List<RaycastResult>();
-            m_PED.position = Input.mousePosition;
-            ES.RaycastAll(m_PED, results);
-        }
+        }       
         /// <summary>
         /// UI事件注册
         /// 注:指针事件触发条件(1:UI透明的>=0.1 2:UI的RaycastTarget为True)
