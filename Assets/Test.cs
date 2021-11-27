@@ -10,14 +10,17 @@ using System.IO;
 using System.Text;
 using Farme.Audio;
 using Farme.UI;
+using System;
 public class Test : BaseMono
 {
     private Animator m_Anim;
     private Coroutine m_C;
     public Image button;
     Coroutine co = null;
+    string MP3path = @"C:\Users\XiaoHeTao\Desktop\Music\Wisp X - Stand With Me.mp3";
+    public Image Image;
 
-   
+    private Audio audio;
     protected override void LateOnEnable()
     {
         ///Debug.Log(2);
@@ -25,30 +28,42 @@ public class Test : BaseMono
     // Start is called before the first frame update
     protected override void Start()
     {
+        //GC.Collect();
         //Debug.Log(1);
-
-        if(GoLoad.Take("FarmeLockFile/WindowRoot",out GameObject go))
+        WebDownloadTool.WebDownLoadAudioClipMP3(MP3path, (clip) =>
         {
-            MonoSingletonFactory<WindowRoot>.GetSingleton(go, false);
-            if(MonoSingletonFactory<WindowRoot>.SingletonExist)
+            clip.UnloadAudioData();
+            if (audio == null)
             {
-                WindowRoot root = MonoSingletonFactory<WindowRoot>.GetSingleton();
-                root.CreateWindow("MyFirstWindow", RenderMode.ScreenSpaceOverlay,(window)=> 
-                {
-                    window.CanvasScaler.referenceResolution = new Vector2(1920,1080);
-                    //new Vector2(960, 540);
-
-                     window.CreatePanel<PanelTest>("PanelTest", "PanelTest", EnumPanelLayer.BOTTOM, (panel) =>
-                     {
-                         
-                     });
-                });
-                
+                audio = AudioManager.ApplyForAudio();
+                audio.Loop = true;
             }
+            audio.Clip = clip;
+            audio.Play();
+        });
+
+        //if(GoLoad.Take("FarmeLockFile/WindowRoot",out GameObject go))
+        //{
+        //    MonoSingletonFactory<WindowRoot>.GetSingleton(go, false);
+        //    if(MonoSingletonFactory<WindowRoot>.SingletonExist)
+        //    {
+        //        WindowRoot root = MonoSingletonFactory<WindowRoot>.GetSingleton();
+        //        root.CreateWindow("MyFirstWindow", RenderMode.ScreenSpaceOverlay,(window)=> 
+        //        {
+        //            window.CanvasScaler.referenceResolution = new Vector2(1920,1080);
+        //            //new Vector2(960, 540);
+
+        //             window.CreatePanel<PanelTest>("PanelTest", "PanelTest", EnumPanelLayer.BOTTOM, (panel) =>
+        //             {
+
+        //             });
+        //        });
+
+        //    }
 
 
-        }
-      
+        //}
+
         //co= MonoSingletonFactory<ShareMono>.GetSingleton().DelayUAction(2, () =>
         //{
         //    MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(co);
@@ -132,11 +147,12 @@ public class Test : BaseMono
     {
        if(Input.GetKeyDown(KeyCode.S))
         {
-            StopCoroutine(co);
+            //StopCoroutine(co);
         }
         if (Input.GetKeyDown(KeyCode.C))
         {
-            AudioManager.ClearCache();
+            //AudioManager.ClearCache();
+            GC.Collect();
         }
     }
     private void FixedUpdate()
