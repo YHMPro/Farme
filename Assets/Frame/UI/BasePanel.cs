@@ -60,7 +60,7 @@ namespace Farme.UI
         /// </summary>
         /// <param name="state">状态</param>
         /// <param name="callback">回调</param>
-        public void SetState(EnumPanelState state,UnityAction callback=null)
+        public virtual void SetState(EnumPanelState state,UnityAction callback=null)
         {
             switch(state)
             {
@@ -71,9 +71,9 @@ namespace Farme.UI
                         break;
                     }
                 case EnumPanelState.Hide:
-                    {
-                        callback?.Invoke();
+                    {                       
                         gameObject.SetActive(false);
+                        callback?.Invoke();
                         break;
                     }
                 case EnumPanelState.Destroy:
