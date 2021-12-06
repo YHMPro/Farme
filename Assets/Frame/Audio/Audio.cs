@@ -253,6 +253,7 @@ namespace Farme.Audio
                     m_IsPlay = false;
                     m_As.time = 0;   
                     m_IsStop = true;
+                    m_As.Stop();
                     if (m_AbleRecycle)
                     {
                         if (AudioManager.NotInidleAudioLi.Contains(this))
