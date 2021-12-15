@@ -66,6 +66,20 @@ namespace Farme.Audio
 
         #region 属性 
         /// <summary>
+        /// 播放进度
+        /// </summary>
+        public float Progress
+        {
+            get
+            {
+                if(m_As.clip==null)
+                {
+                    return 0;
+                }
+                return m_As.time / m_As.clip.length;
+            }
+        }
+        /// <summary>
         /// 音效事件
         /// </summary>
         public AudioEvent Event
