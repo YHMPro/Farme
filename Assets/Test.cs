@@ -11,6 +11,8 @@ using System.Text;
 using Farme.Audio;
 using Farme.UI;
 using System;
+using Newtonsoft.Json;
+using Farme.Tool;
 public class Test : BaseMono
 {
     private Animator m_Anim;
@@ -20,27 +22,76 @@ public class Test : BaseMono
     string MP3path = @"C:\Users\XiaoHeTao\Desktop\Music\Wisp X - Stand With Me.mp3";
     public Image Image;
 
-    private Audio audio;
+    //private Audio audio;
     protected override void LateOnEnable()
     {
         ///Debug.Log(2);
     }
+    private float[,] f = new float[2,3] { { 0, 1, 2 }, { 3, 4, 5 } };//二维数组
+    private float[][] F = new float[2][] { new float[2] { 1,2},new float[2] { 1,2} };//数组的数组
     // Start is called before the first frame update
     protected override void Start()
     {
+        //List<AStarGirdPosition> poss = new List<AStarGirdPosition>();
+        //poss.Add(new AStarGirdPosition() { x = 1, y = 1 });
+        //poss.Add(new AStarGirdPosition() { x = 3, y = 2 });
+        //poss.Add(new AStarGirdPosition() { x = 4, y = 3 });
+        //poss.Add(new AStarGirdPosition() { x = 3, y = 4 });
+        //List<int> numbers = new List<int>() { 0, 1, 2, 3, 5, 4 };
+        //poss.Sort((a, b) => 
+        //{
+        //    if (a.x >= b.x)
+        //    {
+        //        return 0;
+        //    }
+        //    return -1;
+        //});
+        //foreach (var i in poss)
+        //{
+        //    Debug.Log(i.x+"______"+i.y);
+        //}
+        for (var i = 0; i < 4; i++)
+        {
+            Debug.Log((Mathf.Sin((i * 90f) * Mathf.Deg2Rad)) + "_________" + (Mathf.Cos((i * 90f) * Mathf.Deg2Rad)));
+        }
+        //Debug.Log(F[0][1]);
+        //string str = File.ReadAllText(Application.streamingAssetsPath + @"\UnKnowData.json");
+        //UnKnowData data = JsonConvert.DeserializeObject<UnKnowData>(str);
+
+        //Debug.Log(data.Info["1004"].exclusive[1]);
+        ////UnKnowData unKnowData =new UnKnowData();
+
+        //unKnowData.InfoDic.Add("1", new Info());
+
+        //string json = JsonConvert.SerializeObject(unKnowData);
+
+        //File.WriteAllText(Application.streamingAssetsPath + @"\UnKnowData.json", json,Encoding.UTF8);
+
+
+
+        //Debug.Log(data.InfoDic);
+
+        //WebDownloadTool.WebDownloadText(Application.streamingAssetsPath + @"\UnKnowData.json", (json) =>
+        // {
+
+        //     Debug.Log(json);
+        // });
+
+
+
         //GC.Collect();
         //Debug.Log(1);
-        WebDownloadTool.WebDownLoadAudioClipMP3(MP3path, (clip) =>
-        {
-            clip.UnloadAudioData();
-            if (audio == null)
-            {
-                audio = AudioManager.ApplyForAudio();
-                audio.Loop = true;
-            }
-            audio.Clip = clip;
-            audio.Play();
-        });
+        //WebDownloadTool.WebDownLoadAudioClipMP3(MP3path, (clip) =>
+        //{
+        //    clip.UnloadAudioData();
+        //    if (audio == null)
+        //    {
+        //        audio = AudioManager.ApplyForAudio();
+        //        audio.Loop = true;
+        //    }
+        //    audio.Clip = clip;
+        //    audio.Play();
+        //});
 
         //if(GoLoad.Take("FarmeLockFile/WindowRoot",out GameObject go))
         //{
@@ -216,3 +267,21 @@ public class Test : BaseMono
         //Debug.Log(t2D);
     }
 }
+
+
+[Serializable]
+public class UnKnowData
+{
+    public Dictionary<string, Info> Info;
+}
+[Serializable]
+public class Info
+{
+    public string id;
+    public string name;
+    public string description;
+    public int grade;
+    public Dictionary<string, int> effect;
+    public string[] exclusive;
+}
+

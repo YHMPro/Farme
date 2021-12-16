@@ -53,6 +53,7 @@
     <UnityVersion>2019.4.33f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Assets\AStarTest.cs" />
     <Compile Include="Assets\Frame\Audio\Audio.cs" />
     <Compile Include="Assets\Frame\Audio\AudioClipManager.cs" />
     <Compile Include="Assets\Frame\Audio\AudioManager.cs" />
@@ -75,6 +76,9 @@
     <Compile Include="Assets\Frame\Load\SceneLoad.cs" />
     <Compile Include="Assets\Frame\Net\WebDownloadTool.cs" />
     <Compile Include="Assets\Frame\Plugins\Audio\MP3Tool.cs" />
+    <Compile Include="Assets\Frame\Tool\AStar\AStar.cs" />
+    <Compile Include="Assets\Frame\Tool\AStar\AStarConfig.cs" />
+    <Compile Include="Assets\Frame\Tool\AStar\AStarGrid.cs" />
     <Compile Include="Assets\Frame\UI\BasePanel.cs" />
     <Compile Include="Assets\Frame\UI\StandardWindow.cs" />
     <Compile Include="Assets\Frame\UI\WindowRoot.cs" />
@@ -83,6 +87,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Frame\Plugins\Audio\NAudio.dll" />
+    <None Include="Assets\Frame\Plugins\Newtonsoft.Json.dll" />
     <None Include="Assets\Frame\Plugins\Log\Debuger.dll" />
     <None Include="Assets\Frame\Plugins\Log\Debuger.xml" />
   </ItemGroup>
@@ -269,6 +274,9 @@
     </Reference>
     <Reference Include="UnityEditor">
       <HintPath>C:\Program Files\Unity\2019.4.33f1\Editor\Data\Managed\UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>Assets\Frame\Plugins\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NAudio">
       <HintPath>Assets\Frame\Plugins\Audio\NAudio.dll</HintPath>
