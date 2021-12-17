@@ -7,7 +7,7 @@ namespace Farme.Tool
     /// A*寻路
     /// </summary>
     public class AStar
-    {
+    {   
         /// <summary>
         /// A星格子数组
         /// </summary>
@@ -27,22 +27,33 @@ namespace Farme.Tool
             }
         }
         public static List<AStarGirdPosition> FindPath(AStarGrid start, AStarGrid end)
-        {
-            return Find(start, end);
+        {        
+            return OptimalPath(start, end);
         }
 
-        public static void FindPath(Vector2 start, Vector2 end)
+        public static List<AStarGirdPosition> FindPath(Vector2 start, Vector2 end)
         {
-
+            AStarGirdPosition AStarPosStart = AStarGirdPosition.ToAStarGirdPosition(start);
+            AStarGirdPosition AStarPosEnd = AStarGirdPosition.ToAStarGirdPosition(end);
+            OptimalPath(m_AStarGrids[AStarPosStart.x, AStarPosStart.y], m_AStarGrids[AStarPosEnd.x, AStarPosEnd.y]);
+            return null;
         }
 
-        public static void FindPath(AStarGirdPosition start, AStarGirdPosition end)
+        public static List<AStarGirdPosition> FindPath(AStarGirdPosition start, AStarGirdPosition end)
         {
-
+            return OptimalPath(m_AStarGrids[start.x, start.y], m_AStarGrids[end.x, end.y]);
         }
-     
+        
 
-        private static List<AStarGirdPosition> Find(AStarGrid start, AStarGrid end)
+        private static List<AStarGirdPosition> OptimalPath(AStarGrid start, AStarGrid end)
+        {
+            List<AStarGirdPosition> path1 = GetPath(start,end);
+            List<AStarGirdPosition> path2 = GetPath(end, start);
+            path1.Reverse();
+            return path1.Count >= path2.Count ? path2 : path1;
+        }
+
+        private static List<AStarGirdPosition> GetPath(AStarGrid start, AStarGrid end)
         {
             if(m_AStarGrids!=null && start!= end && start.State==AStartGirdState.Through&& start.State == end.State)//判断起始点与终点是否都为可行走点
             {
@@ -83,7 +94,6 @@ namespace Farme.Tool
                             Positions.Add(tempAStarGrid.Prev.Position);
                             tempAStarGrid = tempAStarGrid.Prev;
                         }
-                        Positions.Reverse();//颠倒数组
                         return Positions;
                     }
                 }            
@@ -106,11 +116,15 @@ namespace Farme.Tool
                 {                  
                     if (!referAStarGirdLi.Contains(tempAStarGrid)&& !filterAStarGirdLi.Contains(tempAStarGrid))
                     {               
-                        //计算该格子与起止点和终点的格子数
+                        //计算该格子与起止点、终点的距离
                         tempAStarGrid.Distance = tempAStarGrid.Position.Distance(startGrid.Position.ToVecto2()) + tempAStarGrid.Position.Distance(endGrid.Position);
                         tempAStarGrid.Prev = aStarGrid;//与上一个格子建立连接
-                        referAStarGirdLi.Add(tempAStarGrid);
+                        referAStarGirdLi.Add(tempAStarGrid);//添加到参考A星格子列表当中
                     }
+                }
+                else
+                {
+                    startGrid = aStarGrid;
                 }
             }
         }

@@ -17,7 +17,7 @@ namespace Farme.Tool
         /// </summary>
         public int y;
         /// <summary>
-        /// 计算A星格子与世界坐标的距离
+        /// 计算A星格子与某世界坐标的距离
         /// </summary>
         /// <param name="v">世界坐标</param>
         /// <returns>Unity位置之间的距离</returns>
@@ -29,10 +29,10 @@ namespace Farme.Tool
         /// 计算A星格子与另一个A星格子的距离
         /// </summary>
         /// <param name="a">目标A星格子</param>
-        /// <returns>A星格子数</returns>
-        public int Distance(AStarGirdPosition a)
+        /// <returns></returns>
+        public float Distance(AStarGirdPosition a)
         {
-            return Mathf.Abs(a.x-x)+Mathf.Abs(a.y-y);
+            return Mathf.Abs(a.x-x)*AStarConfig.PrecisionX+Mathf.Abs(a.y-y)* AStarConfig.PrecisionY;
         }
         /// <summary>
         /// A星格子坐标转世界坐标
@@ -84,7 +84,7 @@ namespace Farme.Tool
         /// </summary>
         public AStarGrid Prev;
         /// <summary>
-        /// 自身与起点、终点的距离之和   与起点为欧式距离   与终点为曼哈顿距离(格子数)
+        /// 自身与起点、终点的距离之和   与起点为欧式距离   与终点为曼哈顿距离
         /// </summary>
         public float Distance;
         public AStarGrid()
