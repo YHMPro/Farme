@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 namespace Farme.Tool
 {
     /// <summary>
@@ -11,29 +9,51 @@ namespace Farme.Tool
         /// <summary>
         /// X坐标
         /// </summary>
-        public int x;
+        public float x;
         /// <summary>
         /// Y坐标
         /// </summary>
-        public int y;
+        public float y;
         /// <summary>
-        /// 计算A星格子与某世界坐标的距离
+        /// 单位化
         /// </summary>
-        /// <param name="v">世界坐标</param>
-        /// <returns>Unity位置之间的距离</returns>
-        public float Distance(Vector2 v)
+        public AStarGirdPosition Normalized
         {
-           return Mathf.Sqrt(Mathf.Pow(Mathf.Abs(x * AStarConfig.PrecisionX - (v.x- AStarConfig.AStarOriginPosition.x)), 2) + Mathf.Pow(Mathf.Abs(y * AStarConfig.PrecisionY - (v.y- AStarConfig.AStarOriginPosition.y)), 2));
+            get
+            {
+                float length = Mathf.Sqrt(x * x + y * y);
+                x = x / length;
+                y = y / length;
+                return this;
+            }
         }
         /// <summary>
-        /// 计算A星格子与另一个A星格子的距离
+        /// 计算两个A星坐标的叉积(相似度)
         /// </summary>
-        /// <param name="a">目标A星格子</param>
+        /// <param name="pos"></param>
         /// <returns></returns>
-        public float Distance(AStarGirdPosition a)
+        public float Cross(AStarGirdPosition pos)
         {
-            return Mathf.Abs(a.x-x)*AStarConfig.PrecisionX+Mathf.Abs(a.y-y)* AStarConfig.PrecisionY;
+            return Mathf.Abs(x * pos.y - pos.x *y);           
         }
+        /// <summary>
+        /// 欧氏距离(计算自身与目标坐标的距离)
+        /// </summary>
+        /// <param name="pos">目标A星坐标</param>
+        /// <returns>欧氏距离</returns>
+        public float EuclideanDistance(AStarGirdPosition pos)
+        {
+            return Mathf.Sqrt(Mathf.Pow(Mathf.Abs(pos.x - x), 2) + Mathf.Pow(Mathf.Abs( pos.y - y), 2));
+        }
+        /// <summary>
+        /// 曼哈顿距离(计算自身与目标坐标的距离)
+        /// </summary>
+        /// <param name="pos">目标A星坐标</param>
+        /// <returns>曼哈顿距离</returns>
+        public float ManhattonDistance(AStarGirdPosition pos)
+        {
+            return Mathf.Abs(pos.x - x) + Mathf.Abs(pos.y - y);
+        }     
         /// <summary>
         /// A星格子坐标转世界坐标
         /// </summary>
@@ -55,7 +75,15 @@ namespace Farme.Tool
                 x = (int)(v.x / AStarConfig.PrecisionX),
                 y = (int)(v.y / AStarConfig.PrecisionY)
             };
-        }      
+        }           
+        public static AStarGirdPosition operator +(AStarGirdPosition a, AStarGirdPosition b)
+        {
+            return new AStarGirdPosition() { x=a.x+b.x, y=a.y+b.y};
+        }
+        public static AStarGirdPosition operator -(AStarGirdPosition a, AStarGirdPosition b)
+        {
+            return new AStarGirdPosition() { x = a.x - b.x, y = a.y - b.y };
+        }
     }
     /// <summary>
     /// A星格子状态
