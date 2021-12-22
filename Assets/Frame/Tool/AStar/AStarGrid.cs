@@ -27,6 +27,11 @@ namespace Farme.Tool
                 return this;
             }
         }
+        public AStarGirdPosition(float x,float y)
+        {
+            this.x = x;
+            this.y = y;
+        }
         /// <summary>
         /// 计算两个A星坐标的叉积(相似度)
         /// </summary>
@@ -115,12 +120,20 @@ namespace Farme.Tool
         /// 自身与起点、终点的距离之和   与起点为欧式距离   与终点为曼哈顿距离
         /// </summary>
         public float Distance;
+        /// <summary>
+        /// 距离起始A星格子的距离
+        /// </summary>
+        public float ToStartDistance;
+        /// <summary>
+        /// 距离终点A星格子的距离
+        /// </summary>
+        public float ToEndDistance;
         public AStarGrid()
         {
             Position = new AStarGirdPosition() { x=0,y=0 };
             State = AStartGirdState.Through;         
             Distance= 0;
-            Prev = null;           
+            Prev = null;
         }
     }
 }

@@ -65,32 +65,39 @@ namespace Farme.Tool
                 m_StartToEndDir= (end.Position-start.Position).Normalized;
                 start.Prev = null;
                 start.Distance = 0;
+                start.ToStartDistance = 0;
+                start.ToEndDistance = 0;
                 end.Prev = null;
                 end.Distance = 0;
+                end.ToStartDistance = 0;
+                end.ToEndDistance = 0;
                 AStarGrid tempAStarGrid = start;
-                List<AStarGrid> referAStarGirdLi = new List<AStarGrid>();
-                List<AStarGrid> filterAStarGirdLi = new List<AStarGrid>();              
+                List<AStarGrid> openLi = new List<AStarGrid>();
+                List<AStarGrid> closeLi = new List<AStarGrid>();              
                 while (true)
                 {                          
                     #region 计算起始点上下左右的四个点与终点的距离并依照从大到小的顺序排序
-                    FindAroundAStarGrid(tempAStarGrid, start, end, referAStarGirdLi,filterAStarGirdLi);
-                    referAStarGirdLi.Sort((a, b) =>//从小->大排列
+                    //FindAroundAStarGrid(tempAStarGrid, start, end, referAStarGirdLi,filterAStarGirdLi);
+                    FindNeighborAStarGrid(tempAStarGrid,end, openLi, closeLi);
+                    openLi.Sort((a, b) =>//从小->大排列
                     {
-                        if (a.Distance >= b.Distance)
+                        if ((a.ToStartDistance+a.ToEndDistance) >= (b.ToStartDistance + b.ToEndDistance))
                         {
                             return 1;
                         }
                         return -1;
                     });
                     #endregion
-                    if (referAStarGirdLi.Count == 0)
+                    if (openLi.Count == 0)
                     {
                         Debuger.Log("没有路可走");
                         break;
                     }
-                    tempAStarGrid = referAStarGirdLi[0];
-                    filterAStarGirdLi.Add(tempAStarGrid);
-                    referAStarGirdLi.Remove(tempAStarGrid);               
+                    tempAStarGrid = openLi[0];
+                    closeLi.Add(tempAStarGrid);
+                    openLi.Remove(tempAStarGrid);
+                    Debuger.Log(tempAStarGrid.Position.ToVecto2());
+                    Debuger.Log(end.Position.ToVecto2());
                     if (Equals(tempAStarGrid.Position, end.Position))//判断添加的A星格子是否为终点的格子
                     {
                         List<AStarGirdPosition> Positions = new List<AStarGirdPosition>();
@@ -126,7 +133,6 @@ namespace Farme.Tool
                 {                  
                     if (!referAStarGirdLi.Contains(tempAStarGrid)&& !filterAStarGirdLi.Contains(tempAStarGrid))
                     {
-                        Debuger.Log((tempAStarGrid.Position - aStarGrid.Position).Cross(m_StartToEndDir));
                         //计算该格子与起止点、终点的距离  欧氏距离+曼哈顿距离+自身下一步的走向方向与起点指向终点方向的相似度
                         tempAStarGrid.Distance = tempAStarGrid.Position.EuclideanDistance(startGrid.Position) + tempAStarGrid.Position.ManhattonDistance(endGrid.Position) + (tempAStarGrid.Position - aStarGrid.Position).Normalized.Cross(m_StartToEndDir);
                         tempAStarGrid.Prev = aStarGrid;//与上一个格子建立连接
@@ -138,6 +144,82 @@ namespace Farme.Tool
                     startGrid = aStarGrid;
                 }
             }
+        }
+
+
+        /// <summary>
+        /// 寻找A星格子相邻的八个A格子
+        /// </summary>
+        /// <param name="targetPos">目标坐标</param>
+        /// <param name="firstPos">第一个坐标(会变动)</param>
+        /// <param name="lastPos">最后一个点(会变动)</param>
+        /// <param name="openPosLi">开放坐标列表</param>
+        /// <param name="closePosLi">关闭坐标列表</param>
+        private static void FindNeighborAStarGrid(AStarGrid target,AStarGrid end,List<AStarGrid> openLi,List<AStarGrid> closeLi)
+        {
+            int x;
+            int y;
+            for (var angle = 45; angle <= 360;)
+            {
+                /*(1,1) (1,0)  (1,-1)  (0,1)  (0,-1)  (0,0)  (-1,0) (-1,-1) */
+                if (angle % 2 == 0)
+                {
+                    x = Mathf.Clamp((int)target.Position.x + (int)Mathf.Sin(angle * Mathf.Deg2Rad), 0, m_AStarGrids.GetLength(0) - 1);
+                    y = Mathf.Clamp((int)target.Position.y + (int)Mathf.Cos(angle * Mathf.Deg2Rad), 0, m_AStarGrids.GetLength(1) - 1);
+                    if (m_AStarGrids[x, y].State == AStartGirdState.Through)
+                    {
+                        if (!openLi.Contains(m_AStarGrids[x, y]) && !closeLi.Contains(m_AStarGrids[x, y]))
+                        {
+                            //计算离起始点的距离
+                            m_AStarGrids[x, y].ToStartDistance = target.ToStartDistance + 1f;
+                            //计算离终点的距离
+                            m_AStarGrids[x, y].ToEndDistance = m_AStarGrids[x, y].Position.ManhattonDistance(end.Position);
+                            //连接上一个A星格子
+                            m_AStarGrids[x, y].Prev = target;
+                            //添加到参考A星格子列表当中
+                            openLi.Add(m_AStarGrids[x, y]);
+                        }
+                    }
+                }
+                else
+                {
+                    x = Mathf.Clamp((int)target.Position.x + (Mathf.Sin(angle * Mathf.Deg2Rad) > 0 ? 1 : -1), 0, m_AStarGrids.GetLength(0) - 1);
+                    y = Mathf.Clamp((int)target.Position.y + (Mathf.Cos(angle * Mathf.Deg2Rad) > 0 ? 1 : -1), 0, m_AStarGrids.GetLength(1) - 1);
+                    Debuger.Log(x + "     " + y);
+                    //计算angle  +-45°所对应坐标A星格子是否为可通过类型   有一个为可通过则为可通过
+                    if (m_AStarGrids[x, y].State == AStartGirdState.Through)
+                    {
+                        if (!openLi.Contains(m_AStarGrids[x, y]) && !closeLi.Contains(m_AStarGrids[x, y]))
+                        {
+                            if (
+                            m_AStarGrids
+                            [
+                                 Mathf.Clamp((int)target.Position.x + (int)Mathf.Sin((angle + 45f) * Mathf.Deg2Rad), 0, m_AStarGrids.GetLength(0) - 1),
+                                 Mathf.Clamp((int)target.Position.x + (int)Mathf.Cos((angle + 45f) * Mathf.Deg2Rad), 0, m_AStarGrids.GetLength(1) - 1)
+                            ].State == AStartGirdState.Through
+                                     ||
+                            m_AStarGrids
+                            [
+                                 Mathf.Clamp((int)target.Position.x + (int)Mathf.Sin((angle - 45f) * Mathf.Deg2Rad), 0, m_AStarGrids.GetLength(0) - 1),
+                                 Mathf.Clamp((int)target.Position.x + (int)Mathf.Cos((angle - 45f) * Mathf.Deg2Rad), 0, m_AStarGrids.GetLength(1) - 1)
+                            ].State == AStartGirdState.Through
+                            )
+                            {
+                                //计算离起始点的距离
+                                m_AStarGrids[x, y].ToStartDistance = target.ToStartDistance + m_AStarGrids[x, y].Position.EuclideanDistance(target.Position);
+                                //计算离终点的距离
+                                m_AStarGrids[x, y].ToEndDistance = m_AStarGrids[x, y].Position.ManhattonDistance(end.Position);
+                                //连接上一个A星格子
+                                m_AStarGrids[x, y].Prev = target;
+                                //添加到参考A星格子列表当中
+                                openLi.Add(m_AStarGrids[x, y]);
+                            }
+                        }
+                    }
+                }
+                angle += 45;
+            }
+
         }
     }
 }

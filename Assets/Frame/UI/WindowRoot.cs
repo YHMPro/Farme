@@ -172,6 +172,7 @@ namespace Farme.UI
         /// <param name="callBack">移除的回调</param>
         public static void UIEventRemove(UIBehaviour uiB, EventTriggerType eTType, UnityAction<BaseEventData> callBack)
         {
+            
             if (uiB == null)
             {
                 Debuger.Log("申请对象为NULL");

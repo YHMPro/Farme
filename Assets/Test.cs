@@ -32,6 +32,23 @@ public class Test : BaseMono
     // Start is called before the first frame update
     protected override void Start()
     {
+        float x;
+        float y;
+        for (var i = 0; i <360;)
+        {
+            /*(1,1) (1,0)  (1,-1)  (0,1)  (0,-1)  (0,0)  (-1,0) (-1,-1) */                     
+            x = (i % 2 == 0) ? (int)Mathf.Sin(i * Mathf.Deg2Rad) : (Mathf.Sin(i * Mathf.Deg2Rad) > 0 ? 1 : -1);
+            y = (i % 2 == 0) ? (int)Mathf.Cos(i * Mathf.Deg2Rad) : (Mathf.Cos(i * Mathf.Deg2Rad) > 0 ? 1 : -1);
+
+
+
+
+           
+
+         
+
+            i += 45;
+        }
         //List<AStarGirdPosition> poss = new List<AStarGirdPosition>();
         //poss.Add(new AStarGirdPosition() { x = 1, y = 1 });
         //poss.Add(new AStarGirdPosition() { x = 3, y = 2 });
@@ -50,10 +67,10 @@ public class Test : BaseMono
         //{
         //    Debug.Log(i.x+"______"+i.y);
         //}
-        for (var i = 0; i < 4; i++)
-        {
-            Debug.Log((Mathf.Sin((i * 90f) * Mathf.Deg2Rad)) + "_________" + (Mathf.Cos((i * 90f) * Mathf.Deg2Rad)));
-        }
+        //for (var i = 0; i < 4; i++)
+        //{
+        //    Debug.Log((Mathf.Sin((i * 90f) * Mathf.Deg2Rad)) + "_________" + (Mathf.Cos((i * 90f) * Mathf.Deg2Rad)));
+        //}
         //Debug.Log(F[0][1]);
         //string str = File.ReadAllText(Application.streamingAssetsPath + @"\UnKnowData.json");
         //UnKnowData data = JsonConvert.DeserializeObject<UnKnowData>(str);
