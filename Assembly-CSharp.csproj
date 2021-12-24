@@ -79,6 +79,8 @@
     <Compile Include="Assets\Frame\Tool\AStar\AStar.cs" />
     <Compile Include="Assets\Frame\Tool\AStar\AStarConfig.cs" />
     <Compile Include="Assets\Frame\Tool\AStar\AStarGrid.cs" />
+    <Compile Include="Assets\Frame\Tool\AStar\AStarUIPanel.cs" />
+    <Compile Include="Assets\Frame\Tool\AStar\AStartGridInfo.cs" />
     <Compile Include="Assets\Frame\UI\BasePanel.cs" />
     <Compile Include="Assets\Frame\UI\StandardWindow.cs" />
     <Compile Include="Assets\Frame\UI\WindowRoot.cs" />
