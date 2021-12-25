@@ -38,7 +38,6 @@ namespace Farme.Tool
         {       
             return TwoWayPathFinding(start, end);
         }
-        private static int num = 1000;
         private static List<AStarGirdPosition> TwoWayPathFinding(AStarGrid start, AStarGrid end)
         {
             if (m_AStarGrids != null && start != end && start.State == AStartGirdState.Through && start.State == end.State)//判断起始点与终点是否都为可行走点
