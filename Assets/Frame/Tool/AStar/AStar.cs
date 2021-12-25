@@ -56,15 +56,15 @@ namespace Farme.Tool
                 AStarGrid tempAStarGrid_EndToStart = end;//已end为起点
                 List<AStarGrid> openLi_StartToEnd = new List<AStarGrid>();
                 List<AStarGrid> closeLi_StartToEnd = new List<AStarGrid>();
-                List<AStarGrid> openLi_EndToStart = new List<AStarGrid>();
-                List<AStarGrid> closeLi_EndToStart = new List<AStarGrid>();
+                //List<AStarGrid> openLi_EndToStart = new List<AStarGrid>();
+                //List<AStarGrid> closeLi_EndToStart = new List<AStarGrid>();
                 while (true)
                 {
                     #region 计算起始点的八个点与终点的距离并依照从大到小的顺序排序
                     // 从头部开始搜寻
                     FindNeighborAStarGrid(tempAStarGrid_StartToEnd, end, openLi_StartToEnd, closeLi_StartToEnd);
                     //从尾部开始搜寻
-                    FindNeighborAStarGrid(tempAStarGrid_EndToStart, start, openLi_EndToStart, closeLi_EndToStart);
+                    //FindNeighborAStarGrid(tempAStarGrid_EndToStart, tempAStarGrid_StartToEnd, openLi_EndToStart, closeLi_EndToStart);
                     //StartToEnd方向的排序
                     openLi_StartToEnd.Sort((a, b) =>//从小->大排列
                     {
@@ -75,65 +75,59 @@ namespace Farme.Tool
                         return -1;
                     });
                     //EndToStart方向的排序
-                    openLi_EndToStart.Sort((a, b) =>//从小->大排列
-                    {
-                        if ((a.ToStartDistance + a.ToEndDistance) >= (b.ToStartDistance + b.ToEndDistance))
-                        {
-                            return 1;
-                        }
-                        return -1;
-                    });
+                    //openLi_EndToStart.Sort((a, b) =>//从小->大排列
+                    //{
+                    //    if ((a.ToStartDistance + a.ToEndDistance) >= (b.ToStartDistance + b.ToEndDistance))
+                    //    {
+                    //        return 1;
+                    //    }
+                    //    return -1;
+                    //});
                     #endregion
-                    if (openLi_StartToEnd.Count == 0|| openLi_EndToStart.Count==0)
+                    if (openLi_StartToEnd.Count == 0/*|| openLi_EndToStart.Count==0*/)
                     {
                         Debuger.Log("没有路可走");
                         break;
                     }
                     tempAStarGrid_StartToEnd = openLi_StartToEnd[0];
-                    tempAStarGrid_EndToStart = openLi_EndToStart[0];
+                    //tempAStarGrid_EndToStart = openLi_EndToStart[0];
                     closeLi_StartToEnd.Add(tempAStarGrid_StartToEnd);
-                    closeLi_EndToStart.Add(tempAStarGrid_EndToStart);
+                    //closeLi_EndToStart.Add(tempAStarGrid_EndToStart);
                     openLi_StartToEnd.Remove(tempAStarGrid_StartToEnd);
-                    openLi_EndToStart.Remove(tempAStarGrid_EndToStart);
-                    Debuger.Log("正向"+tempAStarGrid_StartToEnd.Position.ToVecto2());
-                    Debuger.Log("反向"+tempAStarGrid_EndToStart.Position.ToVecto2());
-                    if (Equals(tempAStarGrid_StartToEnd.Position, tempAStarGrid_EndToStart.Position))
+                   // openLi_EndToStart.Remove(tempAStarGrid_EndToStart);
+                    //if (Equals(tempAStarGrid_StartToEnd.Position, tempAStarGrid_EndToStart.Position))
+                    {
+                        //List<AStarGirdPosition> Positions = new List<AStarGirdPosition>();
+                        ////获取前半段的路径
+                        //tempAStarGrid_StartToEnd = closeLi_StartToEnd[closeLi_StartToEnd.Count - 2];
+                        //Positions.Add(tempAStarGrid_StartToEnd.Position);
+                        //while (tempAStarGrid_StartToEnd.Prev != null)
+                        //{
+                        //    Positions.Add(tempAStarGrid_StartToEnd.Prev.Position);
+                        //    tempAStarGrid_StartToEnd = tempAStarGrid_StartToEnd.Prev;
+                        //}
+                        //Positions.Reverse();//归正
+                        //获取后半段的路径
+                        //Positions.Add(tempAStarGrid_EndToStart.Position);
+                        //while (tempAStarGrid_EndToStart.Prev != null)
+                        //{
+                        //    Positions.Add(tempAStarGrid_EndToStart.Prev.Position);
+                        //    tempAStarGrid_EndToStart = tempAStarGrid_StartToEnd.Prev;
+                        //}                      
+                        //return Positions;
+                    }
+                    if (Equals(tempAStarGrid_StartToEnd.Position, end.Position))//判断添加的A星格子是否为终点的格子
                     {
                         List<AStarGirdPosition> Positions = new List<AStarGirdPosition>();
-                        //获取前半段的路径
-
-
-                        //获取后半段的路径
-
-                        //Debuger.Log(tempAStarGrid_StartToEnd.Prev.Position.ToVecto2());
-                        //Debuger.Log(tempAStarGrid_EndToStart.Prev.Position.ToVecto2());
-                        //while (tempAStarGrid.Prev != null)
-                        //{
-
-
-
-                        //}
-
-                        return null;
+                        Positions.Add(tempAStarGrid_StartToEnd.Position);
+                        while (tempAStarGrid_StartToEnd.Prev != null)
+                        {
+                            Positions.Add(tempAStarGrid_StartToEnd.Prev.Position);
+                            tempAStarGrid_StartToEnd = tempAStarGrid_StartToEnd.Prev;
+                        }
+                        Positions.Reverse();
+                        return Positions;
                     }
-                    if(num<0)
-                    {
-                        num--;
-                        Debuger.Log("有可能死循环");
-                        return null;
-                    }
-                    //if (Equals(tempAStarGrid.Position, end.Position))//判断添加的A星格子是否为终点的格子
-                    //{
-                    //    List<AStarGirdPosition> Positions = new List<AStarGirdPosition>();
-                    //    Positions.Add(tempAStarGrid.Position);
-                    //    while (tempAStarGrid.Prev != null)
-                    //    {
-                    //        Positions.Add(tempAStarGrid.Prev.Position);
-                    //        tempAStarGrid = tempAStarGrid.Prev;
-                    //    }
-                    //    Positions.Reverse();
-                    //    return Positions;
-                    //}
                 }
             }
             return null;
