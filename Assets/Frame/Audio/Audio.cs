@@ -66,6 +66,27 @@ namespace Farme.Audio
 
         #region 属性 
         /// <summary>
+        /// 空间混合(0:2D  -> 1:3D)
+        /// </summary>
+        public float SpatialBlend
+        {
+            set
+            {
+                if (m_As != null)
+                {
+                    m_As.spatialBlend = Mathf.Clamp(value, 0, 1);
+                }
+            }
+            get
+            {
+                if (m_As != null)
+                {
+                    return m_As.spatialBlend;
+                }
+                return -1;
+            }
+        }
+        /// <summary>
         /// 播放进度
         /// </summary>
         public float Progress
