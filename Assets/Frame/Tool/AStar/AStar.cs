@@ -182,7 +182,7 @@ namespace Farme.Tool
                     tempAStarGrid = openLi[0];
                     closeLi.Add(tempAStarGrid);
                     openLi.Remove(tempAStarGrid);           
-                    if (Equals(tempAStarGrid.Position, end.Position))//判断添加的A星格子是否为终点的格子
+                    if (Equals(tempAStarGrid.Position, start.Position))//判断添加的A星格子是否为终点的格子
                     {
                         List<AStarGirdPosition> Positions = new List<AStarGirdPosition>();
                         Positions.Add(tempAStarGrid.Position);
