@@ -36,8 +36,14 @@ namespace Farme.Tool
         }
         private static List<AStarGirdPosition> OptimalPath(AStarGrid start, AStarGrid end)
         {       
-            return TwoWayPathFinding(start, end);
+            return SingleWayPathFinding(start, end);
         }
+        /// <summary>
+        /// 双向寻路(待)
+        /// </summary>
+        /// <param name="start">起点</param>
+        /// <param name="end">终点</param>
+        /// <returns></returns>
         private static List<AStarGirdPosition> TwoWayPathFinding(AStarGrid start, AStarGrid end)
         {
             if (m_AStarGrids != null && start != end && start.State == AStartGirdState.Through && start.State == end.State)//判断起始点与终点是否都为可行走点
@@ -131,7 +137,66 @@ namespace Farme.Tool
             }
             return null;
         }
-
+        /// <summary>
+        /// 单向寻路
+        /// </summary>
+        /// <param name="start">起点</param>
+        /// <param name="end">终点</param>
+        /// <returns></returns>
+        private static List<AStarGirdPosition> SingleWayPathFinding(AStarGrid start, AStarGrid end)
+        {
+            if (m_AStarGrids != null && start != end && start.State == AStartGirdState.Through && start.State == end.State)//判断起始点与终点是否都为可行走点
+            {
+                m_StartToEndDir = (end.Position - start.Position).Normalized;
+                start.Prev = null;
+                start.Distance = 0;
+                start.ToStartDistance = 0;
+                start.ToEndDistance = 0;
+                end.Prev = null;
+                end.Distance = 0;
+                end.ToStartDistance = 0;
+                end.ToEndDistance = 0;
+                AStarGrid tempAStarGrid = end;//已end为起点
+                List<AStarGrid> openLi = new List<AStarGrid>();
+                List<AStarGrid> closeLi = new List<AStarGrid>();
+                while (true)
+                {
+                    #region 计算起始点的八个点与终点的距离并依照从大到小的顺序排序
+                    // 从头部开始搜寻
+                    FindNeighborAStarGrid(tempAStarGrid, start, openLi, closeLi);
+                    openLi.Sort((a, b) =>//从小->大排列
+                    {
+                        if ((a.ToStartDistance + a.ToEndDistance) >= (b.ToStartDistance + b.ToEndDistance))
+                        {
+                            return 1;
+                        }
+                        return -1;
+                    });
+                    
+                    #endregion
+                    if (openLi.Count == 0)
+                    {
+                        Debuger.Log("没有路可走");
+                        break;
+                    }
+                    tempAStarGrid = openLi[0];
+                    closeLi.Add(tempAStarGrid);
+                    openLi.Remove(tempAStarGrid);           
+                    if (Equals(tempAStarGrid.Position, end.Position))//判断添加的A星格子是否为终点的格子
+                    {
+                        List<AStarGirdPosition> Positions = new List<AStarGirdPosition>();
+                        Positions.Add(tempAStarGrid.Position);
+                        while (tempAStarGrid.Prev != null)
+                        {
+                            Positions.Add(tempAStarGrid.Prev.Position);
+                            tempAStarGrid = tempAStarGrid.Prev;
+                        }
+                        return Positions;
+                    }
+                }
+            }
+            return null;
+        }
         /// <summary>
         /// 寻找A星格子相邻的八个A格子
         /// </summary>
