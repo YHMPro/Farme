@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 namespace Farme.UI
 {
     /// <summary>
-    /// 面板状态
+    /// 窗口状态
     /// </summary>
     public enum EnumWindowState
     {
@@ -30,7 +30,7 @@ namespace Farme.UI
         Destroy
     }
     /// <summary>
-    /// 窗口层级
+    /// 面板层级
     /// </summary>
     public enum EnumPanelLayer
     {
