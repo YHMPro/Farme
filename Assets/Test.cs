@@ -31,7 +31,7 @@ namespace Test
        
         public void OnValidate()
         {
-            text.text = content;
+            //text.text = content;
         }
         //private Audio audio;
         //protected override void LateOnEnable()
@@ -43,6 +43,7 @@ namespace Test
                                                                                               // Start is called before the first frame update
         protected void Start()
         {
+            SceneLoad.LoadSceneAsync("Test");
             float x;
             float y;
             for (var i = 0; i < 360;)
