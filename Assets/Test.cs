@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 using Farme.Tool;
 namespace Test
 {
-    public class Test : BaseMono
+    public class Test : MonoBehaviour
     {
         private Animator m_Anim;
         private Coroutine m_C;
@@ -23,16 +23,25 @@ namespace Test
         Coroutine co = null;
         string MP3path = @"C:\Users\XiaoHeTao\Desktop\Music\Wisp X - Stand With Me.mp3";
         public Image Image;
+        public string content;
+        public Text text;
+        public Image img;
 
-        //private Audio audio;
-        protected override void LateOnEnable()
+
+       
+        public void OnValidate()
         {
-            ///Debug.Log(2);
+            text.text = content;
         }
+        //private Audio audio;
+        //protected override void LateOnEnable()
+        //{
+        //    ///Debug.Log(2);
+        //}
         private float[,] f = new float[2, 3] { { 0, 1, 2 }, { 3, 4, 5 } };//二维数组
         private float[][] F = new float[2][] { new float[2] { 1, 2 }, new float[2] { 1, 2 } };//数组的数组
                                                                                               // Start is called before the first frame update
-        protected override void Start()
+        protected void Start()
         {
             float x;
             float y;
@@ -215,6 +224,12 @@ namespace Test
         }
         private void Update()
         {
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                text.text += "111";
+                img.rectTransform.sizeDelta = text.rectTransform.sizeDelta;
+                //StopCoroutine(co);
+            }
             if (Input.GetKeyDown(KeyCode.S))
             {
                 //StopCoroutine(co);
@@ -222,7 +237,7 @@ namespace Test
             if (Input.GetKeyDown(KeyCode.C))
             {
                 //AudioManager.ClearCache();
-                GC.Collect();
+                //GC.Collect();
             }
         }
         private void FixedUpdate()

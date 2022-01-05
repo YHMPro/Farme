@@ -38,6 +38,10 @@ namespace Farme
                         else
                         {
                             m_Instance = instances[0];
+                            if(!isDontDestroyOnLoad)
+                            {
+                                Object.DontDestroyOnLoad(applyTarget);
+                            }
                             if (instances.Length > 1)
                             {
                                 Debuger.LogWarning("场景内存在多个" + typeof(T).Name + "实例");
