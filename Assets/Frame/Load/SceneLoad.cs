@@ -2,6 +2,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
+using Farme.Tool;
 namespace Farme
 {
     /// <summary>
@@ -17,7 +18,7 @@ namespace Farme
         /// <param name="startLoadCallback">开始加载回调</param>
         /// <param name="endLoadCallback">结束加载回调</param>
         /// <param name="loadProgressCallback">加载进度回调</param>
-        public static void LoadSceneAsync(string sceneName, UnityAction startLoadCallback = null, UnityAction endLoadCallback = null, UnityAction<float> loadProgressCallback = null)
+        public static void LoadSceneAsync(string sceneName, UnityAction startLoadCallback = null, UnityAction<bool> endLoadCallback = null, UnityAction<float> loadProgressCallback = null)
         {
             //开启协程
             MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IELoadScene(sceneName, startLoadCallback, endLoadCallback, loadProgressCallback));
@@ -30,18 +31,24 @@ namespace Farme
         /// <param name="endLoadCallback">回调切换场景后</param>
         /// <param name="loadProgressCallback">加载进度回调</param>
         /// <returns></returns>
-        private static IEnumerator IELoadScene(string sceneName, UnityAction startLoadCallback = null, UnityAction endLoadCallback = null, UnityAction<float> loadProgressCallback = null)
+        private static IEnumerator IELoadScene(string sceneName, UnityAction startLoadCallback = null, UnityAction<bool> endLoadCallback = null, UnityAction<float> loadProgressCallback = null)
         {
             //用于处理加载前场景数据
             startLoadCallback?.Invoke();
             AsyncOperation ao = SceneManager.LoadSceneAsync(sceneName);
+            if (ao == null)
+            {
+                Debuger.LogError("场景不存在!");
+                endLoadCallback?.Invoke(false);
+                yield break;
+            }
             while (!ao.isDone)//等待场景加载完成
             {
                 loadProgressCallback?.Invoke(ao.progress);
                 yield return ao;
-            }          
+            }
             //用于初始化数据
-            endLoadCallback?.Invoke();
+            endLoadCallback?.Invoke(true);
         }
         #endregion
 
