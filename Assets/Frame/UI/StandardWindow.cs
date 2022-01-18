@@ -182,7 +182,7 @@ namespace Farme.UI
             if (GoLoad.Take(path, out GameObject panel, GetPanelLayer(layer)))
             {
                 T t = panel.InspectComponent<T>();
-                t.relyWindow = this;
+                t.RelyWindow = this;
                 m_PanelDic.Add(panelName, t);
                 callback?.Invoke(t);
                 return;

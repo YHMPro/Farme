@@ -27,7 +27,7 @@ public class PanelTest : BasePanel
 
     private void ImageClick(BaseEventData bEData)
     {
-        if(relyWindow.Raycast(out List<RaycastResult> resultLi))
+        if(RelyWindow.Raycast(out List<RaycastResult> resultLi))
         {
             foreach(var result in resultLi)
             {
