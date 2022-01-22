@@ -7,13 +7,13 @@ namespace Farme.Audio
     /// <summary>
     /// 音效管理器
     /// </summary>
-    public class AudioManager 
+    public class AudioManager
     {
         #region 字段
         /// <summary>
         /// 闲置音效栈
         /// </summary>
-        private static Stack<Audio> m_InidleAudios = null;       
+        private static Stack<Audio> m_InidleAudios = null;
         /// <summary>
         /// 非闲置的音效列表
         /// </summary>
@@ -21,7 +21,7 @@ namespace Farme.Audio
         /// <summary>
         /// 缓存的音效播放器最大数量
         /// </summary>
-        private static int m_cacheAudioMax = 5;      
+        private static int m_cacheAudioMax = 5;
         #endregion
 
         #region 属性
@@ -32,7 +32,7 @@ namespace Farme.Audio
         {
             get
             {
-                if(m_NotInidleAudioLi==null)
+                if (m_NotInidleAudioLi == null)
                 {
                     m_NotInidleAudioLi = new List<Audio>();
                 }
@@ -52,7 +52,7 @@ namespace Farme.Audio
                 }
                 return m_InidleAudios;
             }
-        }      
+        }
         /// <summary>
         /// 缓存的最大音效数量
         /// </summary>
@@ -91,10 +91,10 @@ namespace Farme.Audio
         public static void ClearCache()
         {
             ClearNULL_USING();//清除一次空引用
-            while(InidleAudios.Count > m_cacheAudioMax)
-            {             
+            while (InidleAudios.Count > m_cacheAudioMax)
+            {
                 //销毁掉多余的音效
-                Object.Destroy(InidleAudios.Pop().gameObject);              
+                Object.Destroy(InidleAudios.Pop().gameObject);
             }
         }
         /// <summary>
@@ -110,20 +110,21 @@ namespace Farme.Audio
                 }
             }
             //保证音效闲置栈中的第一个Head元素不为NULL即可
-            while(InidleAudios.Count>0&& InidleAudios.Peek()==null)
+            while (InidleAudios.Count > 0 && InidleAudios.Peek() == null)
             {
                 InidleAudios.Pop();//弹出该NULL  
-            }            
+            }
         }
         /// <summary>
         /// 申请音效
         /// </summary>
+        /// <param name="isDontDestroyOnLoad">加载新场景时是否销毁目标对象</param>
         /// <returns></returns>
-        public static Audio ApplyForAudio()
+        public static Audio ApplyForAudio(bool isDontDestroyOnLoad = true)
         {
             ClearNULL_USING();//清除一次空引用
             Audio audio;
-            if(InidleAudios.Count>0)
+            if (InidleAudios.Count > 0)
             {
                 audio = InidleAudios.Pop();
                 if (!NotInidleAudioLi.Contains(audio))
@@ -135,7 +136,11 @@ namespace Farme.Audio
             else
             {
                 audio = MonoFactory<Audio>.GetInstance(new GameObject("Audio"));
-            }                   
+            }
+            if (!isDontDestroyOnLoad)
+            {
+                Object.DontDestroyOnLoad(audio.gameObject);
+            }
             return audio;
         }
         /// <summary>
@@ -204,7 +209,7 @@ namespace Farme.Audio
             for (int index = NotInidleAudioLi.Count - 1; index >= 0; index--)
             {
                 Audio audio = NotInidleAudioLi[index];
-                if (audio != null&& audio.Group== audioMixerGroup)
+                if (audio != null && audio.Group == audioMixerGroup)
                 {
                     audio.Stop();
                 }
@@ -234,7 +239,7 @@ namespace Farme.Audio
             for (int index = NotInidleAudioLi.Count - 1; index >= 0; index--)
             {
                 Audio audio = NotInidleAudioLi[index];
-                if (audio != null&& audio.Group == audioMixerGroup)
+                if (audio != null && audio.Group == audioMixerGroup)
                 {
                     audio.RePlay();
                 }
@@ -247,15 +252,15 @@ namespace Farme.Audio
         /// <param name="to">即将开始播放的音效</param>
         /// <param name="endVolume">过度结束时的音量</param>
         /// <param name="time">过度所消耗的时间</param>
-        public static void ExcessPlay(Audio form,Audio to,float endVolume=1,float time=0)
+        public static void ExcessPlay(Audio form, Audio to, float endVolume = 1, float time = 0)
         {
-            if(form == to)
+            if (form == to)
             {
                 Debuger.LogWarning("相同的音效不能进行过度播放。");
             }
             form.Stop(0, time);
             to.Play(0, endVolume, time);
-        }      
+        }
         /// <summary>
         /// 设置音量
         /// </summary>

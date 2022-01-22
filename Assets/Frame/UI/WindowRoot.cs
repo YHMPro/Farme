@@ -17,7 +17,7 @@ namespace Farme.UI
         private EventSystem m_ES = null;
         private StandaloneInputModule m_InputModule = null;
         private Camera m_Camera = null;
-        private Dictionary<string, StandardWindow> m_WindowModelDic = null;            
+        private Dictionary<string, StandardWindow> m_WindowModelDic = null;
         #endregion
         #region 属性
         /// <summary>
@@ -27,13 +27,13 @@ namespace Farme.UI
         {
             get
             {
-                if(m_ES==null)
+                if (m_ES == null)
                 {
                     m_ES = GetComponent<EventSystem>();
                 }
                 return m_ES;
             }
-        }      
+        }
         /// <summary>
         /// 相机
         /// </summary>
@@ -41,7 +41,7 @@ namespace Farme.UI
         {
             get
             {
-                if(m_Camera==null)
+                if (m_Camera == null)
                 {
                     m_Camera = GetComponent<Camera>();
                 }
@@ -65,28 +65,28 @@ namespace Farme.UI
         /// <param name="windowName">窗口名称</param>
         /// <param name="renderMode">渲染模式</param>
         /// <param name="callback">回调</param>
-        public void CreateWindow(string windowName, RenderMode renderMode=RenderMode.ScreenSpaceOverlay,UnityAction<StandardWindow> callback=null)
+        public void CreateWindow(string windowName, RenderMode renderMode = RenderMode.ScreenSpaceOverlay, UnityAction<StandardWindow> callback = null)
         {
-            if(m_WindowModelDic.ContainsKey(windowName))
+            if (m_WindowModelDic.ContainsKey(windowName))
             {
-                Debuger.LogWarning("窗口:"+ windowName+"反复创建。");
+                Debuger.LogWarning("窗口:" + windowName + "反复创建。已屏蔽这次创建");
                 return;
             }
-            if (GoLoad.Take(m_WindowModelPath,out GameObject go))
+            if (GoLoad.Take(m_WindowModelPath, out GameObject go))
             {
                 go.transform.SetParent(transform);
                 StandardWindow windowModel = go.InspectComponent<StandardWindow>();
-                windowModel.gameObject.name = windowName;          
+                windowModel.gameObject.name = windowName;
                 windowModel.Canvas.renderMode = renderMode;
-                windowModel.Canvas.worldCamera = m_Camera;             
+                windowModel.Canvas.worldCamera = m_Camera;
                 switch (renderMode)
                 {
                     case RenderMode.ScreenSpaceOverlay:
-                        {                           
+                        {
                             break;
                         }
                     case RenderMode.ScreenSpaceCamera:
-                        {                          
+                        {
                             break;
                         }
                     case RenderMode.WorldSpace:
@@ -97,7 +97,7 @@ namespace Farme.UI
                 }
                 m_WindowModelDic.Add(windowName, windowModel);
                 callback?.Invoke(windowModel);
-            }                                      
+            }
         }
         /// <summary>
         /// 获取窗口
@@ -106,7 +106,7 @@ namespace Farme.UI
         /// <returns>窗口</returns>
         public StandardWindow GetWindow(string windowName)
         {
-            if(m_WindowModelDic.TryGetValue(windowName,out StandardWindow windowModel))
+            if (m_WindowModelDic.TryGetValue(windowName, out StandardWindow windowModel))
             {
                 return windowModel;
             }
@@ -118,11 +118,11 @@ namespace Farme.UI
         /// <param name="windowName">窗口名称</param>
         public void RemoveWindow(string windowName)
         {
-            if(m_WindowModelDic.ContainsKey(windowName))
+            if (m_WindowModelDic.ContainsKey(windowName))
             {
                 m_WindowModelDic.Remove(windowName);
-            }          
-        }       
+            }
+        }
         /// <summary>
         /// UI事件注册
         /// 注:指针事件触发条件(1:UI透明的>=0.1 2:UI的RaycastTarget为True)
@@ -172,7 +172,7 @@ namespace Farme.UI
         /// <param name="callBack">移除的回调</param>
         public static void UIEventRemove(UIBehaviour uiB, EventTriggerType eTType, UnityAction<BaseEventData> callBack)
         {
-            
+
             if (uiB == null)
             {
                 Debuger.Log("申请对象为NULL");

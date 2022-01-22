@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using Farme.Tool;
 namespace Farme
-{ 
+{
     /// <summary>
     /// 更新活动方式
     /// </summary>
@@ -35,7 +35,7 @@ namespace Farme
         private void Update()
         {
             m_Callback?.Invoke();
-            
+
         }
         /// <summary>
         /// 延迟更新
@@ -52,7 +52,7 @@ namespace Farme
             m_FixCallback?.Invoke();
         }
         #endregion
-        protected ShareMono() { }       
+        protected ShareMono() { }
         #region 事件       
         /// <summary>
         /// 回调
@@ -73,9 +73,9 @@ namespace Farme
         /// </summary>
         /// <param name="updateAction">行为方式</param>
         /// <param name="callback">回调</param>
-        public void ApplyUpdateAction(EnumUpdateAction updateAction,UnityAction callback)
+        public void ApplyUpdateAction(EnumUpdateAction updateAction, UnityAction callback)
         {
-            switch(updateAction)
+            switch (updateAction)
             {
                 case EnumUpdateAction.Standard:
                     {
@@ -91,7 +91,7 @@ namespace Farme
                     {
                         m_LateCallback += callback;
                         break;
-                    }           
+                    }
             }
         }
         /// <summary>
@@ -119,9 +119,88 @@ namespace Farme
                         break;
                     }
             }
-        }             
+        }
+
+        #region 不受Timescale影响
         /// <summary>
-        /// 延迟执行(无参数传递) 
+        /// 延迟执行(无参数传递,不受Timescale影响) 
+        /// </summary>
+        /// <param name="delayTime">延迟时长</param>
+        /// <param name="callback">回调</param>
+        /// <returns></returns>
+        public Coroutine DelayRealtimeAction(float delayTime, UnityAction callback)
+        {
+            return StartCoroutine(IEDelayRealtimeAction(Mathf.Clamp(delayTime, 0, delayTime), callback));
+        }
+        /// <summary>
+        /// 延迟执行(含参数传递,不受Timescale影响) 
+        /// </summary>
+        /// <typeparam name="T">参数类型</typeparam>
+        /// <param name="delayTime">延迟时长</param>
+        /// <param name="tInfo">信息</param>
+        /// <param name="callback">回调</param>
+        /// <returns></returns>
+        public Coroutine DelayRealtimeAction<T>(float delayTime, T tInfo, UnityAction<T> callback)
+        {
+            return StartCoroutine(IEDelayRealtimeAction(Mathf.Clamp(delayTime, 0, delayTime), tInfo, callback));
+        }
+        /// <summary>
+        /// 延迟执行(含参数传递,不受Timescale影响) 
+        /// </summary>
+        /// <typeparam name="T">参数类型</typeparam>
+        /// <typeparam name="K">参数类型</typeparam>
+        /// <param name="delayTime">延迟时长</param>
+        /// <param name="tInfo">信息</param>
+        /// <param name="kInfo">信息</param>
+        /// <param name="callback">回调</param>
+        /// <returns></returns>
+        public Coroutine DelayRealtimeAction<T, K>(float delayTime, T tInfo, K kInfo, UnityAction<T, K> callback)
+        {
+            return StartCoroutine(IEDelayRealtimeAction(Mathf.Clamp(delayTime, 0, delayTime), tInfo, kInfo, callback));
+        }
+        /// <summary>
+        /// 协程延迟(无参数传递,不受Timescale影响)
+        /// </summary>
+        /// <param name="delayTime">延迟时长</param>
+        /// <param name="callback">回调</param>
+        /// <returns></returns>
+        private IEnumerator IEDelayRealtimeAction(float delayTime, UnityAction callback)
+        {
+            yield return new WaitForSecondsRealtime(delayTime);
+            callback?.Invoke();
+        }
+        /// <summary>
+        /// 协程延迟(含参数传递,不受Timescale影响)
+        /// </summary>
+        /// <typeparam name="T">参数类型</typeparam>
+        /// <param name="delayTime">延迟时长</param>
+        /// <param name="tInfo">信息</param>
+        /// <param name="callback">回调</param>
+        /// <returns></returns>
+        private IEnumerator IEDelayRealtimeAction<T>(float delayTime, T tInfo, UnityAction<T> callback)
+        {
+            yield return new WaitForSecondsRealtime(delayTime);
+            callback?.Invoke(tInfo);
+        }
+        /// <summary>
+        /// 协程延迟(含参数传递,不受Timescale影响)
+        /// </summary>
+        /// <typeparam name="T">参数类型</typeparam>
+        /// <typeparam name="K">参数类型</typeparam>
+        /// <param name="delayTime">延迟时长</param>
+        /// <param name="tInfo">信息</param>
+        /// <param name="kInfo">信息</param>
+        /// <param name="callback">回调</param>
+        /// <returns></returns>
+        private IEnumerator IEDelayRealtimeAction<T, K>(float delayTime, T tInfo, K kInfo, UnityAction<T, K> callback)
+        {
+            yield return new WaitForSecondsRealtime(delayTime);
+            callback?.Invoke(tInfo, kInfo);
+        }
+        #endregion
+        #region 受Timescale影响
+        /// <summary>
+        /// 延迟执行(无参数传递,受Timescale影响) 
         /// </summary>
         /// <param name="delayTime">延迟时长</param>
         /// <param name="callback">回调</param>
@@ -131,7 +210,7 @@ namespace Farme
             return StartCoroutine(IEDelayAction(Mathf.Clamp(delayTime, 0, delayTime), callback));
         }
         /// <summary>
-        /// 延迟执行(含参数传递) 
+        /// 延迟执行(含参数传递,受Timescale影响) 
         /// </summary>
         /// <typeparam name="T">参数类型</typeparam>
         /// <param name="delayTime">延迟时长</param>
@@ -143,7 +222,7 @@ namespace Farme
             return StartCoroutine(IEDelayAction(Mathf.Clamp(delayTime, 0, delayTime), tInfo, callback));
         }
         /// <summary>
-        /// 延迟执行(含参数传递) 
+        /// 延迟执行(含参数传递,受Timescale影响) 
         /// </summary>
         /// <typeparam name="T">参数类型</typeparam>
         /// <typeparam name="K">参数类型</typeparam>
@@ -157,7 +236,7 @@ namespace Farme
             return StartCoroutine(IEDelayAction(Mathf.Clamp(delayTime, 0, delayTime), tInfo, kInfo, callback));
         }
         /// <summary>
-        /// 协程延迟(无参数传递)
+        /// 协程延迟(无参数传递,受Timescale影响)
         /// </summary>
         /// <param name="delayTime">延迟时长</param>
         /// <param name="callback">回调</param>
@@ -168,7 +247,7 @@ namespace Farme
             callback?.Invoke();
         }
         /// <summary>
-        /// 协程延迟(含参数传递)
+        /// 协程延迟(含参数传递,受Timescale影响)
         /// </summary>
         /// <typeparam name="T">参数类型</typeparam>
         /// <param name="delayTime">延迟时长</param>
@@ -181,7 +260,7 @@ namespace Farme
             callback?.Invoke(tInfo);
         }
         /// <summary>
-        /// 协程延迟(含参数传递)
+        /// 协程延迟(含参数传递,受Timescale影响)
         /// </summary>
         /// <typeparam name="T">参数类型</typeparam>
         /// <typeparam name="K">参数类型</typeparam>
@@ -194,7 +273,8 @@ namespace Farme
         {
             yield return new WaitForSeconds(delayTime);
             callback?.Invoke(tInfo, kInfo);
-        }       
+        }
+        #endregion
         /// <summary>
         /// 移除所有Update委托
         /// </summary>

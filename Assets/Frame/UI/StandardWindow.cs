@@ -78,7 +78,7 @@ namespace Farme.UI
         /// <summary>
         /// 面板容器
         /// </summary>
-        private Dictionary<string, BasePanel> m_PanelDic = null;       
+        private Dictionary<string, BasePanel> m_PanelDic = null;
         /// <summary>
         /// 底层
         /// </summary>
@@ -116,7 +116,7 @@ namespace Farme.UI
         {
             get
             {
-                if(m_CS==null)
+                if (m_CS == null)
                 {
                     m_CS = GetComponent<CanvasScaler>();
                 }
@@ -130,7 +130,7 @@ namespace Farme.UI
         {
             get
             {
-                if(m_Canvas==null)
+                if (m_Canvas == null)
                 {
                     m_Canvas = GetComponent<Canvas>();
                 }
@@ -147,7 +147,7 @@ namespace Farme.UI
         public bool Raycast(out List<RaycastResult> resultLi)
         {
             resultLi = new List<RaycastResult>();
-            if (m_PED==null)
+            if (m_PED == null)
             {
                 if (!MonoSingletonFactory<WindowRoot>.SingletonExist)
                 {
@@ -156,7 +156,7 @@ namespace Farme.UI
                 }
                 m_PED = new PointerEventData(MonoSingletonFactory<WindowRoot>.GetSingleton().ES);
             }
-            if(m_PED==null)
+            if (m_PED == null)
             {
                 Debuger.LogError("指针数据实例失败。");
                 return false;
@@ -173,10 +173,11 @@ namespace Farme.UI
         /// <param name="panelName">面板名称</param>
         /// <param name="layer">层级</param>
         /// <param name="callback">回调</param>
-        public void CreatePanel<T>(string path,string panelName, EnumPanelLayer layer = EnumPanelLayer.BOTTOM, UnityAction<T> callback=null) where T:BasePanel
+        public void CreatePanel<T>(string path, string panelName, EnumPanelLayer layer = EnumPanelLayer.BOTTOM, UnityAction<T> callback = null) where T : BasePanel
         {
             if (m_PanelDic.ContainsKey(panelName))
             {
+                Debuger.LogWarning("面板:" + panelName + "反复创建,已屏蔽这次创建。");
                 return;
             }
             if (GoLoad.Take(path, out GameObject panel, GetPanelLayer(layer)))
@@ -205,7 +206,7 @@ namespace Farme.UI
         /// <param name="panelName">面板名称</param>
         public void RemovePanel(string panelName)
         {
-            if(m_PanelDic.ContainsKey(panelName))
+            if (m_PanelDic.ContainsKey(panelName))
             {
                 m_PanelDic.Remove(panelName);
             }
@@ -232,9 +233,9 @@ namespace Farme.UI
         /// <param name="panelName">面板名称</param>
         /// <param name="result">结果</param>
         /// <returns></returns>
-        public bool GetPanel<T>(string panelName,out T result)where T:BasePanel
+        public bool GetPanel<T>(string panelName, out T result) where T : BasePanel
         {
-            if(m_PanelDic.TryGetValue(panelName,out BasePanel panel ))
+            if (m_PanelDic.TryGetValue(panelName, out BasePanel panel))
             {
                 result = panel as T;
                 return true;
@@ -266,8 +267,8 @@ namespace Farme.UI
                     }
                 case EnumWindowState.Destroy:
                     {
-                        
-                        if(MonoSingletonFactory<WindowRoot>.SingletonExist)
+
+                        if (MonoSingletonFactory<WindowRoot>.SingletonExist)
                         {
                             MonoSingletonFactory<WindowRoot>.GetSingleton().RemoveWindow(gameObject.name);
                         }
@@ -323,7 +324,7 @@ namespace Farme.UI
 
             }
             return tran;
-        }        
+        }
         #endregion
     }
 }

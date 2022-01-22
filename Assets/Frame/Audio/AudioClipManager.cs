@@ -164,5 +164,37 @@ namespace Farme.Audio
             return null;
         }
         #endregion
+
+        #region Clear
+        /// <summary>
+        /// 卸载缓存的音效剪辑
+        /// </summary>
+        /// <param name="clipKey">剪辑唯一标识(剪辑路径或AB包名+剪辑名)</param>
+        /// <returns></returns>
+        public static bool UnLoadAudioClip(string clipKey)
+        {
+            if (AudioClipDic.TryGetValue(clipKey, out AudioClip result))
+            {
+                result.UnloadAudioData();
+                AudioClipDic.Remove(clipKey);
+                return true;
+            }
+            return false;
+        }
+        /// <summary>
+        /// 卸载所有缓存的音效剪辑
+        /// </summary>
+        public static void UnLoadAllAudioClip()
+        {
+            foreach (string clipKey in AudioClipDic.Keys)
+            {
+                if (AudioClipDic.TryGetValue(clipKey, out AudioClip result))
+                {
+                    result.UnloadAudioData();
+                }
+            }
+            AudioClipDic.Clear();
+        }
+        #endregion
     }
 }

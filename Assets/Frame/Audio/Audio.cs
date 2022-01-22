@@ -27,6 +27,15 @@ namespace Farme.Audio
             m_ListenVolumeExcess = null;
             AudioManager.NotInidleAudioLi.Add(this);
         }
+
+        private void OnDestroy()
+        {
+            RemoveTimer();
+            if (AudioManager.NotInidleAudioLi.Contains(this))
+            {
+                AudioManager.NotInidleAudioLi.Remove(this);             
+            }            
+        }
         #endregion
 
         #region 字段         
