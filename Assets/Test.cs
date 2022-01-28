@@ -16,7 +16,7 @@ using Farme.Tool;
 namespace Test
 {
     public class Test : MonoBehaviour
-    {
+    {       
         private Animator m_Anim;
         private Coroutine m_C;
         public Image button;
@@ -27,8 +27,21 @@ namespace Test
         public Text text;
         public Image img;
 
+        private void Awake()
+        {
+            //m_Anim = GetComponent<Animator>();
+            Debuger.Log(GetComponentInChildren<Text>());
+            //m_Anim.SetIK
+            // m_Anim.SetLoo
+            //GetComponent<FoldFarme>().FE.AddListener((isFold) => { Debuger.Log(isFold); });
+           
+        }
 
-       
+        private void OnAnimatorIK(int layerIndex)
+        {
+
+        }
+
         public void OnValidate()
         {
             
@@ -44,6 +57,14 @@ namespace Test
                                                                                               // Start is called before the first frame update
         protected void Start()
         {
+
+
+
+
+
+
+
+            return;
             SceneLoad.LoadSceneAsync("Test");
             float x;
             float y;
@@ -226,6 +247,7 @@ namespace Test
         }
         private void Update()
         {
+            return;
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 text.text += "111";

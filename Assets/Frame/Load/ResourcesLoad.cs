@@ -35,6 +35,7 @@ namespace Farme
                     result = Resources.Load<T>(resPath);
                     if (result == null)
                     {
+                        Debuger.LogError("[" + resPath + "]" + "路径下的资源加载失败。");
                         return false;
                     }
                     m_Objects.Add(resPath, result);
@@ -43,9 +44,14 @@ namespace Farme
             }
             else
             {
+                if (m_Objects.ContainsKey(resPath))
+                {
+                    Debuger.LogWarning(resPath + "路径下的该对象之前已缓存,但却使用不通过缓存加载的方式进行加载。");
+                }
                 result = Resources.Load<T>(resPath);
                 if (result == null)
                 {
+                    Debuger.LogError("[" + resPath + "]" + "路径下的资源加载失败。");
                     return false;
                 }
                 return true;
@@ -70,7 +76,10 @@ namespace Farme
                 else
                 {
                     result = Resources.Load<T>(resPath);
-                    m_Objects.Add(resPath, result);
+                    if (result != null)
+                    {
+                        m_Objects.Add(resPath, result);
+                    }
                 }
             }
             else
@@ -80,6 +89,10 @@ namespace Farme
                     Debuger.LogWarning(resPath + "路径下的该对象之前已缓存,但却使用不通过缓存加载的方式进行加载。");
                 }
                 result = Resources.Load<T>(resPath);
+            }
+            if (result == null)
+            {
+                Debuger.LogError("[" + resPath + "]" + "路径下的资源加载失败。");
             }
             return result;
         }
@@ -124,7 +137,10 @@ namespace Farme
             }
             if (isLoadCache)
             {
-                m_Objects.Add(resPath, assets);
+                if (assets != null)
+                {
+                    m_Objects.Add(resPath, assets);
+                }
             }
             callBack?.Invoke(assets);
         }
@@ -144,18 +160,55 @@ namespace Farme
             return false;
         }
         /// <summary>
-        /// 清除缓存
+        /// 清除所有加载资源的缓存
         /// </summary>
-        public static void ClearAllCache()
+        /// <param name="ignoreObjKeys">忽略Obj数组</param>
+        public static void ClearAllCache(string[] ignoreObjKeys = null)
         {
-            foreach (var path in m_Objects.Keys)
+            bool isUnload;
+            List<string> unloadKeys = null;
+            if (ignoreObjKeys != null)
             {
-                if (m_Objects.TryGetValue(path, out Object obj))
+                unloadKeys = new List<string>();
+            }
+            foreach (string objKey in m_Objects.Keys)
+            {
+                isUnload = true;
+                if (ignoreObjKeys != null)
                 {
-                    Resources.UnloadAsset(obj);
+                    foreach (var ignoreObjKey in ignoreObjKeys)
+                    {
+                        if (Equals(ignoreObjKey, objKey))
+                        {
+                            isUnload = false;
+                            break;//跳出ignoreClipKeys循环
+                        }
+                    }
+                    if (!isUnload)
+                    {
+                        continue;//跳过本次
+                    }
+                }
+                if (m_Objects.TryGetValue(objKey, out Object result))
+                {
+                    if (unloadKeys != null)
+                    {
+                        unloadKeys.Add(objKey);
+                    }
+                    Resources.UnloadAsset(result);
                 }
             }
-            m_Objects.Clear();
+            if (ignoreObjKeys != null)
+            {
+                foreach (var unloadKey in unloadKeys)
+                {
+                    m_Objects.Remove(unloadKey);
+                }
+            }
+            else
+            {
+                m_Objects.Clear();
+            }
         }
     }
 }

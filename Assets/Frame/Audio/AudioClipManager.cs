@@ -182,18 +182,56 @@ namespace Farme.Audio
             return false;
         }
         /// <summary>
-        /// 卸载所有缓存的音效剪辑
+        /// 依照忽略来进行采写(默认为不忽略)
         /// </summary>
-        public static void UnLoadAllAudioClip()
+        /// <param name="ignoreClipKeys">忽略剪辑数组</param>
+        public static void UnLoadAllAudioClip(string[] ignoreClipKeys = null)
         {
+            bool isUnload;
+            List<string> unloadKeys = null;
+            if (ignoreClipKeys != null)
+            {
+                unloadKeys = new List<string>();
+            }
             foreach (string clipKey in AudioClipDic.Keys)
             {
+                isUnload = true;
+                if (ignoreClipKeys != null)
+                {
+                    foreach (var ignoreClipKey in ignoreClipKeys)
+                    {
+                        if (Equals(ignoreClipKey, clipKey))
+                        {
+                            isUnload = false;
+                            break;//跳出ignoreClipKeys循环
+                        }
+                    }
+                    if (!isUnload)
+                    {
+                        continue;//跳过本次
+                    }
+                }
                 if (AudioClipDic.TryGetValue(clipKey, out AudioClip result))
                 {
+                    if (unloadKeys != null)
+                    {
+                        unloadKeys.Add(clipKey);
+                    }
                     result.UnloadAudioData();
                 }
             }
-            AudioClipDic.Clear();
+            if (ignoreClipKeys != null)
+            {
+                foreach (var unloadKey in unloadKeys)
+                {
+                    AudioClipDic.Remove(unloadKey);
+                }
+            }
+            else
+            {
+                AudioClipDic.Clear();
+            }
+
         }
         #endregion
     }

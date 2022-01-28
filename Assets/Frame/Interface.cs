@@ -168,6 +168,17 @@ namespace Farme
     #endregion
 
     #region UGUI扩展接口
+    /// <summary>
+    /// 刷新UI接口
+    /// </summary>
+    public interface IRefreshUI:IInterfaceBase
+    {
+        /// <summary>
+        /// 刷新UI
+        /// </summary>
+        void RefreshUI();
+    }
+
     #region CheckBox指针事件接口  ( 集中约束  ->  具体 )
     /// <summary>
     /// Box指针事件接口

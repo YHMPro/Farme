@@ -51,6 +51,13 @@ namespace Farme
         {
             m_FixCallback?.Invoke();
         }
+
+        private void OnDestroy()
+        {
+            ClearFixedUpdate();
+            ClearLateUpdate();
+            ClearUpdate();
+        }
         #endregion
         protected ShareMono() { }
         #region 事件       

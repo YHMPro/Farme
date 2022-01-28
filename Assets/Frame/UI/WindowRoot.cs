@@ -100,6 +100,48 @@ namespace Farme.UI
             }
         }
         /// <summary>
+        /// 创建窗口
+        /// </summary>
+        /// <param name="windowName">窗口名称</param>
+        /// <param name="renderMode">渲染模式</param>
+        /// <param name="callback">回调</param>
+        public bool CreateWindow(string windowName, out StandardWindow xxWindow,RenderMode renderMode = RenderMode.ScreenSpaceOverlay)
+        {
+            xxWindow = null;
+            if (m_WindowModelDic.ContainsKey(windowName))
+            {
+                Debuger.LogWarning("窗口:" + windowName + "反复创建。已屏蔽这次创建");
+                return false;
+            }
+            if (!GoLoad.Take(m_WindowModelPath, out GameObject go))
+            {
+                return false;
+            }
+            go.transform.SetParent(transform);
+            xxWindow = go.InspectComponent<StandardWindow>();
+            xxWindow.gameObject.name = windowName;
+            xxWindow.Canvas.renderMode = renderMode;
+            xxWindow.Canvas.worldCamera = m_Camera;
+            switch (renderMode)
+            {
+                case RenderMode.ScreenSpaceOverlay:
+                    {
+                        break;
+                    }
+                case RenderMode.ScreenSpaceCamera:
+                    {
+                        break;
+                    }
+                case RenderMode.WorldSpace:
+                    {
+                        xxWindow.transform.localScale = Vector3.one * 0.001f;
+                        break;
+                    }
+            }
+            m_WindowModelDic.Add(windowName, xxWindow);
+            return true;
+        }
+        /// <summary>
         /// 获取窗口
         /// </summary>
         /// <param name="windowName">窗口名称</param>
@@ -111,6 +153,15 @@ namespace Farme.UI
                 return windowModel;
             }
             return null;
+        }
+        /// <summary>
+        /// 获取窗口
+        /// </summary>
+        /// <param name="windowName">窗口名称</param>
+        /// <param name="result">结果</param>
+        public bool GetWindow(string windowName,out StandardWindow result)
+        {
+            return m_WindowModelDic.TryGetValue(windowName, out result);         
         }
         /// <summary>
         /// 移除窗口
