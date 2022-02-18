@@ -62,7 +62,7 @@ namespace Farme
             while (!ao.isDone)//等待场景加载完成
             {
                 loadProgressCallback?.Invoke(ao.progress);
-                yield return ao;
+                yield return true;
             }
             //用于初始化数据
             endLoadCallback?.Invoke(true);
@@ -99,10 +99,10 @@ namespace Farme
                 endUnLoadCallback?.Invoke(false);
                 yield break;
             }
-            while (!ao.isDone)//等待场景加载完成
+            while (!ao.isDone)//等待场景卸载完成
             {
                 unLoadProgressCallback?.Invoke(ao.progress);
-                yield return ao;
+                yield return true;
             }
             //用于初始化数据
             endUnLoadCallback?.Invoke(true);

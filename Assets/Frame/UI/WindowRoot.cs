@@ -104,7 +104,6 @@ namespace Farme.UI
         /// </summary>
         /// <param name="windowName">窗口名称</param>
         /// <param name="renderMode">渲染模式</param>
-        /// <param name="callback">回调</param>
         public bool CreateWindow(string windowName, out StandardWindow xxWindow,RenderMode renderMode = RenderMode.ScreenSpaceOverlay)
         {
             xxWindow = null;

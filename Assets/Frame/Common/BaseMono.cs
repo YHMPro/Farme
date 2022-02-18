@@ -50,10 +50,8 @@ namespace Farme
         {
             m_ComponentDic = null;
         }
-#if UNITY_EDITOR
         protected virtual void OnValidate() { }      
-#endif
-#endregion
+        #endregion
         #region 方法     
         /// <summary>
         /// 注册组件类型
