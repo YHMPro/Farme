@@ -343,7 +343,10 @@ namespace Farme.Audio
         {
             if (m_Timer != null)
             {
-                MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(m_Timer);//停止协程
+                if (MonoSingletonFactory<ShareMono>.SingletonExist)
+                {
+                    MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(m_Timer);//停止协程
+                }
                 m_Timer = null;
             }
         }

@@ -42,7 +42,10 @@ namespace Farme.UI
         {
             if(m_RelyCanvasRenderMode== RenderMode.ScreenSpaceOverlay)
             {
-
+                //计算指针的位置与自身的距离
+                m_ToPointerDistance = Mathf.Clamp((transform.position - Input.mousePosition).magnitude, 0, (m_Img.rectTransform.rect.width * m_Img.transform.lossyScale.x) / 2f - 3f);
+                //调控放缩量
+                transform.localScale = Vector3.one - (1f - m_ToPointerDistance / ((m_Img.rectTransform.rect.width * m_Img.transform.lossyScale.x) / 2f - 3f)) * Vector3.one * m_ScaleValue;
                 return;
             }
             if (!MonoSingletonFactory<WindowRoot>.SingletonExist)

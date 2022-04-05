@@ -19,13 +19,16 @@ namespace Farme.Extend
         /// <param name="delay">延迟时长</param>
         public static void Recycle(this GameObject target,string reuseGroup, float delay = 0)
         {
-            MonoSingletonFactory<ShareMono>.GetSingleton().DelayAction(delay, () =>
-             {
-                 if(target!=null)
+            if (MonoSingletonFactory<ShareMono>.SingletonExist)
+            {
+                MonoSingletonFactory<ShareMono>.GetSingleton().DelayAction(delay, () =>
                  {
-                     GoReusePool.Put(reuseGroup, target);
-                 }
-             });         
+                     if (target != null)
+                     {
+                         GoReusePool.Put(reuseGroup, target);
+                     }
+                 });
+            }
         }
         /// <summary>
         /// 检测组件是否存在，有则直接返该类型组件，没有则添加该类型组件在返回

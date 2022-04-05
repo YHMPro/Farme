@@ -40,7 +40,6 @@ namespace Farme.Test
 
         private void OnDestroy()
         {
-            Debug.Log(MonoSingletonFactory<ShareMono>.SingletonExist);
             //MonoSingletonFactory<ShareMono>.ClearSingleton();
             //Debug.Log(MonoSingletonFactory<ShareMono>.GetSingleton());
         }
