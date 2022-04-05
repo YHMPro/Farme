@@ -1677,6 +1677,7 @@ GameObject:
   - component: {fileID: 197098082}
   - component: {fileID: 197098081}
   - component: {fileID: 197098080}
+  - component: {fileID: 197098083}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1749,6 +1750,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &197098083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197098079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb2dadadd705d1d4f9ed73eb085f43c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  button: {fileID: 0}
+  Image: {fileID: 0}
+  content: 
+  text: {fileID: 0}
+  img: {fileID: 0}
 --- !u!1 &198403005
 GameObject:
   m_ObjectHideFlags: 0
@@ -9546,8 +9564,8 @@ Canvas:
   m_GameObject: {fileID: 1330045891}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 2
+  m_Camera: {fileID: 197098081}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -9566,8 +9584,8 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1330045891}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 90}
+  m_LocalScale: {x: 0.15035163, y: 0.15035163, z: 0.15035163}
   m_Children:
   - {fileID: 1740973291}
   - {fileID: 357101163}
@@ -9578,9 +9596,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 1}
+  m_SizeDelta: {x: 1024.0001, y: 768}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1332961498
 GameObject:
   m_ObjectHideFlags: 0
@@ -17791,7 +17809,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8394995742732613048}
   - component: {fileID: 2477306293183033282}
-  - component: {fileID: 9208406080953921283}
   m_Layer: 0
   m_Name: Solider
   m_TagString: Untagged
@@ -17799,20 +17816,3 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &9208406080953921283
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9208406080953921282}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb2dadadd705d1d4f9ed73eb085f43c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  button: {fileID: 0}
-  Image: {fileID: 0}
-  content: 
-  text: {fileID: 0}
-  img: {fileID: 0}

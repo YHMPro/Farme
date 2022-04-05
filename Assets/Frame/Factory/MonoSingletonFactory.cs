@@ -91,7 +91,14 @@ namespace Farme
         {
             if (m_Instance != null)
             {
-                Object.Destroy(m_Instance.gameObject);
+                lock (m_ThreadLock)
+                {
+                    if (m_Instance != null)
+                    {
+                        Debuger.Log("销毁单例:" + m_Instance.GetType().Name);
+                        Object.DestroyImmediate(m_Instance.gameObject);//同步销毁
+                    }
+                }
             }
             ClearInstance();
         }

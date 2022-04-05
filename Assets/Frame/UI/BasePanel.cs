@@ -31,10 +31,16 @@ namespace Farme.UI
     /// </summary>
     public abstract class BasePanel : BaseMono
     {
-        protected override void Awake()
+        #region 生命周期
+        protected override void OnDestroy()
         {
-            base.Awake();
+            if (m_RelyWindow != null)
+            {
+                m_RelyWindow.RemovePanel(gameObject.name);
+            }
+            base.OnDestroy();
         }
+        #endregion
         #region 字段    
         [SerializeField]
         /// <summary>

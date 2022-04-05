@@ -23,19 +23,40 @@ namespace Farme.UI
         private float m_ToPointerDistance = 0;
         [Range(-0.5f, 0.5f)]
         [SerializeField]
-        private float m_ScaleValue = 0.2f;        
+        private float m_ScaleValue = 0.2f;
+        /// <summary>
+        /// 所依赖画布的渲染模式
+        /// </summary>
+        private RenderMode m_RelyCanvasRenderMode = RenderMode.ScreenSpaceOverlay;
         protected override void Awake()
         {
             base.Awake();
-            m_Img = GetComponent<Image>();
+            m_Img = GetComponent<Image>();           
         }
-
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            m_RelyCanvasRenderMode=GetComponentInParent<Canvas>().renderMode;
+        }
         private void ScaleUpdate()
         {
+            if(m_RelyCanvasRenderMode== RenderMode.ScreenSpaceOverlay)
+            {
+
+                return;
+            }
+            if (!MonoSingletonFactory<WindowRoot>.SingletonExist)
+            {
+                //计算指针的位置与自身的距离
+                m_ToPointerDistance = Mathf.Clamp(((Vector3)RectTransformUtility.WorldToScreenPoint(Camera.main, transform.position) - Input.mousePosition).magnitude, 0, (m_Img.rectTransform.rect.width * m_Img.transform.localScale.x) / 2f - 3f);
+                //调控放缩量
+                transform.localScale = Vector3.one - (1f - m_ToPointerDistance / ((m_Img.rectTransform.rect.width * m_Img.transform.localScale.x) / 2f - 3f)) * Vector3.one * m_ScaleValue;
+                return;
+            }
             //计算指针的位置与自身的距离
-            m_ToPointerDistance = Mathf.Clamp((transform.position - Input.mousePosition).magnitude, 0, (m_Img.rectTransform.rect.width * m_Img.transform.lossyScale.x) / 2f - 3f);
+            m_ToPointerDistance = Mathf.Clamp(((Vector3)RectTransformUtility.WorldToScreenPoint(MonoSingletonFactory<WindowRoot>.GetSingleton().Camera, transform.position) - Input.mousePosition).magnitude, 0, (m_Img.rectTransform.rect.width * m_Img.transform.localScale.x) / 2f - 3f);
             //调控放缩量
-            transform.localScale = Vector3.one - (1f - m_ToPointerDistance / ((m_Img.rectTransform.rect.width * m_Img.transform.lossyScale.x) / 2f - 3f)) * Vector3.one * m_ScaleValue;
+            transform.localScale = Vector3.one - (1f - m_ToPointerDistance / ((m_Img.rectTransform.rect.width * m_Img.transform.localScale.x) / 2f - 3f)) * Vector3.one * m_ScaleValue;          
         }
         #region OnPointerEvent
         public override void OnPointerEnter(PointerEventData eventData)
@@ -52,13 +73,12 @@ namespace Farme.UI
         }
         #endregion   
         protected override void OnDestroy()
-        {         
-            base.OnDestroy();
-            if (!Application.isEditor)
+        {
+            if (MonoSingletonFactory<ShareMono>.SingletonExist)
             {
                 MonoSingletonFactory<ShareMono>.GetSingleton().RemoveUpdateAction(EnumUpdateAction.Standard, this.ScaleUpdate);
             }
-
+            base.OnDestroy();
         }        
     }
 }

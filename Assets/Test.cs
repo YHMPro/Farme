@@ -13,7 +13,7 @@ using Farme.UI;
 using System;
 using Newtonsoft.Json;
 using Farme.Tool;
-namespace Test
+namespace Farme.Test
 {
     public class Test : MonoBehaviour
     {       
@@ -29,12 +29,20 @@ namespace Test
 
         private void Awake()
         {
+            MonoSingletonFactory<ShareMono>.GetSingleton();
             //m_Anim = GetComponent<Animator>();
-            Debuger.Log(GetComponentInChildren<Text>());
+
             //m_Anim.SetIK
             // m_Anim.SetLoo
             //GetComponent<FoldFarme>().FE.AddListener((isFold) => { Debuger.Log(isFold); });
-           
+
+        }
+
+        private void OnDestroy()
+        {
+            Debug.Log(MonoSingletonFactory<ShareMono>.SingletonExist);
+            //MonoSingletonFactory<ShareMono>.ClearSingleton();
+            //Debug.Log(MonoSingletonFactory<ShareMono>.GetSingleton());
         }
 
         private void OnAnimatorIK(int layerIndex)
@@ -219,8 +227,8 @@ namespace Test
             //     // button.sprite = Sprite.Create(texture2D, new Rect(0, 0, texture2D.width, texture2D.height), Vector2.one / 2.0f);
             // });
         }
-        Audio audio1;
-        Audio audio2;
+        Audio.Audio audio1;
+        Audio.Audio audio2;
         //private void 
         private void InputKeyDonw()
         {

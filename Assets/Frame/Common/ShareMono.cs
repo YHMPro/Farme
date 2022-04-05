@@ -127,7 +127,12 @@ namespace Farme
                     }
             }
         }
-
+        #region APPExit
+        private void OnApplicationQuit()
+        {          
+            MonoSingletonFactory<ShareMono>.ClearSingleton();
+        }
+        #endregion
         #region 不受Timescale影响
         /// <summary>
         /// 延迟执行(无参数传递,不受Timescale影响) 
