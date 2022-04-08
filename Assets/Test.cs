@@ -65,13 +65,30 @@ namespace Farme.Test
         protected void Start()
         {
 
+            if (GoLoad.Take("FarmeLockFile/WindowRoot", out GameObject go))
+            {
+                MonoSingletonFactory<WindowRoot>.GetSingleton(go, false);
+                if (MonoSingletonFactory<WindowRoot>.SingletonExist)
+                {
+                    WindowRoot root = MonoSingletonFactory<WindowRoot>.GetSingleton();
+                    root.CreateWindow("MyFirstWindow", RenderMode.ScreenSpaceCamera, (window) =>
+                     {
+                         window.CanvasScaler.referenceResolution = new Vector2(1920, 1080);
+
+                         window.CreatePanel<PanelTest>("PanelTest", "PanelTest", EnumPanelLayer.BOTTOM, (panel) =>
+                         {
+
+                         });
+                     });
+
+                }
+            }
 
 
 
 
 
-
-            return;
+                return;
             SceneLoad.LoadSceneAsync("Test");
             float x;
             float y;

@@ -84,7 +84,7 @@
     <Compile Include="Assets\Frame\Tool\AStar\AStarConfig.cs" />
     <Compile Include="Assets\Frame\Tool\AStar\AStarGrid.cs" />
     <Compile Include="Assets\Frame\UI\BasePanel.cs" />
-    <Compile Include="Assets\Frame\UI\ElasticBtn.cs" />
+    <Compile Include="Assets\Frame\UI\ElasticButton.cs" />
     <Compile Include="Assets\Frame\UI\FoldContentRect.cs" />
     <Compile Include="Assets\Frame\UI\FoldFarmeRect.cs" />
     <Compile Include="Assets\Frame\UI\StandardWindow.cs" />
