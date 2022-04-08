@@ -53,11 +53,17 @@ namespace Farme.UI
             m_CircumcircleRadius = Mathf.Sqrt(Mathf.Pow(m_RectTransform.rect.width / 2.0f * transform.localScale.x, 2) + Mathf.Pow(m_RectTransform.rect.height / 2.0f * transform.localScale.y, 2));
         }
 
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            MonoSingletonFactory<ShareMono>.GetSingleton().RemoveUpdateAction(EnumUpdateAction.Standard, this.ScaleUpdate);
+            transform.localScale = m_NativeScale;
+        }
+
         private void ScaleUpdate()
         {
             Vector2 toPoint;//自身指向指针的方向向量
             Vector2 pos;//toPoint的第一次被赋值后为:向量与UI矩形框外接圆的交点坐标 toPoint的第二次被赋值后为:向量与UI矩形框的交点坐标
-            Vector2 scale;
             float angle;//toPoint(单位化后)向量与单位向量Vector2.right的夹角
             float k;//toPoint向量所构成的直线的斜率
             toPoint = (m_RelyCanvasRenderMode == RenderMode.ScreenSpaceOverlay) ? 
@@ -78,7 +84,6 @@ namespace Farme.UI
                 pos.x = pos.y / k;
             }
             transform.localScale = m_NativeScale - (1f - toPoint.magnitude / pos.magnitude) * Vector3.one * m_ScaleValue;
-            //transform.localScale = (Vector2.Distance(transform.localScale, scale) < 0.01) ? (Vector2)transform.localScale : scale;        
         }
         #region OnPointerEvent
         public override void OnPointerEnter(PointerEventData eventData)
@@ -94,13 +99,6 @@ namespace Farme.UI
             transform.localScale = m_NativeScale;
         }
         #endregion   
-        protected override void OnDestroy()
-        {
-            if (MonoSingletonFactory<ShareMono>.SingletonExist)
-            {
-                MonoSingletonFactory<ShareMono>.GetSingleton().RemoveUpdateAction(EnumUpdateAction.Standard, this.ScaleUpdate);
-            }
-            base.OnDestroy();
-        }        
+      
     }
 }
