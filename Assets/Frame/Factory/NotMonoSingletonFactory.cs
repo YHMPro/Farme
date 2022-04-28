@@ -19,18 +19,8 @@
         /// </summary>
         /// <param name="result">结果</param>
         public static void GetSingleton(out T result)
-        {
-            if (m_Instance == null)
-            {
-                lock (m_ThreadLock)
-                {
-                    if (m_Instance == null)
-                    {
-                        NotMonoFactory<T>.GetInstance(out m_Instance);
-                    }
-                }
-            }
-            result = m_Instance;
+        {          
+            result = GetSingleton();
         }
         /// <summary>
         /// 获取单例

@@ -13,10 +13,6 @@ namespace Farme.Net
     {
         public static Texture2D DefaultTexture2D = null;
         private const string GB2312 = "gb2312";//用处含有未知
-        private static float m_DownloadTextureRequestOutTime = 10;
-        private static float m_DownloadAssetBundleOutTime = 10;
-        private static float m_DownloadTextRequestOutTime = 5;
-
 
         #region 音效下载
         /// <summary>

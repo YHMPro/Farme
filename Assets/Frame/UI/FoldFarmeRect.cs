@@ -34,7 +34,7 @@ namespace Farme.UI
         /// 折叠按钮
         /// </summary>
         [SerializeField]
-        private ElasticButton m_FoldBtn;
+        private ElasticBtn m_FoldBtn;
         /// <summary>
         /// 折叠内容矩形
         /// </summary>

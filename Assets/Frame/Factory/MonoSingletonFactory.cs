@@ -23,34 +23,8 @@ namespace Farme
         /// <param name="applyTarget">申请目标</param>
         /// <param name="isDontDestroyOnLoad">加载新场景时是否销毁目标对象</param>
         public static void GetSingleton(out T result, GameObject applyTarget = null, bool isDontDestroyOnLoad = true)
-        {
-            if (m_Instance == null)
-            {
-                lock (m_ThreadLock)
-                {
-                    if (m_Instance == null)
-                    {
-                        T[] instances = FindSingletons();
-                        if (instances.Length==0)
-                        {
-                            MonoFactory<T>.GetInstance(out m_Instance, applyTarget, isDontDestroyOnLoad);
-                        }
-                        else
-                        {
-                            m_Instance = instances[0];
-                            if(!isDontDestroyOnLoad)
-                            {
-                                Object.DontDestroyOnLoad(applyTarget);
-                            }
-                            if (instances.Length > 1)
-                            {
-                                Debuger.LogWarning("场景内存在多个" + typeof(T).Name + "实例");
-                            }                            
-                        }                      
-                    }
-                }
-            }
-            result = m_Instance;         
+        {         
+            result = GetSingleton(applyTarget, isDontDestroyOnLoad);         
         }
         /// <summary>
         /// 获取单例

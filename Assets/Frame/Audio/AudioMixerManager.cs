@@ -40,7 +40,7 @@ namespace Farme.Audio
             {
                 if(m_MainAudioMixer==null)
                 {
-                    if(ResourcesLoad.Load(m_MainAudioMixerPath, out m_MainAudioMixer))
+                    if(ResLoad.Load(m_MainAudioMixerPath, out m_MainAudioMixer))
                     {
                         Debug.Log("加载主音效混合器成功!");
                     }
@@ -80,19 +80,9 @@ namespace Farme.Audio
         /// <param name="result">结果</param>
         /// <returns>是否获取成功</returns>
         public static bool GetAudioMixerGroup(string groupName,out AudioMixerGroup result)
-        {        
-            if (m_NowOperationAudioMixerGroup != null && m_NowOperationAudioMixerGroup.name == groupName)
-            {
-                result = m_NowOperationAudioMixerGroup;
-                return true;
-            }        
-            if (AudioMixerGroupDic.TryGetValue(groupName,out result))
-            {
-                m_NowOperationAudioMixerGroup = result;
-                return true;
-            }
-       
-            return false;
+        {
+            result = GetAudioMixerGroup(groupName);
+            return result!=null;
         }
         /// <summary>
         /// 获取音效混合器组

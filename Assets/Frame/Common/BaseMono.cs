@@ -84,23 +84,8 @@ namespace Farme
         /// <param name="result">组件</param>
         public virtual bool GetComponent<T>(string targetName,out T result) where T : Component
         {
-            result = null;          
-            if(ComponentDic.TryGetValue(targetName,out List<Component> componentLi))
-            {
-                foreach(var component in componentLi)
-                {
-                    if(component is T)
-                    {
-                        result= component as T;
-                        break;
-                    }                   
-                }
-            }    
-            if(result==null)
-            {
-                return false;
-            }
-            return true;
+            result = GetComponent<T>(targetName);
+            return result!=null;
         }
         /// <summary>
         /// 获取组件
@@ -128,19 +113,10 @@ namespace Farme
         /// <typeparam name="T"></typeparam>
         /// <param name="targetName">对象名称</param>
         /// <param name="resultLi">组件列表</param>
-        public virtual void GetComponents<T>(string targetName,out List<T> resultLi) where T : Component
+        public virtual bool GetComponents<T>(string targetName,out List<T> resultLi) where T : Component
         {
-            resultLi = new List<T>();      
-            if (ComponentDic.TryGetValue(targetName, out List<Component> componentLi))
-            {
-                foreach (var component in componentLi)
-                {
-                    if (component is T)
-                    {
-                        resultLi.Add(component as T);
-                    }
-                }
-            }                    
+            resultLi = GetComponents<T>(targetName);
+            return resultLi.Count != 0;
         }
         /// <summary>
         /// 获取多个同类型组件
@@ -152,8 +128,7 @@ namespace Farme
         {
             List<T> ts = new List<T>();          
             if (ComponentDic.TryGetValue(targetName, out List<Component> componentLi))
-            {
-               
+            {       
                 foreach (var component in componentLi)
                 {
                     if (component is T)

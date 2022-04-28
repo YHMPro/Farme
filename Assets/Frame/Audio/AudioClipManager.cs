@@ -42,7 +42,7 @@ namespace Farme.Audio
             }
             else
             {
-                ResourcesLoad.LoadAsync<AudioClip>(audioClipPath, (clip) =>
+                ResLoad.LoadAsync<AudioClip>(audioClipPath, (clip) =>
                 {
                     AudioClipDic.Add(audioClipPath, clip);
                     callback?.Invoke(result);
@@ -64,7 +64,7 @@ namespace Farme.Audio
             }
             else
             {
-                if (ResourcesLoad.Load(audioClipPath, out result))
+                if (ResLoad.Load(audioClipPath, out result))
                 {
                     AudioClipDic.Add(audioClipPath, result);
                     return true;
@@ -86,7 +86,7 @@ namespace Farme.Audio
             }
             else
             {
-                if (ResourcesLoad.Load(audioClipPath, out result))
+                if (ResLoad.Load(audioClipPath, out result))
                 {
                     AudioClipDic.Add(audioClipPath, result);
                     return result;

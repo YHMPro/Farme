@@ -16,7 +16,12 @@ using Farme.Tool;
 namespace Farme.Test
 {
     public class Test : MonoBehaviour
-    {       
+    {
+        public Canvas canvas;
+        public DrawLineCamereViewHelper DLCBH;
+        public Camera camera;
+        public RectTransform imge;
+        public Transform cube;
         private Animator m_Anim;
         private Coroutine m_C;
         public Image button;
@@ -65,6 +70,7 @@ namespace Farme.Test
         protected void Start()
         {
 
+            return;
             if (GoLoad.Take("FarmeLockFile/WindowRoot", out GameObject go))
             {
                 MonoSingletonFactory<WindowRoot>.GetSingleton(go, false);
@@ -271,6 +277,19 @@ namespace Farme.Test
         }
         private void Update()
         {
+            if (Input.GetMouseButton(0))
+            {            
+                float cubeToCameraDis = Mathf.Abs(cube.transform.position.y - camera.transform.position.y);
+                DLCBH._nearDistance = cubeToCameraDis;
+                float halfFOV = (camera.fieldOfView * 0.5f) * Mathf.Deg2Rad;
+                float aspect = camera.aspect;
+                float height = cubeToCameraDis * Mathf.Tan(halfFOV);
+                float width = height * aspect;
+                float moveHScale = height / 540f;
+                float moveVScale = width / 960f;
+                imge.position=Input.mousePosition;
+                cube.transform.position = new Vector3(imge.anchoredPosition.x* moveHScale, cube.transform.position.y, imge.anchoredPosition.y* moveVScale);      
+            }
             return;
             if (Input.GetKeyDown(KeyCode.Space))
             {

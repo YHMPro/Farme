@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using Farme.Tool;
 using System.IO;
+using Farme.Extend;
 namespace Farme
 {
     /// <summary>
@@ -65,20 +66,20 @@ namespace Farme
         /// <summary>
         /// 初始化主包
         /// </summary>
-        /// <param name="reslutCallback">结果回调</param>
-        private static void InitMainABAsync(UnityAction reslutCallback=null)
+        /// <param name="callback">结果回调</param>
+        public static void InitMainABAsync(UnityAction callback = null)
         {
             if (m_MainAB != null)
             {
-                reslutCallback?.Invoke();
+                callback?.Invoke();
                 return;
             }          
             if (FileExists(m_PackageCatalogueFile_URL + m_MainABName))
             {
-                MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IEInitMainAB(reslutCallback));
+                MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IEInitMainAB(callback));
             }
         }
-        private static IEnumerator IEInitMainAB(UnityAction reslutCallback=null)
+        private static IEnumerator IEInitMainAB(UnityAction callback = null)
         {
             AssetBundleCreateRequest abcr = AssetBundle.LoadFromFileAsync(m_PackageCatalogueFile_URL + m_MainABName);
             yield return abcr;//等待异步请求完成      
@@ -88,37 +89,69 @@ namespace Farme
             yield return abr;//等待异步请求完成  
             Debuger.Log("包依赖信息获取成功。");
             m_MainABInfo = abr.asset as AssetBundleManifest;
-            reslutCallback?.Invoke();
+            callback?.Invoke();
         }
         #endregion
-        #region 异步加载资源
+        #region 异步加载资源  
+        /// <summary>
+        /// 加载包中所有资源
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="abName">包名</param>
+        /// <param name="callback">结果回调</param>
+        public static void LoadAllAssetAsync<T>(string abName, UnityAction<List<T>> callback)where T : Object
+        {
+            if (m_MainAB == null || m_MainABInfo == null)
+            {
+                Debuger.LogError("主包或主包信息加载失败。");
+                callback?.Invoke(null);
+                return;
+            }
+            InitAssetBundleDependenciesAsync(abName, (ab) => {
+                if (ab == null)
+                {
+                    callback?.Invoke(null);
+                    return;
+                }
+                MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IELoadAllAsset(ab, callback));
+            });
+        }
+        private static IEnumerator IELoadAllAsset<T>(AssetBundle ab,UnityAction<List<T>> callback)where T : Object
+        {
+            AssetBundleRequest abr = ab.LoadAllAssetsAsync<T>();
+            yield return abr;//等待异步请求完成     
+            List<T> tList = new List<T>();
+            foreach(T t in abr.allAssets)
+            {
+                tList.Add(t);
+            }
+            callback?.Invoke(tList);
+        }
         /// <summary>
         /// 加载资源
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="abName">包名</param>
         /// <param name="resName">资源名</param>
-        /// <param name="resultCallback">结果回调</param>
-        public static void LoadAssetAsync<T>(string abName, string resName, UnityAction<T> resultCallback) where T : Object
+        /// <param name="callback">结果回调</param>
+        public static void LoadAssetAsync<T>(string abName, string resName, UnityAction<T> callback) where T : Object
         {
-            InitMainABAsync(() => {
-                if (m_MainAB == null || m_MainABInfo == null)
+            if (m_MainAB == null || m_MainABInfo == null)
+            {
+                Debuger.LogError("主包或主包信息加载失败。");
+                callback?.Invoke(null);
+                return;
+            }
+            InitAssetBundleDependenciesAsync(abName, (ab) => {
+                if (ab == null)
                 {
-                    Debuger.LogError("主包或主包信息加载失败。");
-                    resultCallback?.Invoke(null);
+                    callback?.Invoke(null);
                     return;
                 }
-                InitAssetBundleDependenciesAsync(abName, (ab) => {
-                    if(ab==null)
-                    {
-                        resultCallback?.Invoke(null);
-                        return;
-                    }
-                    MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IELoadAsset(ab, resName, resultCallback));
-                });            
-            });        
+                MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IELoadAsset(ab, resName, callback));
+            });
         }
-        private static IEnumerator IELoadAsset<T>(AssetBundle ab, string resName, UnityAction<T> resultCallback) where T : Object
+        private static IEnumerator IELoadAsset<T>(AssetBundle ab, string resName, UnityAction<T> callback) where T : Object
         {
             AssetBundleRequest abr = ab.LoadAssetAsync<T>(resName);
             yield return abr;//等待异步请求完成     
@@ -127,18 +160,18 @@ namespace Farme
             {
                 Debuger.LogError("资源:" + resName + "不存在");
             }
-            resultCallback?.Invoke(asset);
+            callback?.Invoke(asset);
         }
         /// <summary>
         /// 初始化包的依赖包并加载该包
         /// </summary>
         /// <param name="abName">包名</param>
-        /// <param name="reslutCallback">结果回调</param>
-        private static void InitAssetBundleDependenciesAsync(string abName, UnityAction<AssetBundle> reslutCallback)
+        /// <param name="callback">结果回调</param>
+        private static void InitAssetBundleDependenciesAsync(string abName, UnityAction<AssetBundle> callback)
         {
-            MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IEInitAssetBundleDependencies(abName,reslutCallback));
+            MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IEInitAssetBundleDependencies(abName, callback));
         }
-        private static IEnumerator IEInitAssetBundleDependencies(string abName,UnityAction<AssetBundle> reslutCallback)
+        private static IEnumerator IEInitAssetBundleDependencies(string abName,UnityAction<AssetBundle> callback)
         {     
             if (FileExists(m_PackageCatalogueFile_URL + abName))
             {
@@ -164,7 +197,7 @@ namespace Farme
                 }
                 if (m_ABDic.TryGetValue(abName, out ab))
                 {
-                    reslutCallback?.Invoke(ab);
+                    callback?.Invoke(ab);
                 }
                 else
                 {
@@ -173,16 +206,16 @@ namespace Farme
                     ab = abcr.assetBundle;
                     //将子包添加到包容器当中
                     m_ABDic.Add(abName, ab);
-                    reslutCallback?.Invoke(ab);
+                    callback?.Invoke(ab);
                 }
             }
             else
             {
-                reslutCallback?.Invoke(null);
+                callback?.Invoke(null);
             }
         }
         #endregion
-        #region 初始化主包与包配置信息
+        #region 同步初始化主包与包配置信息
         /// <summary>
         /// 初始化主包
         /// </summary>
@@ -202,7 +235,7 @@ namespace Farme
             return false;         
         }
         #endregion
-        #region 同步加载       
+        #region 同步加载             
         /// <summary>
         /// 加载资源
         /// </summary>
@@ -239,7 +272,40 @@ namespace Farme
         public static bool LoadAsset<T>(string abName, string resName,out T result) where T : Object
         {
             result = LoadAsset<T>(abName, resName);
-            return result == null ? false : true;
+            return result != null;
+        }
+        /// <summary>
+        /// 加载资源
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="abName">包名</param>
+        /// <param name="atlasName">图集名</param>
+        /// <returns>包中的所有对应类型资源</returns>
+        public static T[] LoadAllAssets<T>(string abName)where T : Object
+        {
+            if (InitMainAB())//初始化AB包
+            {
+                AssetBundle ab = InitAssetBundleDependencies(abName);
+                if (ab == null)
+                {
+                    return null;
+                }
+                T[] ts = ab.LoadAllAssets<T>();            
+                return ts;
+            }
+            return null;
+        }
+        /// <summary>
+        /// 加载资源
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="abName">包名</param>
+        /// <param name="result">包中的所有对应类型资源</param>
+        /// <returns></returns>
+        public static bool LoadAllAssets<T>(string abName,out T[] result)where T : Object
+        {
+            result = LoadAllAssets<T>(abName);
+            return result != null;
         }
         /// <summary>
         /// 初始化AB包的依赖关系并加载包
