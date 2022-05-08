@@ -1,13 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-using UnityEngine.Events;
-using Farme.Extend;
 using System;
 namespace Farme.UI
 {
+    [Serializable]
     /// <summary>
     /// 富有弹性的按钮
     /// </summary>
@@ -17,24 +14,10 @@ namespace Farme.UI
         /// 文本
         /// </summary>
         private Text m_Text = null;
-        public string Content
-        {
-            set
-            {
-                if(m_Text!=null)
-                {
-                    m_Text.text = value;
-                }
-            }
-            get
-            {
-                if(m_Text!=null)
-                {
-                    return m_Text.text;
-                }
-                return null;
-            }
-        }
+        /// <summary>
+        /// 文本
+        /// </summary>
+        public Text Text => m_Text;
         /// <summary>
         /// 矩形转换
         /// </summary>
@@ -42,7 +25,11 @@ namespace Farme.UI
         /// <summary>
         /// 按钮背景
         /// </summary>
-        private Image m_Bg;
+        private Image m_Bg = null;
+        /// <summary>
+        /// 按钮背景
+        /// </summary>
+        public Image Bg => m_Bg;
         /// <summary>
         /// 原生缩放
         /// </summary>
@@ -61,9 +48,9 @@ namespace Farme.UI
         private RenderMode m_RelyCanvasRenderMode = RenderMode.ScreenSpaceOverlay;
 
         protected override void Awake()
-        {
-            base.Awake();
-            m_Text=GetComponentInChildren<Text>();
+        {      
+            base.Awake();    
+            m_Text=GetComponentInChildren<Text>(true);
             m_Bg = GetComponent<Image>();
             m_NativeScale = transform.localScale;
             m_RectTransform = transform as RectTransform;
@@ -104,7 +91,7 @@ namespace Farme.UI
                 pos.x = pos.x / Mathf.Abs(pos.x) * m_RectTransform.rect.width / 2f * m_NativeScale.x;
                 pos.y = k * pos.x;
             }
-            if (Mathf.Abs(pos.y) > m_Bg.rectTransform.rect.height / 2f)
+            if (Mathf.Abs(pos.y) > Bg.rectTransform.rect.height / 2f)
             {
                 pos.y = pos.y / Mathf.Abs(pos.y) * m_RectTransform.rect.height / 2f * m_NativeScale.y;
                 pos.x = pos.y / k;

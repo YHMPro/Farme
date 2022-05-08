@@ -31,19 +31,12 @@ namespace Farme
         /// <returns></returns>
         public static GameObject Take(string reuseGroup)
         {
-            if (ReuseGoDic.TryGetValue(reuseGroup, out List<GameObject> goLi))
-            {
-                foreach (var go in goLi)
-                {
-                    if (go != null)
-                    {
-                        go.SetActive(true);
-                        goLi.Remove(go);
-                        return go;
-                    }
-                }
-                ReuseGoDic.Remove(reuseGroup);//移除该组
-                Debuger.LogWarning("复用组[" + reuseGroup + "]中不存在实例对象。");
+            if (ReuseGoDic.TryGetValue(reuseGroup, out List<GameObject> goLi)&& goLi.Count>0)
+            {            
+                GameObject go = goLi[0];              
+                goLi.RemoveAt(0);
+                go.SetActive(true);
+                return go;
             }      
             return null;
         }
@@ -56,7 +49,7 @@ namespace Farme
         public static bool Take(string reuseGroup, out GameObject result)
         {
             result = Take(reuseGroup);        
-            return false;
+            return result!=null;
         }
         /// <summary>
         /// 放入Go实例
