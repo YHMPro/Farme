@@ -37,7 +37,7 @@ namespace Farme
         public static void LoadSceneAsync(string sceneName, LoadSceneMode loadModel = LoadSceneMode.Single, UnityAction startLoadCallback = null, UnityAction<bool> endLoadCallback = null, UnityAction<float> loadProgressCallback = null)
         {
             //开启协程
-            MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IELoadScene(sceneName, loadModel, startLoadCallback, endLoadCallback, loadProgressCallback));
+            ShareMono.GetSingleton().StartCoroutine(IELoadScene(sceneName, loadModel, startLoadCallback, endLoadCallback, loadProgressCallback));
         }
         /// <summary>
         /// 协程加载场景
@@ -79,7 +79,7 @@ namespace Farme
         /// <param name="unLoadProgressCallback">卸载进度回调</param>
         public static void UnLoadSceneAsync(string sceneName, UnityAction startUnLoadCallback = null, UnityAction<bool> endUnLoadCallback = null, UnityAction<float> unLoadProgressCallback = null)
         {
-            MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IEUnLoadScene(sceneName, startUnLoadCallback, endUnLoadCallback, unLoadProgressCallback));
+            ShareMono.GetSingleton().StartCoroutine(IEUnLoadScene(sceneName, startUnLoadCallback, endUnLoadCallback, unLoadProgressCallback));
         }
         /// <summary>
         /// 

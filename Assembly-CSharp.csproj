@@ -62,17 +62,14 @@
     <Compile Include="Assets\Frame\Audio\AudioClipManager.cs" />
     <Compile Include="Assets\Frame\Audio\AudioManager.cs" />
     <Compile Include="Assets\Frame\Audio\AudioMixerManager.cs" />
-    <Compile Include="Assets\Frame\Common\BaseMono.cs" />
     <Compile Include="Assets\Frame\Common\BaseUI.cs" />
     <Compile Include="Assets\Frame\Common\InterfaceManager.cs" />
     <Compile Include="Assets\Frame\Common\MesgManager.cs" />
+    <Compile Include="Assets\Frame\Common\MonoBase.cs" />
+    <Compile Include="Assets\Frame\Common\MonoSingletonBase.cs" />
     <Compile Include="Assets\Frame\Common\ShareMono.cs" />
+    <Compile Include="Assets\Frame\Common\Singleton.cs" />
     <Compile Include="Assets\Frame\Extend.cs" />
-    <Compile Include="Assets\Frame\Factory\AbstractSingletonFactory.cs" />
-    <Compile Include="Assets\Frame\Factory\MonoFactory.cs" />
-    <Compile Include="Assets\Frame\Factory\MonoSingletonFactory.cs" />
-    <Compile Include="Assets\Frame\Factory\NotMonoFactory.cs" />
-    <Compile Include="Assets\Frame\Factory\NotMonoSingletonFactory.cs" />
     <Compile Include="Assets\Frame\Interface.cs" />
     <Compile Include="Assets\Frame\Load\AssetBundleLoad.cs" />
     <Compile Include="Assets\Frame\Load\AtlasAssetsLoad.cs" />
@@ -93,6 +90,7 @@
     <Compile Include="Assets\Frame\UI\WindowRoot.cs" />
     <Compile Include="Assets\PanelTest.cs" />
     <Compile Include="Assets\Test.cs" />
+    <Compile Include="Assets\Test2.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Frame\Plugins\Audio\NAudio.dll" />

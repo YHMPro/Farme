@@ -3,13 +3,15 @@ using UnityEngine.EventSystems;
 using UnityEngine.Events;
 using System;
 using Farme.UI;
+using System.Collections;
+using System.Collections.Generic;
 namespace Farme.Extend
 {
     /// <summary>
     /// 扩展
     /// </summary>
     public static class Extend
-    {
+    {    
         #region 为GameObject类扩展相关功能
         /// <summary>
         /// 回收
@@ -19,9 +21,9 @@ namespace Farme.Extend
         /// <param name="delay">延迟时长</param>
         public static void Recycle(this GameObject target,string reuseGroup, float delay = 0)
         {
-            if (MonoSingletonFactory<ShareMono>.SingletonExist)
+            if (ShareMono.Exists)
             {
-                MonoSingletonFactory<ShareMono>.GetSingleton().DelayAction(delay, () =>
+                ShareMono.GetSingleton().DelayAction(delay, () =>
                  {
                      if (target != null)
                      {

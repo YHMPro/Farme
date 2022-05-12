@@ -309,7 +309,7 @@ namespace Farme.Audio
         {
             if (m_Timer == null && m_As.clip != null)
             {
-                m_Timer = MonoSingletonFactory<ShareMono>.GetSingleton().DelayAction(m_As.clip.length - m_As.time, () =>
+                m_Timer = ShareMono.GetSingleton().DelayAction(m_As.clip.length - m_As.time, () =>
                 {
                     RemoveTimer();
                     if (m_As.loop)
@@ -343,9 +343,9 @@ namespace Farme.Audio
         {
             if (m_Timer != null)
             {
-                if (MonoSingletonFactory<ShareMono>.SingletonExist)
+                if (ShareMono.Exists)
                 {
-                    MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(m_Timer);//停止协程
+                    ShareMono.GetSingleton().StopCoroutine(m_Timer);//停止协程
                 }
                 m_Timer = null;
             }
@@ -375,7 +375,7 @@ namespace Farme.Audio
         {
             if (m_ListenVolumeExcess != null)
             {
-                MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(m_ListenVolumeExcess);
+                ShareMono.GetSingleton().StopCoroutine(m_ListenVolumeExcess);
             }
             m_As.volume = Mathf.Clamp(startVolume, 0, 1);
             Play();
@@ -414,7 +414,7 @@ namespace Farme.Audio
         {
             if (m_ListenVolumeExcess != null)
             {
-                MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(m_ListenVolumeExcess);
+                ShareMono.GetSingleton().StopCoroutine(m_ListenVolumeExcess);
             }
             VolumeExcess(endVolume, time, () =>
             {
@@ -446,7 +446,7 @@ namespace Farme.Audio
         {
             if (m_ListenVolumeExcess != null)
             {
-                MonoSingletonFactory<ShareMono>.GetSingleton().StopCoroutine(m_ListenVolumeExcess);
+                ShareMono.GetSingleton().StopCoroutine(m_ListenVolumeExcess);
             }
             VolumeExcess(endVolume, time, () =>
             {
@@ -463,7 +463,7 @@ namespace Farme.Audio
         /// <param name="finishCallback">完成回调</param>
         private void VolumeExcess(float volume, float time, UnityAction finishCallback = null)
         {
-            m_ListenVolumeExcess = MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IEVolumeExcess(volume, Mathf.Clamp(time, 0, m_As.clip.length - m_As.time), finishCallback));
+            m_ListenVolumeExcess = ShareMono.GetSingleton().StartCoroutine(IEVolumeExcess(volume, Mathf.Clamp(time, 0, m_As.clip.length - m_As.time), finishCallback));
         }
         private IEnumerator IEVolumeExcess(float volume, float time, UnityAction finishCallback = null)//1秒   50次循环
         {

@@ -149,12 +149,12 @@ namespace Farme.UI
             resultLi = new List<RaycastResult>();
             if (m_PED == null)
             {
-                if (!MonoSingletonFactory<WindowRoot>.SingletonExist)
+                if (WindowRoot.Exists)
                 {
                     Debuger.LogError("无事件处理系统(EventSystem)实例");
                     return false;
                 }
-                m_PED = new PointerEventData(MonoSingletonFactory<WindowRoot>.GetSingleton().ES);
+                m_PED = new PointerEventData(WindowRoot.GetSingleton().ES);
             }
             if (m_PED == null)
             {
@@ -268,9 +268,9 @@ namespace Farme.UI
                 case EnumWindowState.Destroy:
                     {
 
-                        if (MonoSingletonFactory<WindowRoot>.SingletonExist)
+                        if (WindowRoot.Exists)
                         {
-                            MonoSingletonFactory<WindowRoot>.GetSingleton().RemoveWindow(gameObject.name);
+                            WindowRoot.GetSingleton().RemoveWindow(gameObject.name);
                         }
                         else
                         {

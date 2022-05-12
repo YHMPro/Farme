@@ -9,8 +9,8 @@ namespace Farme.UI
     /// <summary>
     /// 窗口根节点
     /// </summary>
-    public class WindowRoot : MonoBehaviour
-    {
+    public class WindowRoot : MonoSingletonBase<WindowRoot>
+    {       
         protected WindowRoot() { }
         #region 字段
         private readonly string m_WindowModelPath = "FarmeLockFile\\StandardWindow";
@@ -27,10 +27,6 @@ namespace Farme.UI
         {
             get
             {
-                if (m_ES == null)
-                {
-                    m_ES = GetComponent<EventSystem>();
-                }
                 return m_ES;
             }
         }
@@ -40,22 +36,19 @@ namespace Farme.UI
         public Camera Camera
         {
             get
-            {
-                if (m_Camera == null)
-                {
-                    m_Camera = GetComponent<Camera>();
-                }
+            {                           
                 return m_Camera;
             }
         }
         #endregion
         #region 生命周期函数
-        private void Awake()
+        protected override  void Awake()
         {
+            base.Awake();
             m_WindowModelDic = new Dictionary<string, StandardWindow>();
-            m_ES = GetComponent<EventSystem>();
-            m_InputModule = GetComponent<StandaloneInputModule>();
-            m_Camera = GetComponent<Camera>();
+            m_ES =gameObject.AddComponent<EventSystem>();
+            m_InputModule = gameObject.AddComponent<StandaloneInputModule>();
+            m_Camera = Camera.main;
         }
         #endregion
         #region 方法

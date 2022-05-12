@@ -26,7 +26,7 @@ namespace Farme
     /// <summary>
     /// 共享Mono 用于非MonoBehaviour派生类提供MonoBehaviour功能
     /// </summary>
-    public class ShareMono : MonoBehaviour
+    public class ShareMono : MonoSingletonBase<ShareMono>
     {
         #region 生命周期 
         /// <summary>
@@ -130,7 +130,7 @@ namespace Farme
         #region APPExit
         private void OnApplicationQuit()
         {          
-            MonoSingletonFactory<ShareMono>.ClearSingleton();
+            
         }
         #endregion
         #region 不受Timescale影响

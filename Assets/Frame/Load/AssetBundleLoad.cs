@@ -76,7 +76,7 @@ namespace Farme
             }          
             if (FileExists(m_PackageCatalogueFile_URL + m_MainABName))
             {
-                MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IEInitMainAB(callback));
+                ShareMono.GetSingleton().StartCoroutine(IEInitMainAB(callback));
             }
         }
         private static IEnumerator IEInitMainAB(UnityAction callback = null)
@@ -113,7 +113,7 @@ namespace Farme
                     callback?.Invoke(null);
                     return;
                 }
-                MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IELoadAllAsset(ab, callback));
+                ShareMono.GetSingleton().StartCoroutine(IELoadAllAsset(ab, callback));
             });
         }
         private static IEnumerator IELoadAllAsset<T>(AssetBundle ab,UnityAction<List<T>> callback)where T : Object
@@ -148,7 +148,7 @@ namespace Farme
                     callback?.Invoke(null);
                     return;
                 }
-                MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IELoadAsset(ab, resName, callback));
+                ShareMono.GetSingleton().StartCoroutine(IELoadAsset(ab, resName, callback));
             });
         }
         private static IEnumerator IELoadAsset<T>(AssetBundle ab, string resName, UnityAction<T> callback) where T : Object
@@ -169,7 +169,7 @@ namespace Farme
         /// <param name="callback">结果回调</param>
         private static void InitAssetBundleDependenciesAsync(string abName, UnityAction<AssetBundle> callback)
         {
-            MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IEInitAssetBundleDependencies(abName, callback));
+            ShareMono.GetSingleton().StartCoroutine(IEInitAssetBundleDependencies(abName, callback));
         }
         private static IEnumerator IEInitAssetBundleDependencies(string abName,UnityAction<AssetBundle> callback)
         {     

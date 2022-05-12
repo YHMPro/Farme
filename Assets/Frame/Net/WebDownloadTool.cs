@@ -22,7 +22,7 @@ namespace Farme.Net
         /// <param name="resultCallback">结果回调</param>
         public static void WebDownLoadAudioClipMP3(string url,UnityAction<AudioClip> resultCallback)
         {
-            MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IEWebDownLoadAudioClipMP3(url,resultCallback));
+            ShareMono.GetSingleton().StartCoroutine(IEWebDownLoadAudioClipMP3(url,resultCallback));
         }
         private static IEnumerator IEWebDownLoadAudioClipMP3(string url, UnityAction<AudioClip> resultCallback)
         {
@@ -45,7 +45,7 @@ namespace Farme.Net
         /// <param name="resultCallback">结果回调</param>
         public static void WebDownLoadAudioClip(string url, AudioType audioType, UnityAction<AudioClip> resultCallback)
         {
-            MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IEWebDownLoadAudioClip(url, audioType,resultCallback));
+            ShareMono.GetSingleton().StartCoroutine(IEWebDownLoadAudioClip(url, audioType,resultCallback));
         }
         private static IEnumerator IEWebDownLoadAudioClip(string url,AudioType audioType, UnityAction<AudioClip> resultCallback)
         {
@@ -70,7 +70,7 @@ namespace Farme.Net
         /// <param name="resultCallback">结果回调</param>
         public static void WebDownloadText(string url, UnityAction<string> resultCallback)
         {
-            MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IEWebDownloadText(url, resultCallback));
+            ShareMono.GetSingleton().StartCoroutine(IEWebDownloadText(url, resultCallback));
         }
         private static IEnumerator IEWebDownloadText(string url, UnityAction<string> resultCallback)
         {
@@ -98,7 +98,7 @@ namespace Farme.Net
         /// <param name="resultCallback">结果回调</param>
         public static void WebDownloadAssetBundle(string url, UnityAction<AssetBundle> resultCallback)
         {
-            MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IEWebDownloadAssetBundle(url, resultCallback));
+            ShareMono.GetSingleton().StartCoroutine(IEWebDownloadAssetBundle(url, resultCallback));
         }
         private static IEnumerator IEWebDownloadAssetBundle(string url, UnityAction<AssetBundle> resultCallback)
         {
@@ -123,7 +123,7 @@ namespace Farme.Net
         /// <param name="resultCallback">结果回调</param>
         public static void WebDownloadTexture(string url, UnityAction<Texture2D> resultCallback)
         {
-            MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IEWebDownloadTexture(url, resultCallback));
+            ShareMono.GetSingleton().StartCoroutine(IEWebDownloadTexture(url, resultCallback));
         }       
         private static IEnumerator IEWebDownloadTexture(string url, UnityAction<Texture2D> resultCallback)
         {

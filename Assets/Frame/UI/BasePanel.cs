@@ -29,7 +29,7 @@ namespace Farme.UI
     /// <summary>
     /// 面板基类
     /// </summary>
-    public abstract class BasePanel : BaseMono
+    public abstract class BasePanel : MonoBase
     {
         #region 生命周期
         protected override void OnDestroy()

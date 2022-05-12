@@ -76,9 +76,9 @@ namespace Farme
         /// <param name="resPath">资源路径</param>
         /// <param name="callback">回调</param>
         public static void LoadAsync<T>(string resPath, UnityAction<T> callback) where T : Object
-        {            
+        {
             //开启协程进行资源加载
-            MonoSingletonFactory<ShareMono>.GetSingleton().StartCoroutine(IELoadAsync(resPath, callback));
+            ShareMono.GetSingleton().StartCoroutine(IELoadAsync(resPath, callback));
         }
         /// <summary>
         /// 协程启动异步加载Res资源

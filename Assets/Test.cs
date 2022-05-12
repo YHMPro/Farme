@@ -13,9 +13,10 @@ using Farme.UI;
 using System;
 using Newtonsoft.Json;
 using Farme.Tool;
+using Farme.Extend;
 namespace Farme.Test
 {
-    public class Test : MonoBehaviour
+    public class Test : MonoSingletonBase<Test>
     {
         public Canvas canvas;
         public DrawLineCamereViewHelper DLCBH;
@@ -32,33 +33,11 @@ namespace Farme.Test
         public Text text;
         public Image img;
 
-        private void Awake()
-        {
-            MonoSingletonFactory<ShareMono>.GetSingleton();
-            //m_Anim = GetComponent<Animator>();
+        
 
-            //m_Anim.SetIK
-            // m_Anim.SetLoo
-            //GetComponent<FoldFarme>().FE.AddListener((isFold) => { Debuger.Log(isFold); });
 
-        }
 
-        private void OnDestroy()
-        {
-            //MonoSingletonFactory<ShareMono>.ClearSingleton();
-            //Debug.Log(MonoSingletonFactory<ShareMono>.GetSingleton());
-        }
-
-        private void OnAnimatorIK(int layerIndex)
-        {
-
-        }
-
-        public void OnValidate()
-        {
-            
-            //text.text = content;
-        }
+    
         //private Audio audio;
         //protected override void LateOnEnable()
         //{
@@ -69,26 +48,29 @@ namespace Farme.Test
                                                                                               // Start is called before the first frame update
         protected void Start()
         {
-
+            base.Start();
+            Debug.Log(Test2.Exists);
+            Test2.GetSingleton();
+            Debug.Log(Test2.Exists);
             return;
-            if (GoLoad.Take("FarmeLockFile/WindowRoot", out GameObject go))
-            {
-                MonoSingletonFactory<WindowRoot>.GetSingleton(go, false);
-                if (MonoSingletonFactory<WindowRoot>.SingletonExist)
-                {
-                    WindowRoot root = MonoSingletonFactory<WindowRoot>.GetSingleton();
-                    root.CreateWindow("MyFirstWindow", RenderMode.ScreenSpaceCamera, (window) =>
-                     {
-                         window.CanvasScaler.referenceResolution = new Vector2(1920, 1080);
+            //if (GoLoad.Take("FarmeLockFile/WindowRoot", out GameObject go))
+            //{
+            //    MonoSingletonFactory<WindowRoot>.GetSingleton(go, false);
+            //    if (MonoSingletonFactory<WindowRoot>.SingletonExist)
+            //    {
+            //        WindowRoot root = MonoSingletonFactory<WindowRoot>.GetSingleton();
+            //        root.CreateWindow("MyFirstWindow", RenderMode.ScreenSpaceCamera, (window) =>
+            //         {
+            //             window.CanvasScaler.referenceResolution = new Vector2(1920, 1080);
 
-                         window.CreatePanel<PanelTest>("PanelTest", "PanelTest", EnumPanelLayer.BOTTOM, (panel) =>
-                         {
+            //             window.CreatePanel<PanelTest>("PanelTest", "PanelTest", EnumPanelLayer.BOTTOM, (panel) =>
+            //             {
 
-                         });
-                     });
+            //             });
+            //         });
 
-                }
-            }
+            //    }
+            //}
 
 
 

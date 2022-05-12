@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 namespace Farme.UI
 {
-    public abstract class BaseUI : BaseMono,IRefreshUI
+    public abstract class BaseUI : MonoBase, IRefreshUI
     {
         protected RectTransform m_RectTransform;
         public RectTransform RectTransform

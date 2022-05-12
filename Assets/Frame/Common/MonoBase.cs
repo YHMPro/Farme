@@ -5,9 +5,9 @@ namespace Farme
     /// <summary>
     /// Mono基类
     /// </summary>
-    public abstract class BaseMono : MonoBehaviour
+    public abstract class MonoBase : MonoBehaviour
     {
-        protected BaseMono() { }
+        protected MonoBase() { }
         #region 字段
         private Dictionary<string, List<Component>> m_ComponentDic;
         protected Dictionary<string,List<Component>> ComponentDic

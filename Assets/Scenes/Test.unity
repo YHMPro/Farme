@@ -291,7 +291,6 @@ GameObject:
   - component: {fileID: 197098081}
   - component: {fileID: 197098080}
   - component: {fileID: 197098083}
-  - component: {fileID: 197098084}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -378,28 +377,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _farDistance: 1000
   _nearDistance: 0.3
---- !u!114 &197098084
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 197098079}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb2dadadd705d1d4f9ed73eb085f43c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  canvas: {fileID: 0}
-  DLCBH: {fileID: 197098083}
-  camera: {fileID: 197098081}
-  imge: {fileID: 459256339}
-  cube: {fileID: 697810093}
-  button: {fileID: 0}
-  Image: {fileID: 0}
-  content: 
-  text: {fileID: 0}
-  img: {fileID: 0}
 --- !u!1 &459256338
 GameObject:
   m_ObjectHideFlags: 0
@@ -486,6 +463,7 @@ GameObject:
   - component: {fileID: 697810092}
   - component: {fileID: 697810091}
   - component: {fileID: 697810090}
+  - component: {fileID: 697810094}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -567,6 +545,28 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &697810094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 697810089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb2dadadd705d1d4f9ed73eb085f43c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvas: {fileID: 0}
+  DLCBH: {fileID: 0}
+  camera: {fileID: 0}
+  imge: {fileID: 0}
+  cube: {fileID: 0}
+  button: {fileID: 0}
+  Image: {fileID: 0}
+  content: 
+  text: {fileID: 0}
+  img: {fileID: 0}
 --- !u!1 &1682351537
 GameObject:
   m_ObjectHideFlags: 0
@@ -579,6 +579,7 @@ GameObject:
   - component: {fileID: 1682351541}
   - component: {fileID: 1682351540}
   - component: {fileID: 1682351539}
+  - component: {fileID: 1682351542}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -666,3 +667,15 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1682351542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1682351537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d5d1d6e374a7c7409253b7e80cab6e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

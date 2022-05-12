@@ -135,7 +135,7 @@ namespace Farme.Audio
             }
             else
             {
-                audio = MonoFactory<Audio>.GetInstance(new GameObject("Audio"));
+                audio = new GameObject(typeof(Audio).Name).AddComponent<Audio>();
             }
             if (!isDontDestroyOnLoad)
             {

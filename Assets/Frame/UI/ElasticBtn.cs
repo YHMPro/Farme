@@ -66,9 +66,9 @@ namespace Farme.UI
         protected override void OnDisable()
         {
             base.OnDisable();
-            if (MonoSingletonFactory<ShareMono>.SingletonExist)
+            if (ShareMono.Exists)
             {
-                MonoSingletonFactory<ShareMono>.GetSingleton().RemoveUpdateAction(EnumUpdateAction.Standard, this.ScaleUpdate);
+                ShareMono.GetSingleton().RemoveUpdateAction(EnumUpdateAction.Standard, this.ScaleUpdate);
             }
             transform.localScale = m_NativeScale;
             
@@ -80,8 +80,8 @@ namespace Farme.UI
             float angle;//toPoint(单位化后)向量与单位向量Vector2.right的夹角
             float k;//toPoint向量所构成的直线的斜率
             toPoint = (m_RelyCanvasRenderMode == RenderMode.ScreenSpaceOverlay) ?
-                           (Vector2)(Input.mousePosition - transform.position) : (RectTransformUtility.WorldToScreenPoint(MonoSingletonFactory<WindowRoot>.SingletonExist ?
-                                                                                                                    MonoSingletonFactory<WindowRoot>.GetSingleton().Camera : Camera.main, transform.position) - (Vector2)Input.mousePosition);
+                           (Vector2)(Input.mousePosition - transform.position) : (RectTransformUtility.WorldToScreenPoint(WindowRoot.Exists ?
+                                                                                                                    WindowRoot.GetSingleton().Camera : Camera.main, transform.position) - (Vector2)Input.mousePosition);
             angle = Vector2.SignedAngle(Vector2.right, toPoint.normalized);
             pos.x = Mathf.Cos(angle * Mathf.Deg2Rad) * m_CircumcircleRadius;
             pos.y = Mathf.Sin(angle * Mathf.Deg2Rad) * m_CircumcircleRadius;
@@ -102,13 +102,13 @@ namespace Farme.UI
         public override void OnPointerEnter(PointerEventData eventData)
         {
             base.OnPointerEnter(eventData);
-            MonoSingletonFactory<ShareMono>.GetSingleton().ApplyUpdateAction(EnumUpdateAction.Standard, this.ScaleUpdate);
+            ShareMono.GetSingleton().ApplyUpdateAction(EnumUpdateAction.Standard, this.ScaleUpdate);
         }
 
         public override void OnPointerExit(PointerEventData eventData)
         {
             base.OnPointerExit(eventData);
-            MonoSingletonFactory<ShareMono>.GetSingleton().RemoveUpdateAction(EnumUpdateAction.Standard, this.ScaleUpdate);
+            ShareMono.GetSingleton().RemoveUpdateAction(EnumUpdateAction.Standard, this.ScaleUpdate);
             transform.localScale = m_NativeScale;
         }
         #endregion   
