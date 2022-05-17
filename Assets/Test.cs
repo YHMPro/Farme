@@ -33,11 +33,10 @@ namespace Farme.Test
         public Text text;
         public Image img;
 
+
+
+        System.Collections.ArrayList al = new System.Collections.ArrayList();
         
-
-
-
-    
         //private Audio audio;
         //protected override void LateOnEnable()
         //{

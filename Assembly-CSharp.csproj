@@ -53,6 +53,7 @@
     <UnityVersion>2019.4.33f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Assets\A.cs" />
     <Compile Include="Assets\AStarTest.cs" />
     <Compile Include="Assets\AStarUIPanel.cs" />
     <Compile Include="Assets\AStartGridInfo.cs" />
@@ -89,6 +90,16 @@
     <Compile Include="Assets\Frame\UI\StandardWindow.cs" />
     <Compile Include="Assets\Frame\UI\WindowRoot.cs" />
     <Compile Include="Assets\PanelTest.cs" />
+    <Compile Include="Assets\Scripts\Barrier\Barrier.cs" />
+    <Compile Include="Assets\Scripts\Entry.cs" />
+    <Compile Include="Assets\Scripts\Goods\AGoods.cs" />
+    <Compile Include="Assets\Scripts\Goods\BGoods.cs" />
+    <Compile Include="Assets\Scripts\Goods\CGoods.cs" />
+    <Compile Include="Assets\Scripts\Goods\Goods.cs" />
+    <Compile Include="Assets\Scripts\Goods\TreasureBox.cs" />
+    <Compile Include="Assets\Scripts\Map\MapBuilder.cs" />
+    <Compile Include="Assets\Scripts\PrefabURL.cs" />
+    <Compile Include="Assets\Scripts\UI\ControlWindow\ControlPanel.cs" />
     <Compile Include="Assets\Test.cs" />
     <Compile Include="Assets\Test2.cs" />
   </ItemGroup>

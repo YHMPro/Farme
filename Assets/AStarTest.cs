@@ -23,10 +23,7 @@ namespace Farme.Tool
             offsetY = -v / 2f;
 
             AStarConfig.AStarOriginPosition=new Vector2(offsetX, offsetY);
-            AStar.AStarGrids = new AStarGrid[h, v];
-
-
-          
+            AStar.AStarGrids = new AStarGrid[h, v];     
             for (int i=0; i < h; i++)
             {
                 for(int j=0; j < v; j++)
