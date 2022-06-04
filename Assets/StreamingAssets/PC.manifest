@@ -1,7 +1,0 @@
-ManifestFileVersion: 0
-CRC: 2469672313
-AssetBundleManifest:
-  AssetBundleInfos:
-    Info_0:
-      Name: audio
-      Dependencies: {}

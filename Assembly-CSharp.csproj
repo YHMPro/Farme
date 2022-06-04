@@ -53,12 +53,6 @@
     <UnityVersion>2019.4.33f1</UnityVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Assets\A.cs" />
-    <Compile Include="Assets\AStarTest.cs" />
-    <Compile Include="Assets\AStarUIPanel.cs" />
-    <Compile Include="Assets\AStartGridInfo.cs" />
-    <Compile Include="Assets\BaseSingleTest.cs" />
-    <Compile Include="Assets\DrawLineCamereViewHelper.cs" />
     <Compile Include="Assets\Frame\Audio\Audio.cs" />
     <Compile Include="Assets\Frame\Audio\AudioClipManager.cs" />
     <Compile Include="Assets\Frame\Audio\AudioManager.cs" />
@@ -80,31 +74,18 @@
     <Compile Include="Assets\Frame\Load\SceneLoad.cs" />
     <Compile Include="Assets\Frame\Net\WebDownloadTool.cs" />
     <Compile Include="Assets\Frame\Plugins\Audio\MP3Tool.cs" />
-    <Compile Include="Assets\Frame\Tool\AStar\AStar.cs" />
-    <Compile Include="Assets\Frame\Tool\AStar\AStarConfig.cs" />
-    <Compile Include="Assets\Frame\Tool\AStar\AStarGrid.cs" />
     <Compile Include="Assets\Frame\UI\BasePanel.cs" />
     <Compile Include="Assets\Frame\UI\ElasticBtn.cs" />
     <Compile Include="Assets\Frame\UI\FoldContentRect.cs" />
     <Compile Include="Assets\Frame\UI\FoldFarmeRect.cs" />
     <Compile Include="Assets\Frame\UI\StandardWindow.cs" />
     <Compile Include="Assets\Frame\UI\WindowRoot.cs" />
-    <Compile Include="Assets\PanelTest.cs" />
-    <Compile Include="Assets\Scripts\Barrier\Barrier.cs" />
-    <Compile Include="Assets\Scripts\Entry.cs" />
-    <Compile Include="Assets\Scripts\Goods\AGoods.cs" />
-    <Compile Include="Assets\Scripts\Goods\BGoods.cs" />
-    <Compile Include="Assets\Scripts\Goods\CGoods.cs" />
-    <Compile Include="Assets\Scripts\Goods\Goods.cs" />
-    <Compile Include="Assets\Scripts\Goods\TreasureBox.cs" />
-    <Compile Include="Assets\Scripts\Map\MapBuilder.cs" />
-    <Compile Include="Assets\Scripts\PrefabURL.cs" />
-    <Compile Include="Assets\Scripts\UI\ControlWindow\ControlPanel.cs" />
     <Compile Include="Assets\Test.cs" />
-    <Compile Include="Assets\Test2.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Frame\Plugins\Audio\NAudio.dll" />
+    <None Include="Assets\Frame\Plugins\ICSharpCode.SharpZipLib.dll" />
+    <None Include="Assets\Frame\Plugins\Excel.dll" />
     <None Include="Assets\Frame\Plugins\Newtonsoft.Json.dll" />
     <None Include="Assets\Frame\Plugins\Log\Debuger.dll" />
     <None Include="Assets\Frame\Plugins\Log\Debuger.xml" />
@@ -292,6 +273,12 @@
     </Reference>
     <Reference Include="UnityEditor">
       <HintPath>C:\Program Files\Unity\2019.4.33f1\Editor\Data\Managed\UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="Excel">
+      <HintPath>Assets\Frame\Plugins\Excel.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>Assets\Frame\Plugins\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>Assets\Frame\Plugins\Newtonsoft.Json.dll</HintPath>

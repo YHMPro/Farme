@@ -6,11 +6,8 @@ using UnityEngine.Events;
 using Farme.Extend;
 namespace Farme.UI
 {
-    /// <summary>
-    /// 窗口根节点
-    /// </summary>
     public class WindowRoot : MonoSingletonBase<WindowRoot>
-    {       
+    {
         protected WindowRoot() { }
         #region 字段
         private readonly string m_WindowModelPath = "FarmeLockFile\\StandardWindow";
@@ -36,17 +33,17 @@ namespace Farme.UI
         public Camera Camera
         {
             get
-            {                           
+            {
                 return m_Camera;
             }
         }
         #endregion
         #region 生命周期函数
-        protected override  void Awake()
+        protected override void Awake()
         {
             base.Awake();
             m_WindowModelDic = new Dictionary<string, StandardWindow>();
-            m_ES =gameObject.AddComponent<EventSystem>();
+            m_ES = gameObject.AddComponent<EventSystem>();
             m_InputModule = gameObject.AddComponent<StandaloneInputModule>();
             m_Camera = Camera.main;
         }
@@ -97,7 +94,7 @@ namespace Farme.UI
         /// </summary>
         /// <param name="windowName">窗口名称</param>
         /// <param name="renderMode">渲染模式</param>
-        public bool CreateWindow(string windowName, out StandardWindow xxWindow,RenderMode renderMode = RenderMode.ScreenSpaceOverlay)
+        public bool CreateWindow(string windowName, out StandardWindow xxWindow, RenderMode renderMode = RenderMode.ScreenSpaceOverlay)
         {
             xxWindow = null;
             if (m_WindowModelDic.ContainsKey(windowName))
@@ -151,9 +148,9 @@ namespace Farme.UI
         /// </summary>
         /// <param name="windowName">窗口名称</param>
         /// <param name="result">结果</param>
-        public bool GetWindow(string windowName,out StandardWindow result)
+        public bool GetWindow(string windowName, out StandardWindow result)
         {
-            return m_WindowModelDic.TryGetValue(windowName, out result);         
+            return m_WindowModelDic.TryGetValue(windowName, out result);
         }
         /// <summary>
         /// 移除窗口

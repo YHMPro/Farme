@@ -7,7 +7,7 @@ namespace Farme
     /// 单例基类
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public class SingletonBase<T> where T : class, new()
+    public abstract class SingletonBase<T> where T : class,new ()
     {
         /// <summary>
         /// 实例
